@@ -1,0 +1,16 @@
+{
+  "name": "twitter",
+  "version": "0.0.0",
+  "description": "this is twitter-web",
+  "main": "app.js",
+  "scripts": {
+    "start" :"ts-node app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.0.5"
+  },
+  "devDependencies": {}
+}
