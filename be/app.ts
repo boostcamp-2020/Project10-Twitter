@@ -1,17 +1,18 @@
-//src/index.ts
 import express from 'express';
 import logger from 'morgan';
+import indexRouter from './routes/index';
+import dotenv from 'dotenv';
 
 const app = express();
 
-require('dotenv').config();
 app.use(logger('dev'));
 
+dotenv.config();
 
-app.get('/', (req: express.Request, res: express.Response) => {
-  res.send('Hello World!');
-});
+app.use('/', indexRouter);
 
-app.listen(process.env.PORT, () => {
+const port: number = Number(process.env.PORT) || 3000;
+
+app.listen(port, () => {
   console.log('Example app listening on port 3000!');
 });
