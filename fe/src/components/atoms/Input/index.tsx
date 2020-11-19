@@ -7,7 +7,7 @@ interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: FunctionComponent<Props> = ({placehonder='', value, onChange}) => (
+const Input: FunctionComponent<Props> = ({ placehonder = '', value, onChange }) => (
   <TextField value={value} placeholder={placehonder} onChange={onChange} />
 );
 
