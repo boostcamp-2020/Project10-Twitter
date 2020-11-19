@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node app.ts",
     "dev": "next",
+    "storybook": "start-storybook -p 6006 -c .storybook",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -23,6 +24,13 @@
     "@types/react-dom": "^16.9.9",
     "@types/react-router-dom": "^5.1.6",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1"
+    "@typescript-eslint/parser": "^4.8.1",
+    "@storybook/addon-actions": "^6.0.28",
+    "@storybook/addon-backgrounds": "^6.0.28",
+    "@storybook/addon-essentials": "^6.0.28",
+    "@storybook/addon-knobs": "^6.0.28",
+    "@storybook/addon-links": "^6.0.28",
+    "@storybook/node-logger": "^6.0.28",
+    "@storybook/react": "^6.0.28"
   }
 }
