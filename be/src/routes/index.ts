@@ -1,7 +1,7 @@
 import express from 'express';
+import { graphqlHTTP } from 'express-graphql';
 import schema from './schemas/index';
 import root from '../controllers/index';
-import { graphqlHTTP } from 'express-graphql';
 
 const router = express.Router();
 

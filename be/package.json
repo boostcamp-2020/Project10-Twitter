@@ -4,7 +4,7 @@
   "description": "this is twitter-api",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --exec ts-node app.ts",
+    "start": "nodemon --exec ts-node src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,12 +15,20 @@
     "express-graphql": "^0.11.0",
     "graphql": "^15.4.0",
     "mongoose": "^5.10.15",
-    "morgan": "^1.10.0",
-    "typescript": "^4.0.5"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
     "@types/morgan": "^1.9.2",
-    "nodemon": "^2.0.6"
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.1.2"
   }
 }
