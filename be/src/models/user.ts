@@ -6,7 +6,7 @@ const userSchema = new Schema(
   {
     user_id: String,
     password: String,
-    following_list: [{ id: String }],
+    following_list: [String],
     comment: String,
     profile_img_url: String,
     background_img_url: String,
