@@ -20,13 +20,23 @@ const typeDefs = gql`
     search_user_list(word: String): [User]
   }
 
+  type Mutation {
+    github_login(code: String!): Auth
+  }
+
   type User {
     user_id: String
+    name: String
     profile_img_url: String
     comment: String
     background_img_url: String
     following_list: [User]
     following_user: User
+  }
+
+  type Auth {
+    token: String
+    user_info: User
   }
 `;
 

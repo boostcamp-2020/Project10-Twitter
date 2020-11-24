@@ -4,6 +4,7 @@ import {
   getFollowingList,
   getFollowerList,
   getSearchedUserList,
+  githubLogin,
 } from '../services';
 
 const resolvers = {
@@ -13,6 +14,9 @@ const resolvers = {
     following_list: getFollowingList,
     follower_list: getFollowerList,
     search_user_list: getSearchedUserList,
+  },
+  Mutation: {
+    github_login: githubLogin,
   },
 };
 

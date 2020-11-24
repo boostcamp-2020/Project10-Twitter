@@ -1,5 +1,6 @@
 import { getFollowingTweetList, getUserTweetList } from './tweet';
 import { getFollowerList, getFollowingList, getSearchedUserList } from './user';
+import { githubLogin } from './auth';
 
 export {
   getFollowingTweetList,
@@ -7,4 +8,5 @@ export {
   getFollowingList,
   getFollowerList,
   getSearchedUserList,
+  githubLogin,
 };
