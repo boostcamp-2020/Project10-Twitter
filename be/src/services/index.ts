@@ -1,14 +1,4 @@
-import { tweetModel, userModel } from '../models';
+import { getFollowingTweetList, getUserTweetList } from './tweet';
+import { getFollowerList, getFollowingList } from './user';
 
-const getTweetList = async () => {
-  const _id = '2';
-  const followingList = await userModel.findOne({ user_id: _id });
-
-  if (!followingList) return;
-
-  const tweetList = await tweetModel.find({
-    author_id: { $in: followingList.get('following_list') },
-  });
-  return tweetList;
-};
-export { getTweetList };
+export { getFollowingTweetList, getUserTweetList, getFollowingList, getFollowerList };
