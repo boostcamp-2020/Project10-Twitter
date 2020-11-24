@@ -17,6 +17,7 @@ const typeDefs = gql`
     user_tweet_list: [Tweet]
     following_list(id: String): [User]
     follower_list(id: String): [User]
+    search_user_list(word: String): [User]
   }
 
   type User {

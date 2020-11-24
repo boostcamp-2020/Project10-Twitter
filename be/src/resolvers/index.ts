@@ -3,6 +3,7 @@ import {
   getUserTweetList,
   getFollowingList,
   getFollowerList,
+  getSearchedUserList,
 } from '../services';
 
 const resolvers = {
@@ -11,6 +12,7 @@ const resolvers = {
     user_tweet_list: getUserTweetList,
     following_list: getFollowingList,
     follower_list: getFollowerList,
+    search_user_list: getSearchedUserList,
   },
 };
 

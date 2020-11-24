@@ -34,4 +34,10 @@ const getFollowerList = async (_: any, args: any) => {
   return followerList;
 };
 
-export { getFollowerList, getFollowingList };
+const getSearchedUserList = async (_: any, args: any) => {
+  const searchingWord = args.word;
+  const followerList = await userModel.find({ user_id: { $regex: searchingWord } });
+  return followerList;
+};
+
+export { getFollowerList, getFollowingList, getSearchedUserList };
