@@ -9,7 +9,22 @@ export default {
 
 export const Default = () => {
   const content = text('text', 'text');
-  const styled = select('styled', ['root', 'title', 'sub'], 'root');
+  const color = '#0B614B';
+  const size = '20px';
+
+  return <Text value={content} color={color} size={size} />;
+};
+
+export const Title = () => {
+  const content = text('text', 'text');
+  const styled = select('styled', ['root', 'title', 'sub'], 'title');
+
+  return <Text value={content} styled={styled} />;
+};
+
+export const Sub = () => {
+  const content = text('text', 'text');
+  const styled = select('styled', ['root', 'title', 'sub'], 'sub');
 
   return <Text value={content} styled={styled} />;
 };
