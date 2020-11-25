@@ -24,6 +24,8 @@ const typeDefs = gql`
     github_login(code: String!): Auth
     follow_user(follow_user_id: String!): User
     unfollow_user(unfollow_user_id: String!): User
+    add_basic_tweet(content: String!, img_url_list: [String]): Tweet
+    add_reply_tweet(content: String!, img_url_list: [String]): Tweet
   }
 
   type User {
