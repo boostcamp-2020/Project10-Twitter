@@ -22,6 +22,8 @@ const typeDefs = gql`
 
   type Mutation {
     github_login(code: String!): Auth
+    follow_user(follow_user_id: String!): User
+    unfollow_user(unfollow_user_id: String!): User
   }
 
   type User {
@@ -30,7 +32,7 @@ const typeDefs = gql`
     profile_img_url: String
     comment: String
     background_img_url: String
-    following_list: [User]
+    following_list: [String]
     following_user: User
   }
 
