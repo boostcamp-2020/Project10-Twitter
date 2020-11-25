@@ -7,10 +7,15 @@ export default {
 };
 
 export const Default = () => {
-  const [data, setData] = useState('');
   const placeholder = '입력!';
-  const changeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData(e.target.value);
-  };
-  return <Input value={data} placehonder={placeholder} onChange={changeEvent} />;
+  const type = 'text';
+  const variant = 'standard';
+  return <Input placeholder={placeholder} type={type} variant={variant} />;
+};
+
+export const noUnderLineInput = () => {
+  const placeholder = '입력!';
+  const type = 'text';
+  const variant = 'outlined';
+  return <Input placeholder={placeholder} type={type} variant={variant} />;
 };

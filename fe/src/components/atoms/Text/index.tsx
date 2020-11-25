@@ -1,29 +1,48 @@
 import React, { FunctionComponent } from 'react';
-import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 
 interface Props {
   value: string;
-  styled?: 'root' | 'title' | 'sub';
+  color?: string;
+  size?: string;
+  weight?: number;
+  styled?: string;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      fontSize: '15px',
-      fontWeight: 400,
-    },
-    title: {
-      Color: theme.palette.text,
-      fontWeight: 700,
-    },
-    sub: {
-      Color: theme.palette.grey,
-    },
-  }),
-);
+interface StyledProps {
+  color: string;
+  size: string;
+  weight?: number;
+}
 
-const Text: FunctionComponent<Props> = ({ value, styled = 'root' }) => {
-  const classes = useStyles();
+const useStyles = makeStyles({
+  root: (styledProps: StyledProps) => ({
+    color: styledProps.color,
+    fontSize: styledProps.size,
+    fontWeight: styledProps.weight,
+  }),
+  title: {
+    color: '#000',
+    fontSize: '15px',
+    fontWeight: 700,
+    display: 'inline-block',
+  },
+  sub: {
+    color: 'rgb(91, 112, 131)',
+    fontSize: '15px',
+    fontWeight: 400,
+    display: 'inline-block',
+  },
+});
+
+const Text: FunctionComponent<Props> = ({
+  value,
+  color = '#000',
+  size = '15px',
+  weight = 400,
+  styled = 'root',
+}) => {
+  const classes = useStyles({ color, size, weight });
   switch (styled) {
     case 'root':
     default:

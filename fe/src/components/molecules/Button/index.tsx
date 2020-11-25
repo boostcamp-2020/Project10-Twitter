@@ -17,10 +17,10 @@ const Button: FunctionComponent<Props> = ({
   variant = undefined,
   text,
   onClick,
-  icon,
+  icon = undefined,
   isStart = true,
   borderRadius = 15,
-  width = '20%',
+  width = '',
 }) =>
   isStart ? (
     <MaterialButton
