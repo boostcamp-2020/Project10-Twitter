@@ -1,4 +1,4 @@
-import { getFollowingTweetList, getUserTweetList } from './tweet';
+import { getFollowingTweetList, getUserTweetList, addBasicTweet, addReplyTweet } from './tweet';
 import {
   getFollowerList,
   getFollowingList,
@@ -17,4 +17,6 @@ export {
   githubLogin,
   followUser,
   unfollowUser,
+  addBasicTweet,
+  addReplyTweet,
 };
