@@ -9,6 +9,7 @@ import {
   unfollowUser,
   addBasicTweet,
   addReplyTweet,
+  addRetweet,
 } from '../services';
 
 const resolvers = {
@@ -25,6 +26,7 @@ const resolvers = {
     unfollow_user: unfollowUser,
     add_basic_tweet: addBasicTweet,
     add_reply_tweet: addReplyTweet,
+    add_retweet: addRetweet,
   },
 };
 
