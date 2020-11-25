@@ -52,6 +52,10 @@ const LoginRightSection: FunctionComponent = () => {
   const variant = 'contained';
   const borderRadius = 50;
 
+  const onClick = () => {
+    window.location.href =
+      'https://github.com/login/oauth/authorize?client_id=03880f7398f255239678&redirect_uri=http://localhost:3000/callback';
+  };
   return (
     <Box component="div" className={classes.rightSection}>
       <Box component="div" className={classes.loginForm}>
@@ -85,6 +89,7 @@ const LoginRightSection: FunctionComponent = () => {
           variant="outlined"
           borderRadius={3}
           icon={Twitter({})}
+          onClick={onClick}
         />
       </Box>
     </Box>
