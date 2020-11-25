@@ -7,6 +7,8 @@ import {
   githubLogin,
   followUser,
   unfollowUser,
+  addBasicTweet,
+  addReplyTweet,
 } from '../services';
 
 const resolvers = {
@@ -21,6 +23,8 @@ const resolvers = {
     github_login: githubLogin,
     follow_user: followUser,
     unfollow_user: unfollowUser,
+    add_basic_tweet: addBasicTweet,
+    add_reply_tweet: addReplyTweet,
   },
 };
 
