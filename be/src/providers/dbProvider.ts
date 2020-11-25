@@ -6,6 +6,7 @@ const dbStarter = async () => {
   if (CONNECT_URL === undefined) throw Error('db connection fail');
   await mongoose.connect(CONNECT_URL, {
     useNewUrlParser: true,
+    useFindAndModify: false,
   });
 };
 
