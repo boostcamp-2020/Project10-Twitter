@@ -6,15 +6,13 @@ interface Props {
   children: React.ReactChild[];
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'inherit',
-      flexDirection: 'row',
-    },
-  }),
-);
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexWrap: 'inherit',
+    flexDirection: 'row',
+  },
+});
 
 const Form: FunctionComponent<Props> = ({ children }) => {
   const classes = useStyles();
