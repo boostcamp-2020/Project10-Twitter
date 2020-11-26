@@ -23,7 +23,7 @@ const LoginRightSection: FunctionComponent = () => {
 
   const onClick = () => {
     window.location.href =
-      'https://github.com/login/oauth/authorize?client_id=03880f7398f255239678&redirect_uri=http://localhost:3000/callback';
+      'https://github.com/login/oauth/authorize?client_id=5ca42b21f33b23cc53e88&redirect_uri=http://localhost:3000/callback';
   };
   return (
     <Container component="div">

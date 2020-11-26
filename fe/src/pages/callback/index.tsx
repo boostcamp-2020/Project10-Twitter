@@ -18,7 +18,7 @@ const Callback: NextPage<Props> = ({ code }) => {
   if (error) router.push('/login');
   if (data) {
     localStorage.setItem('jwt_token', data.auth.token);
-    router.push('/');
+    router.push('/home');
   }
   return <div>loading...</div>;
 };
