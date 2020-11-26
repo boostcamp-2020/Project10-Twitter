@@ -1,6 +1,7 @@
 import {
   getFollowingTweetList,
   getUserTweetList,
+  getUserAllTweetList,
   getFollowingList,
   getFollowerList,
   getSearchedUserList,
@@ -16,6 +17,7 @@ const resolvers = {
   Query: {
     following_tweet_list: getFollowingTweetList,
     user_tweet_list: getUserTweetList,
+    user_all_tweet_list: getUserAllTweetList,
     following_list: getFollowingList,
     follower_list: getFollowerList,
     search_user_list: getSearchedUserList,
