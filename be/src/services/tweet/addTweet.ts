@@ -1,7 +1,10 @@
 import { tweetModel } from '../../models';
+import { AuthenticationError } from 'apollo-server-express';
 
-const addBasicTweet = async (_: any, args: any) => {
-  const userId = 'test1';
+const addBasicTweet = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.user_id;
   const content = args.content;
   const imgUrls = args.img_url_list;
   const newTweet = await tweetModel.create({
@@ -13,8 +16,10 @@ const addBasicTweet = async (_: any, args: any) => {
   return newTweet;
 };
 
-const addReplyTweet = async (_: any, args: any) => {
-  const userId = 'test1';
+const addReplyTweet = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.user_id;
   const content = args.content;
   const imgUrls = args.img_url_list;
   const parentId = args.parent_id;
@@ -35,8 +40,10 @@ const addReplyTweet = async (_: any, args: any) => {
   return replyTweet;
 };
 
-const addRetweet = async (_: any, args: any) => {
-  const userId = 'test1';
+const addRetweet = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.user_id;
   const content = args.content;
   const retweetId = args.retweet_id;
 

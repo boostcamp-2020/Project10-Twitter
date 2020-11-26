@@ -1,7 +1,10 @@
 import { userModel, tweetModel } from '../../models';
+import { AuthenticationError } from 'apollo-server-express';
 
-const getFollowingTweetList = async (_: any, args: any) => {
-  const userId = 'test1';
+const getFollowingTweetList = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.user_id;
   const followingList = await userModel.findOne({ user_id: userId });
 
   const tweetList = await tweetModel.aggregate([
@@ -55,7 +58,9 @@ const getFollowingTweetList = async (_: any, args: any) => {
   return tweetList;
 };
 
-const getUserTweetList = async (_: any, args: any) => {
+const getUserTweetList = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
   const userId = args.user_id;
   const tweetList = await tweetModel.aggregate([
     {
@@ -105,7 +110,9 @@ const getUserTweetList = async (_: any, args: any) => {
   return tweetList;
 };
 
-const getUserAllTweetList = async (_: any, args: any) => {
+const getUserAllTweetList = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
   const userId = args.user_id;
   const tweetList = await tweetModel.aggregate([
     {
@@ -139,7 +146,7 @@ const getUserAllTweetList = async (_: any, args: any) => {
         as: 'retweet',
       },
     },
-    // { $unwind: '$retweet' },
+    { $unwind: { path: '$retweet', preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
         from: 'users',
@@ -148,7 +155,7 @@ const getUserAllTweetList = async (_: any, args: any) => {
         as: 'retweet.author',
       },
     },
-    // { $unwind: '$retweet.author' },
+    { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
   return tweetList;
 };
