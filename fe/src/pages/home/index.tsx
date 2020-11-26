@@ -114,8 +114,8 @@ const Home: FunctionComponent = () => {
       <MainContainer>
         <HomeBox>Home</HomeBox>
         <NewTweetContainer />
-        {tweets.map((tweet) => (
-          <TweetContainer tweet={tweet} />
+        {tweets.map((tweet, index) => (
+          <TweetContainer key={index} tweet={tweet} />
         ))}
       </MainContainer>
     </Container>
