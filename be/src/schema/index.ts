@@ -43,7 +43,6 @@ const typeDefs = gql`
 
   type Auth {
     token: String
-    user_info: User
   }
 `;
 
