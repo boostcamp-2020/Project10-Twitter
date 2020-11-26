@@ -5,6 +5,11 @@ import {
   getFollowerList,
   getSearchedUserList,
   githubLogin,
+  followUser,
+  unfollowUser,
+  addBasicTweet,
+  addReplyTweet,
+  addRetweet,
 } from '../services';
 
 const resolvers = {
@@ -17,6 +22,11 @@ const resolvers = {
   },
   Mutation: {
     github_login: githubLogin,
+    follow_user: followUser,
+    unfollow_user: unfollowUser,
+    add_basic_tweet: addBasicTweet,
+    add_reply_tweet: addReplyTweet,
+    add_retweet: addRetweet,
   },
 };
 

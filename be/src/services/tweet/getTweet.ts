@@ -1,4 +1,4 @@
-import { userModel, tweetModel } from '../models';
+import { userModel, tweetModel } from '../../models';
 
 const getFollowingTweetList = async (_: any, args: any) => {
   const userId = args.id;

@@ -1,4 +1,4 @@
-import { userModel } from '../models';
+import { userModel } from '../../models';
 
 const getFollowingList = async (_: any, args: any) => {
   const userId = args.id;

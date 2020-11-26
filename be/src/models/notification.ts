@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const notificationSchema = new Schema(
   {
     user_id: String,
-    tweet_id: String,
+    tweet_id: Schema.Types.ObjectId,
     follower_id: String,
     type: String,
     is_read: Boolean,
