@@ -1,20 +1,29 @@
 import React, { FunctionComponent } from 'react';
-import { Box } from '@material-ui/core';
+import Container from './styled';
 import TitleSubText from '../TitleSubText';
 import ProfileImg from '../../atoms/ProfileImg';
 
 interface Props {
+  onClick?: () => void;
   img?: string;
   title: string;
   sub: string;
   inRow?: boolean;
+  width?: string;
 }
 
-const UserInfo: FunctionComponent<Props> = ({ img, title, sub, inRow }) => (
-  <Box component="div" display="flex" alignItems="center">
+const UserInfo: FunctionComponent<Props> = ({
+  onClick = () => {},
+  img,
+  title,
+  sub,
+  inRow,
+  width = '',
+}) => (
+  <Container component="div" onClick={onClick} width={width}>
     <ProfileImg img={img} />
     <TitleSubText title={title} sub={sub} inRow={inRow} />
-  </Box>
+  </Container>
 );
 
 export default UserInfo;
