@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { GITHUB_LOGIN } from '../../graphql/github.gql';
+import GITHUB_LOGIN from '../../graphql/github.gql';
 
 interface Props {
   code: string | string[] | undefined;
