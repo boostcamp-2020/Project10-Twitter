@@ -1,22 +1,10 @@
 import React, { FunctionComponent } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { FormGroup } from '@material-ui/core';
+import Container from './styled';
 
 interface Props {
   children: React.ReactChild[];
 }
 
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    flexWrap: 'inherit',
-    flexDirection: 'row',
-  },
-});
-
-const Form: FunctionComponent<Props> = ({ children }) => {
-  const classes = useStyles();
-  return <FormGroup className={classes.root}>{children}</FormGroup>;
-};
+const Form: FunctionComponent<Props> = ({ children }) => <Container>{children}</Container>;
 
 export default Form;
