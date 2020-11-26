@@ -1,11 +1,7 @@
 import React from 'react';
 import { text } from '@storybook/addon-knobs';
 import Button from './index';
-import Home from '../../atoms/icons/Home';
-import Explore from '../../atoms/icons/Explore';
-import Twitter from '../../atoms/icons/Twitter';
-import Notifications from '../../atoms/icons/Notifications';
-import Profiles from '../../atoms/icons/Profiles';
+import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
 
 export default {
   title: 'Molecules/Button',

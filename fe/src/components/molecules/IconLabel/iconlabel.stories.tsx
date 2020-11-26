@@ -1,6 +1,6 @@
 import React from 'react';
 import IconLabel from './index';
-import Search from '../../atoms/icons/Search';
+import { Search } from '../../atoms/Icons';
 import Text from '../../atoms/Text';
 
 export default {
