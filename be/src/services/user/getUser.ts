@@ -40,4 +40,8 @@ const getSearchedUserList = async (_: any, args: any) => {
   return followerList;
 };
 
-export { getFollowerList, getFollowingList, getSearchedUserList };
+const getUserInfo = (_: any, args: any, context: any) => {
+  return context.user;
+};
+
+export { getFollowerList, getFollowingList, getSearchedUserList, getUserInfo };
