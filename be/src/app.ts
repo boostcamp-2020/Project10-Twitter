@@ -18,10 +18,12 @@ const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
   context: ({ req }) => {
-    const bearerHeader = req.headers.authorization || '';
+    if (!req.headers.authorization) return { authUser: undefined };
+
+    const bearerHeader = req.headers.authorization;
     const token = bearerHeader.split(' ')[1];
-    const user = verifyToken(token);
-    return { user };
+    const authUser = verifyToken(token);
+    return { authUser };
   },
 });
 
