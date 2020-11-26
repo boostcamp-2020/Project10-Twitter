@@ -1,15 +1,13 @@
 import React, { ReactElement, FunctionComponent } from 'react';
-import { List, ListItem } from '@material-ui/core';
+import styled from 'styled-components';
+import { Box, ListItem } from '@material-ui/core';
 import Button from '../../molecules/Button';
-import Home from '../../atoms/icons/Home';
-import Explore from '../../atoms/icons/Explore';
-import Twitter from '../../atoms/icons/Twitter';
-import Notifications from '../../atoms/icons/Notifications';
-import Profiles from '../../atoms/icons/Profiles';
+import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
 
 interface Props {
   children: React.ReactChild[];
 }
+
 interface ButtonProps {
   id: number;
   text: string;
@@ -19,24 +17,30 @@ interface ButtonProps {
   width?: string;
 }
 
+const Container = styled(Box)`
+  position: fixed;
+  top: 0px;
+  height: 100%;
+`;
+
 const TITLE: Array<ButtonProps> = [
-  { id: 0, text: '', icon: Twitter({}) },
-  { id: 1, text: '홈', icon: Home({}) },
-  { id: 2, text: '탐색하기', icon: Explore({}) },
-  { id: 3, text: '알림', icon: Notifications({}) },
-  { id: 4, text: '프로필', icon: Profiles({}) },
-  { id: 5, text: '트윗', color: 'primary', variant: 'contained', width: '20%' },
+  { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px' }) },
+  { id: 1, text: '홈', icon: Home({ width: '30px', height: '30px' }) },
+  { id: 2, text: '탐색하기', icon: Explore({ width: '30px', height: '30px' }) },
+  { id: 3, text: '알림', icon: Notifications({ width: '30px', height: '30px' }) },
+  { id: 4, text: '프로필', icon: Profiles({ width: '30px', height: '30px' }) },
+  { id: 5, text: 'Tweet', color: 'primary', variant: 'contained', width: '90%' },
 ];
 
 const SideBar: FunctionComponent<Props> = ({ children }) => (
-  <List>
+  <Container component="ul">
     {TITLE.map((v) => (
       <ListItem key={v.id}>
         <Button text={v.text} icon={v.icon} color={v.color} variant={v.variant} width={v.width} />
       </ListItem>
     ))}
     {children}
-  </List>
+  </Container>
 );
 
 export default SideBar;

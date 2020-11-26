@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ListItem } from '@material-ui/core';
 import SideBar from './index';
 import UserInfo from '../../molecules/UserInfo';
@@ -22,7 +22,7 @@ export const Default = () => {
         <SearchBar placeholder={placeholder} type={type} variant={variant} />
       </ListItem>
       <ListItem>
-        <UserInfo title={userId} sub={userName} inRow={false} />
+        <UserInfo title={userId} sub={userName} inRow={false} width="90%" />
       </ListItem>
     </SideBar>
   );
