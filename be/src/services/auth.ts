@@ -8,7 +8,7 @@ const githubLogin = async (_: any, args: any) => {
   const githubUserInfo = await getGithubUserInfo(githubToken);
   const user = await getOurUser(githubUserInfo);
   const signedToken = signToken(user);
-  return signedToken;
+  return { token: signedToken };
 };
 
 const getGithubToken = async (code: string) => {
@@ -46,25 +46,47 @@ const getGithubUserInfo = async (githubToken: string) => {
   return data;
 };
 
+const makeRandomName = () => {
+  let result = '';
+  const NICKNAME_LENGTH = 15;
+  const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < NICKNAME_LENGTH; i++) {
+    result += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length));
+  }
+  return result;
+};
+
+const registerUser = async (githubUserInfo: any) => {
+  const user = await userModel.create({
+    user_id: githubUserInfo.login,
+    name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(),
+    following_list: [],
+    profile_img_url: githubUserInfo.avatar_url,
+  });
+  return user;
+};
+
 const getOurUser = async (githubUserInfo: any) => {
   let user = await userModel.findOne({ user_id: githubUserInfo.username });
   if (!user) {
-    user = await userModel.create({
-      user_id: githubUserInfo.username,
-      name: 'test100',
-      following_list: [],
-      profile_img_url: githubUserInfo.avatar_url,
-    });
+    user = await registerUser(githubUserInfo);
   }
   return user;
 };
 
 const signToken = (user: any) => {
-  const token = jwt.sign(user, process.env.JWT_SECRET_KEY!, { expiresIn: '24h' });
+  const userData = {
+    _id: user._id,
+    name: user.name,
+    user_id: user.user_id,
+    profile_img_url: user.profile_img_url,
+  };
+  const token = jwt.sign(userData, process.env.JWT_SECRET_KEY!, { expiresIn: '24h' });
   return token;
 };
 
 const verifyToken = (token: string) => {
+  if (!token) return null;
   const user = jwt.verify(token, process.env.JWT_SECRET_KEY!);
   return user;
 };
