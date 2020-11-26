@@ -1,6 +1,9 @@
 import { userModel } from '../../models';
+import { AuthenticationError } from 'apollo-server-express';
 
-const getFollowingList = async (_: any, args: any) => {
+const getFollowingList = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
   const userId = args.id;
   const followingList = await userModel.aggregate([
     {
@@ -22,7 +25,9 @@ const getFollowingList = async (_: any, args: any) => {
   return followingList;
 };
 
-const getFollowerList = async (_: any, args: any) => {
+const getFollowerList = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
   const userId = args.id;
   const followerList = await userModel.aggregate([
     {
@@ -34,14 +39,17 @@ const getFollowerList = async (_: any, args: any) => {
   return followerList;
 };
 
-const getSearchedUserList = async (_: any, args: any) => {
+const getSearchedUserList = async (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
   const searchingWord = args.word;
   const followerList = await userModel.find({ user_id: { $regex: searchingWord } });
   return followerList;
 };
 
-const getUserInfo = (_: any, args: any, context: any) => {
-  return context.user;
+const getUserInfo = (_: any, args: any, { authUser }: any) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+  return authUser;
 };
 
 export { getFollowerList, getFollowingList, getSearchedUserList, getUserInfo };
