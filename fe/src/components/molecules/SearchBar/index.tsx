@@ -6,7 +6,7 @@ import Input from '../../atoms/Input/index';
 
 interface Props {
   placeholder?: string;
-  value: string;
+  value?: string;
   type: string;
   variant?: 'filled' | 'outlined' | 'standard' | undefined;
 }
@@ -27,7 +27,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const SearchBar: FunctionComponent<Props> = ({ placeholder = '', value, type, variant }) => {
+const SearchBar: FunctionComponent<Props> = ({
+  placeholder = '',
+  value = '',
+  type,
+  variant = undefined,
+}) => {
   const classes = useStyles();
 
   return (
