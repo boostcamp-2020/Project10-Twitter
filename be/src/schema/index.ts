@@ -19,6 +19,7 @@ const typeDefs = gql`
     following_list(id: String): [User]
     follower_list(id: String): [User]
     search_user_list(word: String): [User]
+    user_info: User
   }
 
   type Mutation {
