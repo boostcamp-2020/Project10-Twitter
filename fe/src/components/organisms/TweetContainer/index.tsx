@@ -10,17 +10,21 @@ import ButtonsBox from './styled';
 interface Props {
   tweet: Tweet;
 }
+
 interface Tweet {
+  content: string;
+  author: Author;
+}
+interface Author {
   user_id: string;
   name: string;
-  content: string;
   profile_img_url: string;
 }
 
 const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
   return (
-    <MainContaier ProfileImgUrl={tweet.profile_img_url}>
-      <TitleSubText title={tweet.user_id} sub={tweet.name} />
+    <MainContaier ProfileImgUrl={tweet.author.profile_img_url}>
+      <TitleSubText title={tweet.author.user_id} sub={tweet.author.name} />
       <TextArea value={tweet.content} readOnly />
       <ButtonsBox component="div">
         <Button icon={Comment({})} text="0" />
