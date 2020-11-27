@@ -8,12 +8,24 @@ import dbStarter from './providers/dbProvider';
 
 import schema from './schema';
 import resolvers from './resolvers';
+import { verifyToken } from './services/auth';
 
 dotenv.config();
 
 const app = express();
 const port: number = Number(process.env.PORT) || 3000;
-const server = new ApolloServer({ typeDefs: schema, resolvers });
+const server = new ApolloServer({
+  typeDefs: schema,
+  resolvers,
+  context: ({ req }) => {
+    if (!req.headers.authorization) return { authUser: undefined };
+
+    const bearerHeader = req.headers.authorization;
+    const token = bearerHeader.split(' ')[1];
+    const authUser = verifyToken(token);
+    return { authUser };
+  },
+});
 
 app.use(logger('dev'));
 app.use(cors());

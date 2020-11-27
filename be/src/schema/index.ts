@@ -19,6 +19,7 @@ const typeDefs = gql`
     following_list(id: String): [User]
     follower_list(id: String): [User]
     search_user_list(word: String): [User]
+    user_info: User
   }
 
   type Mutation {
@@ -42,7 +43,6 @@ const typeDefs = gql`
 
   type Auth {
     token: String
-    user_info: User
   }
 `;
 

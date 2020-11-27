@@ -4,6 +4,7 @@ import {
   getFollowingList,
   getFollowerList,
   getSearchedUserList,
+  getUserInfo,
   githubLogin,
   followUser,
   unfollowUser,
@@ -19,6 +20,7 @@ const resolvers = {
     following_list: getFollowingList,
     follower_list: getFollowerList,
     search_user_list: getSearchedUserList,
+    user_info: getUserInfo,
   },
   Mutation: {
     github_login: githubLogin,
