@@ -10,6 +10,7 @@ import {
   getFollowerList,
   getFollowingList,
   getSearchedUserList,
+  getUserInfo,
   followUser,
   unfollowUser,
 } from './user';
@@ -22,6 +23,7 @@ export {
   getFollowingList,
   getFollowerList,
   getSearchedUserList,
+  getUserInfo,
   githubLogin,
   followUser,
   unfollowUser,

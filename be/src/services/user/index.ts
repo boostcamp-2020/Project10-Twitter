@@ -1,4 +1,11 @@
-import { getFollowerList, getFollowingList, getSearchedUserList } from './getUser';
+import { getFollowerList, getFollowingList, getSearchedUserList, getUserInfo } from './getUser';
 import { followUser, unfollowUser } from './modifyUser';
 
-export { getFollowerList, getFollowingList, getSearchedUserList, followUser, unfollowUser };
+export {
+  getFollowerList,
+  getFollowingList,
+  getSearchedUserList,
+  getUserInfo,
+  followUser,
+  unfollowUser,
+};
