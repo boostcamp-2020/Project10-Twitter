@@ -67,7 +67,7 @@ const registerUser = async (githubUserInfo: any) => {
 };
 
 const getOurUser = async (githubUserInfo: any) => {
-  let user = await userModel.findOne({ user_id: githubUserInfo.username });
+  let user = await userModel.findOne({ user_id: githubUserInfo.login });
   if (!user) {
     user = await registerUser(githubUserInfo);
   }
