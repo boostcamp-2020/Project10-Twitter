@@ -1,6 +1,6 @@
 import React from 'react';
 import IconButton from './index';
-import Home from '../../atoms/icons/Home';
+import { Home } from '../../atoms/Icons';
 
 export default {
   title: 'Molecules/IconButton',

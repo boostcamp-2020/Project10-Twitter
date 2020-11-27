@@ -34,7 +34,7 @@ const Button: FunctionComponent<Props> = ({
     </MaterialButton>
   ) : (
     <MaterialButton
-      style={{ borderRadius }}
+      style={{ borderRadius, width }}
       color={color}
       variant={variant}
       onClick={onClick}

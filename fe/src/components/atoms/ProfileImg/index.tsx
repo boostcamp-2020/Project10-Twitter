@@ -1,12 +1,14 @@
 import React, { FunctionComponent } from 'react';
-import { Avatar } from '@material-ui/core';
+import Profile from './styled';
 
 interface Props {
   img?: string;
+  onClick?: () => void;
 }
 
 const ProfileImg: FunctionComponent<Props> = ({
   img = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
-}) => <Avatar alt="user" src={img} />;
+  onClick = () => {},
+}) => <Profile alt="user" src={img} onClick={onClick} />;
 
 export default ProfileImg;
