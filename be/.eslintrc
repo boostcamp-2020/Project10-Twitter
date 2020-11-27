@@ -5,9 +5,11 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
-    "no-console": "off"
+    "no-console": "off",
+    "import/extensions": 0,
+    "import/no-unresolved": 0
   }
 }
