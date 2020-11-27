@@ -1,6 +1,7 @@
 import {
   getFollowingTweetList,
   getUserTweetList,
+  getUserAllTweetList,
   addBasicTweet,
   addReplyTweet,
   addRetweet,
@@ -18,6 +19,7 @@ import { githubLogin } from './auth';
 export {
   getFollowingTweetList,
   getUserTweetList,
+  getUserAllTweetList,
   getFollowingList,
   getFollowerList,
   getSearchedUserList,

@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   type Tweet {
+    _id: String
     author_id: String
     author: User
     content: String
@@ -14,11 +15,12 @@ const typeDefs = gql`
   }
 
   type Query {
-    following_tweet_list(id: String): [Tweet]
-    user_tweet_list(id: String): [Tweet]
-    following_list(id: String): [User]
-    follower_list(id: String): [User]
-    search_user_list(word: String): [User]
+    following_tweet_list: [Tweet]
+    user_tweet_list(user_id: String): [Tweet]
+    user_all_tweet_list(user_id: String): [Tweet]
+    following_list(user_id: String): [User]
+    follower_list(user_id: String): [User]
+    search_user_list(search_word: String): [User]
     user_info: User
   }
 
@@ -27,11 +29,12 @@ const typeDefs = gql`
     follow_user(follow_user_id: String!): User
     unfollow_user(unfollow_user_id: String!): User
     add_basic_tweet(content: String!, img_url_list: [String]): Tweet
-    add_reply_tweet(content: String!, img_url_list: [String]): Tweet
-    add_retweet(content: String!): Tweet
+    add_reply_tweet(content: String!, img_url_list: [String], parent_id: String!): Tweet
+    add_retweet(content: String, retweet_id: String!): Tweet
   }
 
   type User {
+    _id: String
     user_id: String
     name: String
     profile_img_url: String
