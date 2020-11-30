@@ -1,5 +1,5 @@
-import { userModel } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
+import { userModel, notificationModel } from '../../models';
 
 const followUser = async (_: any, args: any, { authUser }: any) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
@@ -11,6 +11,11 @@ const followUser = async (_: any, args: any, { authUser }: any) => {
     { $addToSet: { following_list: followUserId } },
     { new: true },
   );
+  await notificationModel.create({
+    user_id: followUserId,
+    follower_id: userId,
+    type: 'follow',
+  });
   return user;
 };
 
