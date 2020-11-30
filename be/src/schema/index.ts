@@ -24,6 +24,7 @@ const typeDefs = gql`
     follower_list(user_id: String): [User]
     search_user_list(search_word: String): [User]
     user_info: User
+    get_notification_count: Count
   }
 
   type Mutation {
@@ -49,6 +50,10 @@ const typeDefs = gql`
 
   type Auth {
     token: String
+  }
+
+  type Count {
+    count: Int
   }
 `;
 

@@ -13,6 +13,7 @@ import {
   addReplyTweet,
   addRetweet,
   deleteTweet,
+  getNotification,
 } from '../services';
 
 const resolvers = {
@@ -24,6 +25,7 @@ const resolvers = {
     follower_list: getFollowerList,
     search_user_list: getSearchedUserList,
     user_info: getUserInfo,
+    get_notification_count: getNotification,
   },
   Mutation: {
     github_login: githubLogin,
