@@ -12,6 +12,8 @@ const typeDefs = gql`
     retweet: Tweet
     child_tweet_number: Int
     child_tweet_list: [Tweet]
+    retweet_user_number: Int
+    heart_user_number: Int
   }
 
   type Query {
@@ -31,6 +33,7 @@ const typeDefs = gql`
     add_basic_tweet(content: String!, img_url_list: [String]): Tweet
     add_reply_tweet(content: String!, img_url_list: [String], parent_id: String!): Tweet
     add_retweet(content: String, retweet_id: String!): Tweet
+    delete_tweet(tweet_id: String!): Auth
   }
 
   type User {

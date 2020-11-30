@@ -12,6 +12,7 @@ import {
   addBasicTweet,
   addReplyTweet,
   addRetweet,
+  deleteTweet,
 } from '../services';
 
 const resolvers = {
@@ -31,6 +32,7 @@ const resolvers = {
     add_basic_tweet: addBasicTweet,
     add_reply_tweet: addReplyTweet,
     add_retweet: addRetweet,
+    delete_tweet: deleteTweet,
   },
 };
 
