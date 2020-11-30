@@ -2,12 +2,12 @@ import React, { FunctionComponent } from 'react';
 import { StyledText, StyledTitleText, StyledSubText } from './styled';
 
 interface Props {
-  className: string;
+  className?: string;
   value: string;
   color?: string;
   size?: string;
   weight?: number;
-  styled: 'root' | 'title' | 'sub';
+  styled?: 'root' | 'title' | 'sub';
 }
 
 const Text: FunctionComponent<Props> = ({
@@ -16,12 +16,20 @@ const Text: FunctionComponent<Props> = ({
   color = '#000',
   size = '15px',
   weight = 400,
-  styled = 'root'
+  styled = 'root',
 }) => {
   switch (styled) {
     case 'root':
     default:
-      return <StyledText className={className} color= {color} theme = {{fontSize:size , fontWeight: weight}}>{value}</StyledText>;
+      return (
+        <StyledText
+          className={className}
+          color={color}
+          theme={{ fontSize: size, fontWeight: weight }}
+        >
+          {value}
+        </StyledText>
+      );
     case 'title':
       return <StyledTitleText className={className}>{value}</StyledTitleText>;
     case 'sub':
