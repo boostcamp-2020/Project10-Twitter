@@ -1,24 +1,13 @@
 import React, { FunctionComponent } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { StyledIconLabel } from './styled';
 
 interface Props {
   children: React.ReactChild[];
+  className?: string;
 }
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-});
 
-const IconLabel: FunctionComponent<Props> = ({ children }) => {
-  const classes = useStyles();
-  return (
-    <Box component="div" className={classes.root}>
-      {children}
-    </Box>
-  );
-};
+const IconLabel: FunctionComponent<Props> = ({ children, className }) => (
+  <StyledIconLabel className={className}>{children}</StyledIconLabel>
+);
 
 export default IconLabel;
