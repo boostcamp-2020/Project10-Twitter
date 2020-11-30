@@ -7,6 +7,9 @@ const followUser = async (_: any, args: any, { authUser }: any) => {
 
   const userId = authUser.user_id;
   const followUserId = args.follow_user_id;
+
+  if (followUserId === userId) throw new Error('not allow follow yourself');
+
   const user = await userModel.findOneAndUpdate(
     { user_id: userId },
     { $addToSet: { following_list: followUserId } },
@@ -21,6 +24,7 @@ const unfollowUser = async (_: any, args: any, { authUser }: any) => {
 
   const userId = authUser.user_id;
   const unfollowUserId = args.unfollow_user_id;
+
   const user = await userModel.findOneAndUpdate(
     { user_id: userId },
     { $pull: { following_list: unfollowUserId } },
