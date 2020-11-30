@@ -51,10 +51,10 @@ const LoginRightSection: FunctionComponent = () => {
           size="1.5rem"
           weight={700}
         />
-        <StyledButton text="가입하기" color="primary" variant="outlined" borderRadius={3} />
+        <StyledButton text="가입하기" color="primary" variant="contained" borderRadius={3} />
         <StyledButton
           text="Sign in with GitHub"
-          color="secondary"
+          color="primary"
           variant="outlined"
           borderRadius={3}
           icon={Twitter({})}
