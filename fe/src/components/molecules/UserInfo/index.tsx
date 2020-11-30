@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import Container from './styled';
-import TitleSubText from '../TitleSubText';
+import { Container, StyledTitleSub } from './styled';
 import ProfileImg from '../../atoms/ProfileImg';
 
 interface Props {
@@ -22,7 +21,7 @@ const UserInfo: FunctionComponent<Props> = ({
 }) => (
   <Container component="div" onClick={onClick} width={width}>
     <ProfileImg img={img} />
-    <TitleSubText title={title} sub={sub} inRow={inRow} />
+    <StyledTitleSub title={title} sub={sub} />
   </Container>
 );
 
