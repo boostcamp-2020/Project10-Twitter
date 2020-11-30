@@ -6,17 +6,18 @@ const StyledText = styled('span')`
   font-weight: ${(props) => props.theme.fontWeight};
 `;
 const StyledTitleText = styled('span')`
-  color: '#000';
-  font-size: '15px';
+  color: #000;
+  font-size: 15px;
   font-weight: 700;
-  display: 'inline-block';
+  display: inline-block;
+  margin-right: 5px;
 `;
 
 const StyledSubText = styled('span')`
-  color: 'rgb(91, 112, 131)';
-  font-size: '15px';
+  color: rgb(91, 112, 131);
+  font-size: 15px;
   font-weight: 400;
-  display: 'inline-block';
+  display: inline-block;
 `;
 
 export { StyledText, StyledTitleText, StyledSubText };
