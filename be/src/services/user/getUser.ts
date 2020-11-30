@@ -21,7 +21,7 @@ const getFollowingList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = args.user_id;
-  const followingList = await userModel.aggregate([
+  const followingList: Document[] = await userModel.aggregate([
     {
       $match: {
         user_id: userId,
@@ -45,7 +45,7 @@ const getFollowerList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = args.user_id;
-  const followerList = await userModel.aggregate([
+  const followerList: Document[] = await userModel.aggregate([
     {
       $match: {
         following_list: userId,

@@ -20,17 +20,14 @@ const getFollowingTweetList = async (_: any, args: Args, { authUser }: Auth) => 
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.user_id;
-  const followingList = await userModel.findOne({ user_id: userId });
+  const userInfo = await userModel.findOne({ user_id: userId });
 
-  const tweetList = await tweetModel.aggregate([
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
         $and: [
           {
-            $or: [
-              { author_id: { $in: followingList?.get('following_list') } },
-              { author_id: userId },
-            ],
+            $or: [{ author_id: { $in: userInfo?.get('following_list') } }, { author_id: userId }],
           },
           { parent_id: { $exists: false } },
         ],
@@ -79,6 +76,7 @@ const getFollowingTweetList = async (_: any, args: Args, { authUser }: Auth) => 
     },
     { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
+
   return tweetList;
 };
 
@@ -86,7 +84,7 @@ const getUserTweetList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = args.user_id;
-  const tweetList = await tweetModel.aggregate([
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
         $and: [{ author_id: userId }, { parent_id: { $exists: false } }],
@@ -135,6 +133,7 @@ const getUserTweetList = async (_: any, args: Args, { authUser }: Auth) => {
     },
     { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
+
   return tweetList;
 };
 
@@ -142,7 +141,7 @@ const getUserAllTweetList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = args.user_id;
-  const tweetList = await tweetModel.aggregate([
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: { author_id: userId },
     },
@@ -189,6 +188,7 @@ const getUserAllTweetList = async (_: any, args: Args, { authUser }: Auth) => {
     },
     { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
+
   return tweetList;
 };
 
