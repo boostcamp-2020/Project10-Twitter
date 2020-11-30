@@ -25,6 +25,7 @@ const typeDefs = gql`
     search_user_list(search_word: String): [User]
     user_info: User
     get_notification_count: Count
+    get_notification: [Notification]
   }
 
   type Mutation {
@@ -34,7 +35,8 @@ const typeDefs = gql`
     add_basic_tweet(content: String!, img_url_list: [String]): Tweet
     add_reply_tweet(content: String!, img_url_list: [String], parent_id: String!): Tweet
     add_retweet(content: String, retweet_id: String!): Tweet
-    delete_tweet(tweet_id: String!): Auth
+    delete_tweet(tweet_id: String!): Response
+    update_notification: Response
   }
 
   type User {
@@ -54,6 +56,17 @@ const typeDefs = gql`
 
   type Count {
     count: Int
+  }
+
+  type Response {
+    response: Boolean
+  }
+
+  type Notification {
+    user: User
+    tweet: Tweet
+    type: String
+    is_read: Boolean
   }
 `;
 

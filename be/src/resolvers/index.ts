@@ -1,3 +1,4 @@
+import { IResolvers } from 'apollo-server-express';
 import {
   getFollowingTweetList,
   getUserTweetList,
@@ -14,9 +15,11 @@ import {
   addRetweet,
   deleteTweet,
   getNotification,
+  getNotificationCount,
+  updateNotification,
 } from '../services';
 
-const resolvers = {
+const resolvers: IResolvers = {
   Query: {
     following_tweet_list: getFollowingTweetList,
     user_tweet_list: getUserTweetList,
@@ -25,7 +28,8 @@ const resolvers = {
     follower_list: getFollowerList,
     search_user_list: getSearchedUserList,
     user_info: getUserInfo,
-    get_notification_count: getNotification,
+    get_notification: getNotification,
+    get_notification_count: getNotificationCount,
   },
   Mutation: {
     github_login: githubLogin,
@@ -35,6 +39,7 @@ const resolvers = {
     add_reply_tweet: addReplyTweet,
     add_retweet: addRetweet,
     delete_tweet: deleteTweet,
+    update_notification: updateNotification,
   },
 };
 
