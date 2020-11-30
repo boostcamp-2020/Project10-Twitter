@@ -10,7 +10,8 @@ const tweetSchema = new Schema(
     parent_id: Schema.Types.ObjectId,
     retweet_id: Schema.Types.ObjectId,
     child_tweet_list: [Schema.Types.ObjectId],
-    child_tweet_number: Number,
+    retweet_user_list: [String],
+    heart_user_list: [String],
   },
   { versionKey: false },
 );
