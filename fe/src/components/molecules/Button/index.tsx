@@ -2,6 +2,7 @@ import React, { FunctionComponent, ReactNode } from 'react';
 import { Button as MaterialButton } from '@material-ui/core';
 
 interface Props {
+  className : string;
   color?: 'primary' | 'secondary' | 'inherit' | 'default' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
   text: string;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const Button: FunctionComponent<Props> = ({
+  className,
   color = undefined,
   variant = undefined,
   text,
@@ -24,6 +26,7 @@ const Button: FunctionComponent<Props> = ({
 }) =>
   isStart ? (
     <MaterialButton
+      className = {className}
       style={{ borderRadius, width }}
       color={color}
       variant={variant}
