@@ -13,10 +13,13 @@ interface Auth {
 }
 
 interface Args {
-  read: boolean;
+  userId: String;
+  type: String;
+  followerId?: String;
+  tweetId?: String;
 }
 
-const getNotification = async (_: any, args: Args, { authUser }: Auth) => {
+const getNotification = async (_: any, __: any, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const { userId } = authUser;
@@ -34,4 +37,13 @@ const getNotification = async (_: any, args: Args, { authUser }: Auth) => {
   return count;
 };
 
-export default getNotification;
+const createNotifiaction = async ({ userId, followerId, tweetId, type }: Args) => {
+  await notificationModel.create({
+    user_id: userId,
+    follower_id: followerId,
+    tweet_id: tweetId,
+    type,
+  });
+};
+
+export { getNotification, createNotifiaction };
