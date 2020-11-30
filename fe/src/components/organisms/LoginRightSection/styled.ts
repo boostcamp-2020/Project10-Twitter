@@ -26,13 +26,14 @@ const JoinBox = styled(Box)`
 `;
 
 const StyledButton = styled(Button)`
-  &[style] {
-    margin-top: 10px;
+  && {
+    margin-top: 15px;
   }
 `;
 
 const StyledText = styled(Text)`
-  &[style] {
+  && {
+    margin-top: 15px;
   }
 `;
 export { Container, LoginFormContainer, JoinBox, StyledButton, StyledText };
