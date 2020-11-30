@@ -8,7 +8,7 @@ import dbStarter from './providers/dbProvider';
 
 import schema from './schema';
 import resolvers from './resolvers';
-import { verifyToken } from './services/auth';
+import { verifyToken } from './lib/jwt-token';
 
 dotenv.config();
 
@@ -25,6 +25,7 @@ const server = new ApolloServer({
     const authUser = verifyToken(token);
     return { authUser };
   },
+  formatError: (err) => ({ message: err.message }),
 });
 
 app.use(logger('dev'));
