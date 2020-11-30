@@ -21,7 +21,13 @@ const SvgContainer = styled(SvgIcon)`
 `;
 
 const StyledIconLabel = styled(IconLabel)`
-  margin-bottom: 40px;
+  && {
+    margin-bottom: 40px;
+
+    & svg {
+      fill: #fff;
+    }
+  }
 `;
 
 const IconLabelContainer = styled(Box)`
