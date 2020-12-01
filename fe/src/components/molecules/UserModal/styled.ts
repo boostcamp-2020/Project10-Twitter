@@ -1,10 +1,19 @@
-import { Box } from '@material-ui/core';
+import { List, Box } from '@material-ui/core';
 import styled from 'styled-components';
 
 const Container = styled(Box)`
+  position: absolute;
+  bottom: 10vh;
+  right: 5vw;
+`;
+
+const StyledList = styled(List)`
   border-radius: 15px;
   position: relative;
-  border: 1px solid #efefef;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  box-shadow: 3px 3px 3px #999;
+  z-index: 1;
 
   &::before {
     position: absolute;
@@ -13,12 +22,12 @@ const Container = styled(Box)`
     width: 12px;
     height: 12px;
     content: '';
-    border-bottom: 1px solid #efefef;
-    border-right: 1px solid #efefef;
+    border-bottom: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    box-shadow: 3px 3px 3px #999;
     transform: rotate(45deg);
-    z-index: 1;
     background-color: #fff;
   }
 `;
 
-export default Container;
+export { Container, StyledList };
