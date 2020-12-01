@@ -1,13 +1,15 @@
 import React, { ReactElement, FunctionComponent, useState } from 'react';
-import styled from 'styled-components';
-import { Box, ListItem } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
+import { useQuery } from '@apollo/client';
 import Button from '../../molecules/Button';
 import UserModal from '../../molecules/UserModal';
 import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
-
-interface Props {
-  children: React.ReactChild[];
-}
+import UserInfo from '../../molecules/UserInfo';
+import SearchBar from '../../molecules/SearchBar';
+import GET_MYINFO from '../../../graphql/getMyInfo.gql';
+import Container from './styled';
+import useOnTextChange from '../../../hooks/useOnTextChange';
+import useDisplay from '../../../hooks/useDisplay';
 
 interface ButtonProps {
   id: number;
@@ -18,21 +20,6 @@ interface ButtonProps {
   width?: string;
   onClick?: () => void;
 }
-
-const Container = styled(Box)`
-  position: fixed;
-  top: 0px;
-  height: 100%;
-  width: 20vw;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-
-  & li:last-child {
-    margin-top: auto;
-    margin-bottom: 3vh;
-  }
-`;
 
 const TITLE: Array<ButtonProps> = [
   { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px' }) },
@@ -49,11 +36,20 @@ const TITLE: Array<ButtonProps> = [
   },
 ];
 
-const SideBar: FunctionComponent<Props> = ({ children }) => {
-  const [display, setDisplay] = useState(false);
-  const onClickUserInfo = () => {
-    setDisplay(!display);
-  };
+const SideBar: FunctionComponent = () => {
+  const { data } = useQuery(GET_MYINFO);
+  const placeholder = 'Search Twitter';
+  const type = 'text';
+  const variant = 'standard';
+
+  const [value,, onTextChange] = useOnTextChange('')
+  const [display,, onClick] = useDisplay(false)
+
+  
+  if (data) {
+    const userId = data.user.user_id;
+    const userName = data.user.name;
+    const userProfileImg = data.user.profile_img_url;
   return (
     <Container component="ul">
       {TITLE.map((v) => (
@@ -64,15 +60,34 @@ const SideBar: FunctionComponent<Props> = ({ children }) => {
             color={v.color}
             variant={v.variant}
             width={v.width}
-            onClick={onClickUserInfo}
           />
         </ListItem>
       ))}
-      {children}
+          <ListItem>
+            <SearchBar
+              placeholder={placeholder}
+              type={type}
+              variant={variant}
+              width="90%"
+              value={value}
+              onChange={onTextChange}
+            />
+          </ListItem>
+          {display ? <UserModal /> : <></>}
+          <ListItem onClick={onClick}>
+            <UserInfo
+              title={userId}
+              sub={userName}
+              img={userProfileImg}
+              width="90%"
+            />
+          </ListItem>
 
-      {display ? <UserModal /> : <></>}
-    </Container>
+          </Container>
+
   );
-};
+      }
+      return <div>loading...</div>;
+    };
 
 export default SideBar;
