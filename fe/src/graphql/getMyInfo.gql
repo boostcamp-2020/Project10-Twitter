@@ -1,5 +1,5 @@
 query {
-  user: user_info {
+  myProfile: user_info {
     user_id
     name
     profile_img_url

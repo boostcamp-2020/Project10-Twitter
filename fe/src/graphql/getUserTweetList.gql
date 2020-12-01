@@ -1,5 +1,5 @@
-query {
-  list: following_tweet_list {
+query($userId: String) {
+  tweetList: user_tweet_list(user_id: $userId) {
     content
     author {
       user_id
