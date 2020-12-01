@@ -5,6 +5,7 @@ import {
   addBasicTweet,
   addReplyTweet,
   addRetweet,
+  deleteTweet,
 } from './tweet';
 import {
   getFollowerList,
@@ -14,7 +15,8 @@ import {
   followUser,
   unfollowUser,
 } from './user';
-import { githubLogin } from './auth';
+import githubLogin from './auth';
+import { getNotification, getNotificationCount, updateNotification } from './notification';
 
 export {
   getFollowingTweetList,
@@ -30,4 +32,8 @@ export {
   addBasicTweet,
   addReplyTweet,
   addRetweet,
+  deleteTweet,
+  getNotification,
+  getNotificationCount,
+  updateNotification,
 };

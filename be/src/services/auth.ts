@@ -1,15 +1,6 @@
 import axios from 'axios';
+import { signToken } from '../lib/jwt-token';
 import { userModel } from '../models';
-import jwt from 'jsonwebtoken';
-
-const githubLogin = async (_: any, args: any) => {
-  const { code } = args;
-  const githubToken = await getGithubToken(code);
-  const githubUserInfo = await getGithubUserInfo(githubToken);
-  const user = await getOurUser(githubUserInfo);
-  const signedToken = signToken(user);
-  return { token: signedToken };
-};
 
 const getGithubToken = async (code: string) => {
   const githubClientId =
@@ -50,7 +41,7 @@ const makeRandomName = () => {
   let result = '';
   const NICKNAME_LENGTH = 15;
   const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < NICKNAME_LENGTH; i++) {
+  for (let i = 0; i < NICKNAME_LENGTH; i += 1) {
     result += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length));
   }
   return result;
@@ -62,6 +53,7 @@ const registerUser = async (githubUserInfo: any) => {
     name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(),
     following_list: [],
     profile_img_url: githubUserInfo.avatar_url,
+    heart_tweet_list: [],
   });
   return user;
 };
@@ -74,21 +66,13 @@ const getOurUser = async (githubUserInfo: any) => {
   return user;
 };
 
-const signToken = (user: any) => {
-  const userData = {
-    _id: user._id,
-    name: user.name,
-    user_id: user.user_id,
-    profile_img_url: user.profile_img_url,
-  };
-  const token = jwt.sign(userData, process.env.JWT_SECRET_KEY!, { expiresIn: '24h' });
-  return token;
+const githubLogin = async (_: any, args: any) => {
+  const { code } = args;
+  const githubToken = await getGithubToken(code);
+  const githubUserInfo = await getGithubUserInfo(githubToken);
+  const user = await getOurUser(githubUserInfo);
+  const signedToken = signToken(user);
+  return { token: signedToken };
 };
 
-const verifyToken = (token: string) => {
-  if (!token) return null;
-  const user = jwt.verify(token, process.env.JWT_SECRET_KEY!);
-  return user;
-};
-
-export { githubLogin, verifyToken };
+export default githubLogin;

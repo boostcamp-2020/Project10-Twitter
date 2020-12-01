@@ -1,17 +1,34 @@
-import { userModel, tweetModel } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
+import { userModel, tweetModel } from '../../models';
 
-const getFollowingTweetList = async (_: any, args: any, { authUser }: any) => {
+interface User {
+  user_id: String;
+  profile_img_url: String;
+  name: String;
+  _id: String;
+}
+
+interface Auth {
+  authUser: User;
+}
+
+interface Args {
+  user_id: String;
+}
+
+const getFollowingTweetList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.user_id;
-  const followingList = await userModel.findOne({ user_id: userId });
+  const userInfo = await userModel.findOne({ user_id: userId });
 
-  const tweetList = await tweetModel.aggregate([
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
         $and: [
-          { author_id: { $in: followingList?.get('following_list') } },
+          {
+            $or: [{ author_id: { $in: userInfo?.get('following_list') } }, { author_id: userId }],
+          },
           { parent_id: { $exists: false } },
         ],
       },
@@ -25,6 +42,10 @@ const getFollowingTweetList = async (_: any, args: any, { authUser }: any) => {
         retweet_id: 1,
         child_tweet_list: 1,
         child_tweet_number: { $size: '$child_tweet_list' },
+        retweet_user_list: 1,
+        retweet_user_number: { $size: '$retweet_user_list' },
+        heart_user_list: 1,
+        heart_user_number: { $size: '$heart_user_list' },
       },
     },
     {
@@ -55,14 +76,15 @@ const getFollowingTweetList = async (_: any, args: any, { authUser }: any) => {
     },
     { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
+
   return tweetList;
 };
 
-const getUserTweetList = async (_: any, args: any, { authUser }: any) => {
+const getUserTweetList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = args.user_id;
-  const tweetList = await tweetModel.aggregate([
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
         $and: [{ author_id: userId }, { parent_id: { $exists: false } }],
@@ -77,6 +99,10 @@ const getUserTweetList = async (_: any, args: any, { authUser }: any) => {
         retweet_id: 1,
         child_tweet_list: 1,
         child_tweet_number: { $size: '$child_tweet_list' },
+        retweet_user_list: 1,
+        retweet_user_number: { $size: '$retweet_user_list' },
+        heart_user_list: 1,
+        heart_user_number: { $size: '$heart_user_list' },
       },
     },
     {
@@ -107,14 +133,15 @@ const getUserTweetList = async (_: any, args: any, { authUser }: any) => {
     },
     { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
+
   return tweetList;
 };
 
-const getUserAllTweetList = async (_: any, args: any, { authUser }: any) => {
+const getUserAllTweetList = async (_: any, args: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = args.user_id;
-  const tweetList = await tweetModel.aggregate([
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: { author_id: userId },
     },
@@ -127,6 +154,10 @@ const getUserAllTweetList = async (_: any, args: any, { authUser }: any) => {
         retweet_id: 1,
         child_tweet_list: 1,
         child_tweet_number: { $size: '$child_tweet_list' },
+        retweet_user_list: 1,
+        retweet_user_number: { $size: '$retweet_user_list' },
+        heart_user_list: 1,
+        heart_user_number: { $size: '$heart_user_list' },
       },
     },
     {
@@ -157,6 +188,7 @@ const getUserAllTweetList = async (_: any, args: any, { authUser }: any) => {
     },
     { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
   ]);
+
   return tweetList;
 };
 

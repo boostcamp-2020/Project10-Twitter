@@ -11,6 +11,7 @@ const userSchema = new Schema(
     comment: String,
     profile_img_url: String,
     background_img_url: String,
+    heart_tweet_list: [mongoose.Types.ObjectId],
   },
   { versionKey: false },
 );

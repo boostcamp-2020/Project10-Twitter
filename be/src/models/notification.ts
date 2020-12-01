@@ -8,7 +8,7 @@ const notificationSchema = new Schema(
     tweet_id: Schema.Types.ObjectId,
     follower_id: String,
     type: String,
-    is_read: Boolean,
+    is_read: { type: Boolean, default: false },
   },
   { versionKey: false },
 );
