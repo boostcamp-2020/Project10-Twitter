@@ -1,7 +1,8 @@
-import React, { ReactElement, FunctionComponent } from 'react';
+import React, { ReactElement, FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { Box, ListItem } from '@material-ui/core';
 import Button from '../../molecules/Button';
+import UserModal from '../../molecules/UserModal';
 import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
 
 interface Props {
@@ -15,12 +16,22 @@ interface ButtonProps {
   color?: 'primary' | 'inherit' | 'default' | 'secondary' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
   width?: string;
+  onClick?: () => void;
 }
 
 const Container = styled(Box)`
   position: fixed;
   top: 0px;
   height: 100%;
+  width: 20vw;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+
+  & li:last-child {
+    margin-top: auto;
+    margin-bottom: 3vh;
+  }
 `;
 
 const TITLE: Array<ButtonProps> = [
@@ -29,18 +40,39 @@ const TITLE: Array<ButtonProps> = [
   { id: 2, text: '탐색하기', icon: Explore({ width: '30px', height: '30px' }) },
   { id: 3, text: '알림', icon: Notifications({ width: '30px', height: '30px' }) },
   { id: 4, text: '프로필', icon: Profiles({ width: '30px', height: '30px' }) },
-  { id: 5, text: 'Tweet', color: 'primary', variant: 'contained', width: '90%' },
+  {
+    id: 5,
+    text: 'Tweet',
+    color: 'primary',
+    variant: 'contained',
+    width: '90%',
+  },
 ];
 
-const SideBar: FunctionComponent<Props> = ({ children }) => (
-  <Container component="ul">
-    {TITLE.map((v) => (
-      <ListItem key={v.id}>
-        <Button text={v.text} icon={v.icon} color={v.color} variant={v.variant} width={v.width} />
-      </ListItem>
-    ))}
-    {children}
-  </Container>
-);
+const SideBar: FunctionComponent<Props> = ({ children }) => {
+  const [display, setDisplay] = useState(false);
+  const onClickUserInfo = () => {
+    setDisplay(!display);
+  };
+  return (
+    <Container component="ul">
+      {TITLE.map((v) => (
+        <ListItem key={v.id}>
+          <Button
+            text={v.text}
+            icon={v.icon}
+            color={v.color}
+            variant={v.variant}
+            width={v.width}
+            onClick={onClickUserInfo}
+          />
+        </ListItem>
+      ))}
+      {children}
+
+      {display ? <UserModal /> : <></>}
+    </Container>
+  );
+};
 
 export default SideBar;

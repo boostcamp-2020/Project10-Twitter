@@ -7,10 +7,10 @@ import Button from '../../molecules/Button';
 import ButtonsBox from './styled';
 
 interface Props {
-  Img?: string;
+  img?: string;
 }
 
-const NewTweetContainer: FunctionComponent<Props> = ({ Img = '' }) => {
+const NewTweetContainer: FunctionComponent<Props> = ({ img = '' }) => {
   const placeholder = "What's happening";
   const content = 'Tweet';
   const color = 'primary';
@@ -24,7 +24,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({ Img = '' }) => {
   };
 
   return (
-    <MainContaier ProfileImgUrl={Img}>
+    <MainContaier ProfileImgUrl={img}>
       <TextArea placeholder={placeholder} value={value} onChange={onChange} />
       <ButtonsBox component="div">
         <IconButton icon={Picture} />

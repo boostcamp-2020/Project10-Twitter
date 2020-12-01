@@ -51,12 +51,18 @@ const Home: FunctionComponent = () => {
             />
           </ListItem>
           <ListItem>
-            <UserInfo title={userId} sub={userName} inRow={false} width="90%" />
+            <UserInfo
+              title={userId}
+              sub={userName}
+              inRow={false}
+              img={userProfileImg}
+              width="90%"
+            />
           </ListItem>
         </SideBar>
         <MainContainer>
           <HomeBox>Home</HomeBox>
-          <NewTweetContainer />
+          <NewTweetContainer img={userProfileImg} />
           {data.list?.map((tweet: Tweet, index: number) => (
             <TweetContainer key={index} tweet={tweet} />
           ))}
