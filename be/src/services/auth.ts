@@ -1,6 +1,20 @@
 import axios from 'axios';
 import { signToken } from '../lib/jwt-token';
 import { userModel } from '../models';
+import { registerUser } from '../services/user/addUser';
+import getHashedPassword from '../lib/hash-password';
+
+interface UserInfo {
+  user_id: string;
+  name: string;
+  profile_img_url?: string;
+}
+
+interface GithubUserInfo {
+  login: string;
+  avatar_url: string;
+  name?: string;
+}
 
 const getGithubToken = async (code: string) => {
   const githubClientId =
@@ -29,7 +43,7 @@ const getGithubToken = async (code: string) => {
 };
 
 const getGithubUserInfo = async (githubToken: string) => {
-  const { data } = await axios.get('https://api.github.com/user', {
+  const { data }: { data: GithubUserInfo } = await axios.get('https://api.github.com/user', {
     headers: {
       Authorization: `token ${githubToken}`,
     },
@@ -47,32 +61,36 @@ const makeRandomName = () => {
   return result;
 };
 
-const registerUser = async (githubUserInfo: any) => {
-  const user = await userModel.create({
-    user_id: githubUserInfo.login,
-    name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(),
-    following_list: [],
-    profile_img_url: githubUserInfo.avatar_url,
-    heart_tweet_list: [],
-  });
-  return user;
-};
-
-const getOurUser = async (githubUserInfo: any) => {
-  let user = await userModel.findOne({ user_id: githubUserInfo.login });
+const getOurUser = async (userInfo: UserInfo) => {
+  let user = await userModel.findOne({ user_id: userInfo.user_id });
   if (!user) {
-    user = await registerUser(githubUserInfo);
+    user = await registerUser(userInfo);
   }
   return user;
 };
 
-const githubLogin = async (_: any, args: any) => {
+const githubLogin = async (_: any, args: { code: string }) => {
   const { code } = args;
   const githubToken = await getGithubToken(code);
   const githubUserInfo = await getGithubUserInfo(githubToken);
-  const user = await getOurUser(githubUserInfo);
-  const signedToken = signToken(user);
+  const user = await getOurUser({
+    user_id: githubUserInfo.login,
+    name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(),
+    profile_img_url: githubUserInfo.avatar_url,
+  });
+
+  const signedToken = signToken({ id: user.get('user_id') });
   return { token: signedToken };
 };
 
-export default githubLogin;
+const localLogin = async (_: any, { user_id, password }: { user_id: string; password: string }) => {
+  password = await getHashedPassword(password);
+  const userInfo = await userModel.findOne({ user_id, password });
+  if (userInfo) {
+    const signedToken = signToken({ id: userInfo?.get('user_id') });
+    return { token: signedToken };
+  }
+  throw new Error('Not Found User');
+};
+
+export { githubLogin, localLogin };
