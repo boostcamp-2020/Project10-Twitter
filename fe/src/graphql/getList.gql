@@ -1,10 +1,4 @@
 query {
-  user: user_info {
-    user_id
-    name
-    profile_img_url
-  }
-
   list: following_tweet_list {
     content
     author {
