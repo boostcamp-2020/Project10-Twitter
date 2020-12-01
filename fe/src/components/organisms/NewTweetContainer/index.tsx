@@ -10,7 +10,7 @@ import GET_MYINFO from '../../../graphql/getMyInfo.gql';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 
 const NewTweetContainer: FunctionComponent= () => {
-  const { data } = useQuery(GET_MYINFO);
+  const { loading, error, data } = useQuery(GET_MYINFO);
   const [value,,onTextChange] = useOnTextChange('')
 
   const placeholder = "What's happening";
@@ -19,9 +19,13 @@ const NewTweetContainer: FunctionComponent= () => {
   const variant = 'contained';
   const borderRadius = 50;
 
+  if (loading) return <div>'Loading...'</div>;
+  if (error) return <div>`Error! ${error.message}`</div>;
 
-  if (data) {
-    const userProfileImg = data.user.profile_img_url;
+  const {myProfile} = data
+
+  const userProfileImg = myProfile.profile_img_url;
+
     return (
       <MainContaier ProfileImgUrl={userProfileImg}>
         <TextArea placeholder={placeholder} value={value} onChange={onTextChange} />
@@ -31,7 +35,6 @@ const NewTweetContainer: FunctionComponent= () => {
         </ButtonsBox>
       </MainContaier>
     );
-  }
-  return <div>loading...</div>;
+
 };
 export default NewTweetContainer;
