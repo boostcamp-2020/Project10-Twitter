@@ -14,9 +14,12 @@ import {
   getUserInfo,
   followUser,
   unfollowUser,
+  createUser,
+  updateUserName,
 } from './user';
-import githubLogin from './auth';
+import { localLogin, githubLogin } from './auth';
 import { getNotification, getNotificationCount, updateNotification } from './notification';
+import { imgUpload } from './upload';
 
 export {
   getFollowingTweetList,
@@ -27,6 +30,7 @@ export {
   getSearchedUserList,
   getUserInfo,
   githubLogin,
+  localLogin,
   followUser,
   unfollowUser,
   addBasicTweet,
@@ -36,4 +40,7 @@ export {
   getNotification,
   getNotificationCount,
   updateNotification,
+  createUser,
+  updateUserName,
+  imgUpload,
 };

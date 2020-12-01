@@ -12,6 +12,7 @@ const tweetSchema = new Schema(
     child_tweet_list: [Schema.Types.ObjectId],
     retweet_user_list: [String],
     heart_user_list: [String],
+    createAt: { type: Date, default: Date.now },
   },
   { versionKey: false },
 );
