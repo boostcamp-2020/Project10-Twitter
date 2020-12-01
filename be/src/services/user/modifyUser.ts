@@ -2,7 +2,11 @@ import { AuthenticationError } from 'apollo-server-express';
 import { userModel } from '../../models';
 import { createNotifiaction } from '../notification';
 
-const followUser = async (_: any, args: any, { authUser }: any) => {
+interface Auth {
+  authUser: { user_id: string };
+}
+
+const followUser = async (_: any, args: { follow_user_id: String }, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.user_id;
@@ -19,7 +23,7 @@ const followUser = async (_: any, args: any, { authUser }: any) => {
   return user;
 };
 
-const unfollowUser = async (_: any, args: any, { authUser }: any) => {
+const unfollowUser = async (_: any, args: { unfollow_user_id: String }, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.user_id;
@@ -33,4 +37,13 @@ const unfollowUser = async (_: any, args: any, { authUser }: any) => {
   return user;
 };
 
-export { followUser, unfollowUser };
+const updateUserName = async (_: any, args: { name: String }, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.user_id;
+  const { name } = args;
+  await userModel.update({ user_id: userId }, { $set: { name } });
+  return { response: true };
+};
+
+export { followUser, unfollowUser, updateUserName };
