@@ -8,6 +8,7 @@ import {
   getSearchedUserList,
   getUserInfo,
   githubLogin,
+  localLogin,
   followUser,
   unfollowUser,
   addBasicTweet,
@@ -17,6 +18,9 @@ import {
   getNotification,
   getNotificationCount,
   updateNotification,
+  createUser,
+  updateUserName,
+  imgUpload,
 } from '../services';
 
 const resolvers: IResolvers = {
@@ -30,9 +34,13 @@ const resolvers: IResolvers = {
     user_info: getUserInfo,
     get_notification: getNotification,
     get_notification_count: getNotificationCount,
+    uploads: (parent: any, args: any) => {},
   },
   Mutation: {
+    update_user_name: updateUserName,
+    create_user: createUser,
     github_login: githubLogin,
+    local_login: localLogin,
     follow_user: followUser,
     unfollow_user: unfollowUser,
     add_basic_tweet: addBasicTweet,
@@ -40,6 +48,7 @@ const resolvers: IResolvers = {
     add_retweet: addRetweet,
     delete_tweet: deleteTweet,
     update_notification: updateNotification,
+    single_upload: imgUpload,
   },
 };
 

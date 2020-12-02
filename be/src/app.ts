@@ -2,6 +2,7 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 
 import logger from 'morgan';
+import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import dbStarter from './providers/dbProvider';
@@ -14,6 +15,7 @@ dotenv.config();
 
 const app = express();
 const port: number = Number(process.env.PORT) || 3000;
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
@@ -30,7 +32,7 @@ const server = new ApolloServer({
 
 app.use(logger('dev'));
 app.use(cors());
-
+app.use(express.static(path.join(__dirname, '../uploads')));
 server.applyMiddleware({ app, path: '/graphql' });
 
 const booting = async () => {

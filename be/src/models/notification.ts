@@ -9,6 +9,7 @@ const notificationSchema = new Schema(
     follower_id: String,
     type: String,
     is_read: { type: Boolean, default: false },
+    createAt: { type: Date, default: Date.now },
   },
   { versionKey: false },
 );

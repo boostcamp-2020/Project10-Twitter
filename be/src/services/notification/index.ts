@@ -1,15 +1,8 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { notificationModel } from '../../models';
 
-interface User {
-  user_id: String;
-  profile_img_url: String;
-  name: String;
-  _id: String;
-}
-
 interface Auth {
-  authUser: User;
+  authUser: { user_id: string };
 }
 
 interface Args {
