@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { signToken } from '../lib/jwt-token';
-import { userModel } from '../models';
-import { registerUser } from '../services/user/addUser';
-import getHashedPassword from '../lib/hash-password';
+import { signToken } from '../../lib/jwt-token';
+import { userModel } from '../../models';
+import { registerUser } from '../../services/user/addUser';
+import getHashedPassword from '../../lib/hash-password';
 
 interface UserInfo {
   user_id: string;
