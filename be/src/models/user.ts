@@ -9,6 +9,7 @@ const userSchema = new Schema(
     password: String,
     following_list: [String],
     comment: String,
+    github: String,
     profile_img_url: String,
     background_img_url: String,
     heart_tweet_list: [mongoose.Types.ObjectId],
