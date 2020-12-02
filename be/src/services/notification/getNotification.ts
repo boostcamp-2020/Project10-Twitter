@@ -2,13 +2,13 @@ import { AuthenticationError } from 'apollo-server-express';
 import { notificationModel } from '../../models';
 
 interface Auth {
-  authUser: { user_id: string };
+  authUser: { id: String };
 }
 
 const getNotification = async (_: any, __: any, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   const notifiactions: Document[] = await notificationModel.aggregate([
     {
       $match: {
@@ -58,7 +58,7 @@ const getNotification = async (_: any, __: any, { authUser }: Auth) => {
 const getNotificationCount = async (_: any, __: any, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   const [count]: Document[] = await notificationModel.aggregate([
     {
       $match: {

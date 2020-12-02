@@ -1,10 +1,11 @@
 type User {
+  _id: String
   user_id: String
   name: String
   profile_img_url: String
   comment: String
   background_img_url: String
-  following_list: [String]
+  following_id_list: [String]
   following_user: User
 }
 type Auth {

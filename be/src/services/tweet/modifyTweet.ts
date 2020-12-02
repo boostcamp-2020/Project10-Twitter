@@ -3,7 +3,7 @@ import { tweetModel, userModel } from '../../models';
 import { createNotifiaction } from '../notification/index';
 
 interface Auth {
-  authUser: { user_id: string };
+  authUser: { id: String };
 }
 
 interface Args {
@@ -13,16 +13,16 @@ interface Args {
 const heartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   const tweet = await tweetModel.findOneAndUpdate(
     { _id: tweet_id },
-    { $addToSet: { heart_user_list: userId } },
+    { $addToSet: { heart_user_id_list: userId } },
     { new: true },
   );
 
   const user = await userModel.findOneAndUpdate(
     { user_id: userId },
-    { $addToSet: { heart_tweet_list: tweet_id } },
+    { $addToSet: { heart_tweet_id_list: tweet_id } },
     { new: true },
   );
 
@@ -33,16 +33,16 @@ const heartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
 const unheartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
 
   const tweet = await tweetModel.findOneAndUpdate(
     { _id: tweet_id },
-    { $pull: { heart_user_list: userId } },
+    { $pull: { heart_user_id_list: userId } },
     { new: true },
   );
   const user = await userModel.findOneAndUpdate(
     { user_id: userId },
-    { $pull: { heart_tweet_list: tweet_id } },
+    { $pull: { heart_tweet_id_list: tweet_id } },
     { new: true },
   );
 

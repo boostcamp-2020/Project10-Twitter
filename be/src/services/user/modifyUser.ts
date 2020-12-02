@@ -3,7 +3,7 @@ import { userModel } from '../../models';
 import { createNotifiaction } from '../notification';
 
 interface Auth {
-  authUser: { user_id: string };
+  authUser: { id: String };
 }
 
 const followUser = async (
@@ -13,13 +13,13 @@ const followUser = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
 
   if (follow_user_id === userId) throw new Error('not allow follow yourself');
 
   const user = await userModel.findOneAndUpdate(
     { user_id: userId },
-    { $addToSet: { following_list: follow_user_id } },
+    { $addToSet: { following_id_list: follow_user_id } },
     { new: true },
   );
   await createNotifiaction({ userId: follow_user_id, followerId: userId, type: 'follow' });
@@ -33,11 +33,11 @@ const unfollowUser = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
 
   const user = await userModel.findOneAndUpdate(
     { user_id: userId },
-    { $pull: { following_list: unfollow_user_id } },
+    { $pull: { following_id_list: unfollow_user_id } },
     { new: true },
   );
   return user;
@@ -46,7 +46,7 @@ const unfollowUser = async (
 const updateUserName = async (_: any, { name }: { name: String }, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   await userModel.update({ user_id: userId }, { $set: { name } });
   return { response: true };
 };
@@ -54,7 +54,7 @@ const updateUserName = async (_: any, { name }: { name: String }, { authUser }: 
 const updateUserComment = async (_: any, { comment }: { comment: String }, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   await userModel.update({ user_id: userId }, { $set: { comment } });
   return { response: true };
 };
@@ -66,7 +66,7 @@ const updateUserProfileImg = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   await userModel.update({ user_id: userId }, { $set: { profile_img_url } });
   return { response: true };
 };
@@ -78,7 +78,7 @@ const updateUserBackgroundImg = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   await userModel.update({ user_id: userId }, { $set: { background_img_url } });
   return { response: true };
 };

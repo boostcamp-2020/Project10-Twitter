@@ -3,7 +3,7 @@ import { tweetModel, userModel } from '../../models';
 import { createNotifiaction } from '../notification';
 
 interface Auth {
-  authUser: { user_id: string };
+  authUser: { id: String };
 }
 
 interface Args {
@@ -28,12 +28,12 @@ const addBasicTweet = async (_: any, { content, img_url_list }: Args, { authUser
   if (!authUser) throw new AuthenticationError('not authenticated');
   if (!content && !img_url_list) throw new Error('빈 트윗입니다.');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   const newTweet = await tweetModel.create({
     author_id: userId,
     content,
     img_url_list,
-    child_tweet_list: [],
+    child_tweet_id_list: [],
     retweet_list: [],
     heart_list: [],
   });
@@ -51,20 +51,20 @@ const addReplyTweet = async (
   if (!authUser) throw new AuthenticationError('not authenticated');
   if (!parent_id) throw new Error('parent 트윗이 존재하지 않습니다.');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
   const replyTweet = await tweetModel.create({
     author_id: userId,
     content,
     img_url_list,
     parent_id,
-    child_tweet_list: [],
+    child_tweet_id_list: [],
     retweet_list: [],
     heart_list: [],
   });
   const childId = replyTweet?.get('_id');
   const parentTweet = await tweetModel.findOneAndUpdate(
     { _id: parent_id },
-    { $push: { child_tweet_list: childId } },
+    { $push: { child_tweet_id_list: childId } },
     { new: true },
   );
 
@@ -83,20 +83,20 @@ const addRetweet = async (_: any, { content, retweet_id }: Args, { authUser }: A
   if (!authUser) throw new AuthenticationError('not authenticated');
   if (!retweet_id) throw new Error('retweet할 트윗이 존재하지 않습니다.');
 
-  const userId = authUser.user_id;
+  const userId = authUser.id;
 
   const newRetweet = await tweetModel.create({
     author_id: userId,
     content,
     retweet_id,
-    child_tweet_list: [],
+    child_tweet_id_list: [],
     retweet_list: [],
     heart_list: [],
   });
 
   const parentTweet = await tweetModel.findOneAndUpdate(
     { _id: retweet_id },
-    { $push: { retweet_user_list: userId } },
+    { $push: { retweet_user_id_list: userId } },
     { new: true },
   );
 
