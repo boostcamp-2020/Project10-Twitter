@@ -25,4 +25,6 @@ type Mutation {
   add_reply_tweet(content: String!, img_url_list: [String], parent_id: String!): Tweet
   add_retweet(content: String, retweet_id: String!): Tweet
   delete_tweet(tweet_id: String!): Response
+  heart_tweet(tweet_id: String!): Tweet
+  unheart_tweet(tweet_id: String!): Tweet
 }
