@@ -1,0 +1,16 @@
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+type Image {
+  img_url: String
+}
+
+type Query {
+  upload_images: [File]
+}
+
+type Mutation {
+  single_upload(file: Upload!): Image
+}

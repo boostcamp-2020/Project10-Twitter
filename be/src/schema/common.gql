@@ -1,0 +1,4 @@
+type Response {
+  response: Boolean
+}
+scalar Date

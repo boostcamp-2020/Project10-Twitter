@@ -1,0 +1,27 @@
+type User {
+  user_id: String
+  name: String
+  profile_img_url: String
+  comment: String
+  background_img_url: String
+  following_list: [String]
+  following_user: User
+}
+type Auth {
+  token: String
+}
+type Query {
+  following_list(user_id: String): [User]
+  follower_list(user_id: String): [User]
+  search_user_list(search_word: String): [User]
+  user_info: User
+}
+
+type Mutation {
+  update_user_name(name: String!): Response
+  create_user(user_id: String!, name: String!, password: String!, profile_img_url: String): Response
+  github_login(code: String!): Auth
+  local_login(user_id: String!, password: String!): Auth
+  follow_user(follow_user_id: String!): User
+  unfollow_user(unfollow_user_id: String!): User
+}
