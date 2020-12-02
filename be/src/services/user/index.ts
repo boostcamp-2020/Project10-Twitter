@@ -18,4 +18,7 @@ export {
   unfollowUser,
   createUser,
   updateUserName,
+  updateUserComment,
+  updateUserProfileImg,
+  updateUserBackgroundImg,
 };
