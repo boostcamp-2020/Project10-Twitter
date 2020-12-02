@@ -9,6 +9,8 @@ import {
   deleteTweet,
   heartTweet,
   unheartTweet,
+  getDetailTweet,
+  getChildTweetList,
 } from '../services/tweet';
 
 const tweetResolvers: IResolvers = {
@@ -16,6 +18,8 @@ const tweetResolvers: IResolvers = {
     following_tweet_list: getFollowingTweetList,
     user_tweet_list: getUserTweetList,
     user_all_tweet_list: getUserAllTweetList,
+    child_tweet_list: getChildTweetList,
+    detail_tweet: getDetailTweet,
   },
   Mutation: {
     add_basic_tweet: addBasicTweet,
