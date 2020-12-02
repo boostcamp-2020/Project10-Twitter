@@ -1,5 +1,5 @@
-query {
-  tweetList: following_tweet_list(time: "2020-12-03") {
+query($userId: String) {
+  tweetList: user_all_tweet_list(user_id: $userId, time: "2020-12-03") {
     content
     child_tweet_number
     retweet_user_number
