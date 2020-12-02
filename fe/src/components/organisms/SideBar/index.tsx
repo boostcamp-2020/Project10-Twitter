@@ -1,13 +1,16 @@
 import React, { ReactElement, FunctionComponent, useState } from 'react';
-import styled from 'styled-components';
-import { Box, ListItem } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
+import { useQuery } from '@apollo/client';
 import Button from '../../molecules/Button';
 import UserModal from '../../molecules/UserModal';
 import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
-
-interface Props {
-  children: React.ReactChild[];
-}
+import UserInfo from '../../molecules/UserInfo';
+import SearchBar from '../../molecules/SearchBar';
+import GET_MYINFO from '../../../graphql/getMyInfo.gql';
+import Container from './styled';
+import useOnTextChange from '../../../hooks/useOnTextChange';
+import useDisplay from '../../../hooks/useDisplay';
+import Link from 'next/link';
 
 interface ButtonProps {
   id: number;
@@ -16,62 +19,81 @@ interface ButtonProps {
   color?: 'primary' | 'inherit' | 'default' | 'secondary' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
   width?: string;
-  onClick?: () => void;
+  link: string;
 }
 
-const Container = styled(Box)`
-  position: fixed;
-  top: 0px;
-  height: 100%;
-  width: 20vw;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-
-  & li:last-child {
-    margin-top: auto;
-    margin-bottom: 3vh;
-  }
-`;
-
 const TITLE: Array<ButtonProps> = [
-  { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px' }) },
-  { id: 1, text: '홈', icon: Home({ width: '30px', height: '30px' }) },
-  { id: 2, text: '탐색하기', icon: Explore({ width: '30px', height: '30px' }) },
-  { id: 3, text: '알림', icon: Notifications({ width: '30px', height: '30px' }) },
-  { id: 4, text: '프로필', icon: Profiles({ width: '30px', height: '30px' }) },
+  { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px'}),link:'/home' },
+  { id: 1, text: '홈', icon: Home({ width: '30px', height: '30px' }),link:'/home' },
+  { id: 2, text: '탐색하기', icon: Explore({ width: '30px', height: '30px' }),link:'/home' },
+  { id: 3, text: '알림', icon: Notifications({ width: '30px', height: '30px' }) ,link:'/home'},
+  { id: 4, text: '프로필', icon: Profiles({ width: '30px', height: '30px' }),link:'/'},
   {
     id: 5,
     text: 'Tweet',
     color: 'primary',
     variant: 'contained',
     width: '90%',
+    link:'/home'
   },
 ];
 
-const SideBar: FunctionComponent<Props> = ({ children }) => {
-  const [display, setDisplay] = useState(false);
-  const onClickUserInfo = () => {
-    setDisplay(!display);
-  };
+const SideBar: FunctionComponent = () => {
+  const { loading, error, data } = useQuery(GET_MYINFO);
+  const placeholder = 'Search Twitter';
+  const type = 'text';
+  const variant = 'standard';
+
+  const [value,, onTextChange] = useOnTextChange('')
+  const [display,, onClick] = useDisplay(false)
+  
+  if (loading) return <div>'Loading...'</div>;
+  if (error) return <div>`Error! ${error.message}`</div>;
+  
+  const {myProfile} = data
+    
+  const userId:string = myProfile.user_id;
+  const userName:string = myProfile.name;
+  const userProfileImg:string = myProfile.profile_img_url;
+  TITLE[4].link = userId;
+
   return (
     <Container component="ul">
       {TITLE.map((v) => (
         <ListItem key={v.id}>
+          <Link href={v.link}>
           <Button
             text={v.text}
             icon={v.icon}
             color={v.color}
             variant={v.variant}
             width={v.width}
-            onClick={onClickUserInfo}
           />
+          </Link>
         </ListItem>
       ))}
-      {children}
+          <ListItem>
+            <SearchBar
+              placeholder={placeholder}
+              type={type}
+              variant={variant}
+              width="90%"
+              value={value}
+              onChange={onTextChange}
+            />
+          </ListItem>
+          {display ? <UserModal /> : <></>}
+          <ListItem onClick={onClick}>
+            <UserInfo
+              title={userName}
+              sub={userId}
+              img={userProfileImg}
+              width="90%"
+            />
+          </ListItem>
 
-      {display ? <UserModal /> : <></>}
-    </Container>
+          </Container>
+
   );
 };
 

@@ -24,7 +24,7 @@ interface Author {
 const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
   return (
     <MainContaier ProfileImgUrl={tweet.author.profile_img_url}>
-      <TitleSubText title={tweet.author.user_id} sub={tweet.author.name} />
+      <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
       <Markdown source={tweet.content} />
       <ButtonsBox component="div">
         <Button icon={Comment({})} text="0" />

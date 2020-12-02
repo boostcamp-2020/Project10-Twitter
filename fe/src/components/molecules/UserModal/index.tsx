@@ -1,6 +1,6 @@
 import React, { FunctionComponent, ReactElement } from 'react';
 import { ListItem } from '@material-ui/core';
-import Container from './styled';
+import {Container, StyledList} from './styled';
 import Button from '../Button';
 
 interface ButtonProps {
@@ -18,12 +18,14 @@ const ITEM: Array<ButtonProps> = [
 ];
 
 const UserModal: FunctionComponent = () => (
-  <Container component="ul">
-    {ITEM.map((v) => (
-      <ListItem key={v.id}>
-        <Button text={v.text} />
-      </ListItem>
-    ))}
+  <Container component="div">
+    <StyledList>
+      {ITEM.map((v) => (
+        <ListItem key={v.id}>
+          <Button text={v.text} />
+        </ListItem>
+      ))}
+    </StyledList>
   </Container>
 );
 

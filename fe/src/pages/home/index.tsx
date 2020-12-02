@@ -2,14 +2,11 @@
 /* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { ListItem } from '@material-ui/core';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
 import TweetContainer from '../../components/organisms/TweetContainer';
-import UserInfo from '../../components/molecules/UserInfo';
-import SearchBar from '../../components/molecules/SearchBar';
 import SideBar from '../../components/organisms/SideBar';
 import { Container, MainContainer, HomeBox } from './styled';
-import GET_LIST from '../../graphql/getList.gql';
+import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 
 interface Tweet {
   content: string;
@@ -22,55 +19,25 @@ interface Author {
 }
 
 const Home: FunctionComponent = () => {
-  const [value, setValue] = useState('');
-  const { data } = useQuery(GET_LIST);
-  const placeholder = 'Search Twitter';
-  const type = 'text';
-  const variant = 'standard';
+  const { loading, error, data } = useQuery(GET_TWEETLIST);
 
-  const onChange = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLInputElement;
-    setValue(target.value);
-  };
+  if (loading) return <div>'Loading...'</div>;
+  if (error) return <div>`Error! ${error.message}`</div>;
 
-  if (data) {
-    const userId = data.user.user_id;
-    const userName = data.user.name;
-    const userProfileImg = data.user.profile_img_url;
+  const {tweetList} = data
+
     return (
       <Container>
-        <SideBar>
-          <ListItem>
-            <SearchBar
-              placeholder={placeholder}
-              type={type}
-              variant={variant}
-              width="90%"
-              value={value}
-              onChange={onChange}
-            />
-          </ListItem>
-          <ListItem>
-            <UserInfo
-              title={userId}
-              sub={userName}
-              inRow={false}
-              img={userProfileImg}
-              width="90%"
-            />
-          </ListItem>
-        </SideBar>
+        <SideBar/>
         <MainContainer>
           <HomeBox>Home</HomeBox>
-          <NewTweetContainer img={userProfileImg} />
-          {data.list?.map((tweet: Tweet, index: number) => (
+          <NewTweetContainer/>
+          {tweetList?.map((tweet: Tweet, index: number) => (
             <TweetContainer key={index} tweet={tweet} />
           ))}
         </MainContainer>
       </Container>
     );
-  }
-  return <div>loading...</div>;
 };
 
 export default Home;

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-const StyledText = styled('span')`
+const StyledText = styled.span`
   color: ${(props) => props.color};
   font-size: ${(props) => props.theme.fontSize};
   font-weight: ${(props) => props.theme.fontWeight};
 `;
-const StyledTitleText = styled('span')`
+const StyledTitleText = styled.span`
   color: #000;
   font-size: 15px;
   font-weight: 700;
@@ -13,7 +13,7 @@ const StyledTitleText = styled('span')`
   margin-right: 5px;
 `;
 
-const StyledSubText = styled('span')`
+const StyledSubText = styled.span`
   color: rgb(91, 112, 131);
   font-size: 15px;
   font-weight: 400;
