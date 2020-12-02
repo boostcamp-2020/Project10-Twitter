@@ -1,6 +1,6 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-export default (
+const useOnTextChange = (
   initalValue: string,
 ): [string, React.Dispatch<React.SetStateAction<string>>, (e: React.SyntheticEvent) => void] => {
   const [value, setValue] = useState(initalValue);
@@ -14,3 +14,5 @@ export default (
   );
   return [value, setValue, onTextChange];
 };
+
+export default useOnTextChange;

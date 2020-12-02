@@ -3,7 +3,7 @@ import React from 'react';
 import { ApolloClient, createHttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { AppProps } from 'next/app';
-import {MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import '../styles/global.css';
 
 const authLink = setContext((_, { headers }) => {
@@ -21,8 +21,8 @@ const theme = createMuiTheme({
     primary: {
       main: 'rgb(29, 161, 242)',
       contrastText: '#fff',
-    }
-  }
+    },
+  },
 });
 
 const httpLink = createHttpLink({
@@ -37,7 +37,7 @@ const client = new ApolloClient({
 const App = ({ Component, pageProps }: AppProps) => (
   <ApolloProvider client={client}>
     <MuiThemeProvider theme={theme}>
-    <Component {...pageProps} />
+      <Component {...pageProps} />
     </MuiThemeProvider>
   </ApolloProvider>
 );

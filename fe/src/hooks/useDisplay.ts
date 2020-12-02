@@ -1,6 +1,6 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-export default (
+const useDisplay = (
   initalValue: boolean,
 ): [boolean, React.Dispatch<React.SetStateAction<boolean>>, () => void] => {
   const [display, setDisplay] = useState(initalValue);
@@ -11,3 +11,5 @@ export default (
 
   return [display, setDisplay, onClick];
 };
+
+export default useDisplay;

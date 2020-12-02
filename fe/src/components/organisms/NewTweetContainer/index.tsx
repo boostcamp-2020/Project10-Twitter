@@ -9,9 +9,9 @@ import ButtonsBox from './styled';
 import GET_MYINFO from '../../../graphql/getMyInfo.gql';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 
-const NewTweetContainer: FunctionComponent= () => {
+const NewTweetContainer: FunctionComponent = () => {
   const { loading, error, data } = useQuery(GET_MYINFO);
-  const [value,,onTextChange] = useOnTextChange('')
+  const [value, , onTextChange] = useOnTextChange('');
 
   const placeholder = "What's happening";
   const content = 'Tweet';
@@ -19,22 +19,27 @@ const NewTweetContainer: FunctionComponent= () => {
   const variant = 'contained';
   const borderRadius = 50;
 
-  if (loading) return <div>'Loading...'</div>;
-  if (error) return <div>`Error! ${error.message}`</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error)
+    return (
+      <div>
+        Error!
+        {error.message}
+      </div>
+    );
 
-  const {myProfile} = data
+  const { myProfile } = data;
 
   const userProfileImg = myProfile.profile_img_url;
 
-    return (
-      <MainContaier ProfileImgUrl={userProfileImg}>
-        <TextArea placeholder={placeholder} value={value} onChange={onTextChange} />
-        <ButtonsBox component="div">
-          <IconButton icon={Picture} />
-          <Button borderRadius={borderRadius} text={content} color={color} variant={variant} />
-        </ButtonsBox>
-      </MainContaier>
-    );
-
+  return (
+    <MainContaier ProfileImgUrl={userProfileImg}>
+      <TextArea placeholder={placeholder} value={value} onChange={onTextChange} />
+      <ButtonsBox component="div">
+        <IconButton icon={Picture} />
+        <Button borderRadius={borderRadius} text={content} color={color} variant={variant} />
+      </ButtonsBox>
+    </MainContaier>
+  );
 };
 export default NewTweetContainer;
