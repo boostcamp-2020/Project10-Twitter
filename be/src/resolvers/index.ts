@@ -1,55 +1,7 @@
-import { IResolvers } from 'apollo-server-express';
-import {
-  getFollowingTweetList,
-  getUserTweetList,
-  getUserAllTweetList,
-  getFollowingList,
-  getFollowerList,
-  getSearchedUserList,
-  getUserInfo,
-  githubLogin,
-  localLogin,
-  followUser,
-  unfollowUser,
-  addBasicTweet,
-  addReplyTweet,
-  addRetweet,
-  deleteTweet,
-  getNotification,
-  getNotificationCount,
-  updateNotification,
-  createUser,
-  updateUserName,
-  imgUpload,
-} from '../services';
+import { mergeResolvers } from '@graphql-tools/merge';
+import { loadFilesSync } from '@graphql-tools/load-files';
 
-const resolvers: IResolvers = {
-  Query: {
-    following_tweet_list: getFollowingTweetList,
-    user_tweet_list: getUserTweetList,
-    user_all_tweet_list: getUserAllTweetList,
-    following_list: getFollowingList,
-    follower_list: getFollowerList,
-    search_user_list: getSearchedUserList,
-    user_info: getUserInfo,
-    get_notification: getNotification,
-    get_notification_count: getNotificationCount,
-    uploads: (parent: any, args: any) => {},
-  },
-  Mutation: {
-    update_user_name: updateUserName,
-    create_user: createUser,
-    github_login: githubLogin,
-    local_login: localLogin,
-    follow_user: followUser,
-    unfollow_user: unfollowUser,
-    add_basic_tweet: addBasicTweet,
-    add_reply_tweet: addReplyTweet,
-    add_retweet: addRetweet,
-    delete_tweet: deleteTweet,
-    update_notification: updateNotification,
-    single_upload: imgUpload,
-  },
-};
+const resolversArray = loadFilesSync(__dirname, { extensions: ['ts'] });
 
+const resolvers = mergeResolvers(resolversArray);
 export default resolvers;
