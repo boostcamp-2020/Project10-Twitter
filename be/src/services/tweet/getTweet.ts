@@ -9,12 +9,11 @@ interface Args {
   time: Date;
 }
 
-const getFollowingTweetList = async (_: any, args: Args, { authUser }: Auth) => {
+const getFollowingTweetList = async (_: any, { time }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.user_id;
   const userInfo = await userModel.findOne({ user_id: userId });
-  const { time } = args;
 
   const tweetList: Document[] = await tweetModel.aggregate([
     {
@@ -78,16 +77,14 @@ const getFollowingTweetList = async (_: any, args: Args, { authUser }: Auth) => 
   return tweetList;
 };
 
-const getUserTweetList = async (_: any, args: Args, { authUser }: Auth) => {
+const getUserTweetList = async (_: any, { user_id, time }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = args.user_id;
-  const { time } = args;
   const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
         $and: [
-          { author_id: userId },
+          { author_id: user_id },
           { parent_id: { $exists: false } },
           { createAt: { $lte: new Date(time) } },
         ],
@@ -143,14 +140,12 @@ const getUserTweetList = async (_: any, args: Args, { authUser }: Auth) => {
   return tweetList;
 };
 
-const getUserAllTweetList = async (_: any, args: Args, { authUser }: Auth) => {
+const getUserAllTweetList = async (_: any, { user_id, time }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = args.user_id;
-  const { time } = args;
   const tweetList: Document[] = await tweetModel.aggregate([
     {
-      $match: { $and: [{ author_id: userId }, { createAt: { $lte: new Date(time) } }] },
+      $match: { $and: [{ author_id: user_id }, { createAt: { $lte: new Date(time) } }] },
     },
     {
       $project: {
