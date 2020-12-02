@@ -5,7 +5,7 @@ interface Props {
   className?: string;
   color?: 'primary' | 'secondary' | 'inherit' | 'default' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
-  text: string;
+  text: string | number;
   onClick?: () => void;
   icon?: ReactNode;
   isStart?: true;
