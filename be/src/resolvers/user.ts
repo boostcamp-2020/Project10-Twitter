@@ -4,13 +4,13 @@ import {
   getFollowerList,
   getSearchedUserList,
   getUserInfo,
-  githubLogin,
-  localLogin,
   followUser,
   unfollowUser,
   createUser,
   updateUserName,
-} from '../services';
+} from '../services/user';
+
+import { githubLogin, localLogin } from '../services/auth';
 
 const userResolvers: IResolvers = {
   Query: {

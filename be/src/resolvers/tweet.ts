@@ -7,7 +7,9 @@ import {
   addReplyTweet,
   addRetweet,
   deleteTweet,
-} from '../services';
+  heartTweet,
+  unheartTweet,
+} from '../services/tweet';
 
 const tweetResolvers: IResolvers = {
   Query: {
@@ -20,6 +22,8 @@ const tweetResolvers: IResolvers = {
     add_reply_tweet: addReplyTweet,
     add_retweet: addRetweet,
     delete_tweet: deleteTweet,
+    heart_tweet: heartTweet,
+    unheart_tweet: unheartTweet,
   },
 };
 

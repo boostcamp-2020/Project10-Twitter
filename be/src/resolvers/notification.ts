@@ -1,5 +1,9 @@
 import { IResolvers } from 'apollo-server-express';
-import { getNotification, getNotificationCount, updateNotification } from '../services';
+import {
+  getNotification,
+  getNotificationCount,
+  updateNotification,
+} from '../services/notification';
 
 const notificationResolvers: IResolvers = {
   Query: {
