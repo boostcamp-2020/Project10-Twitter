@@ -14,7 +14,7 @@ type Auth {
 type Query {
   following_list(user_id: String): [User]
   follower_list(user_id: String): [User]
-  search_user_list(search_word: String): [User]
+  search_user_list(search_word: String!, oldest_user_id: String): [User]
   user_info: User
 }
 
