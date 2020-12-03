@@ -11,6 +11,7 @@ interface Props {
   isStart?: true;
   borderRadius?: number;
   width?: string;
+  disabled?: boolean;
 }
 
 const Button: FunctionComponent<Props> = ({
@@ -23,6 +24,7 @@ const Button: FunctionComponent<Props> = ({
   isStart = true,
   borderRadius = 15,
   width = '',
+  disabled = false,
 }) =>
   isStart ? (
     <MaterialButton
@@ -32,6 +34,7 @@ const Button: FunctionComponent<Props> = ({
       variant={variant}
       onClick={onClick}
       startIcon={icon}
+      disabled={disabled}
     >
       {text}
     </MaterialButton>
@@ -42,6 +45,7 @@ const Button: FunctionComponent<Props> = ({
       variant={variant}
       onClick={onClick}
       endIcon={icon}
+      disabled={disabled}
     >
       {text}
     </MaterialButton>
