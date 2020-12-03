@@ -1,8 +1,10 @@
 import React, { FunctionComponent } from 'react';
+import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import TitleSubText from '../../molecules/TitleSubText';
 import ProfileImg from '../../atoms/ProfileImg';
 import Button from '../../molecules/Button';
+
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -62,8 +64,16 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           <TitleSubText title={myProfile.name} sub={myProfile.user_id} />
           <Text value={myProfile.comment} />
           <UserFollowContainer>
-            <TitleSubText title="팔로우 수" sub="133" />
-            <TitleSubText title="팔로워 수" sub="222" />
+            <Link href={`/${myProfile.user_id}/follow?Following`}>
+              <a>
+                <TitleSubText title="팔로잉 수" sub="133" />
+              </a>
+            </Link>
+            <Link href={`/${myProfile.user_id}/follow?Follower`}>
+              <a>
+                <TitleSubText title="팔로워 수" sub="222" />
+              </a>
+            </Link>
           </UserFollowContainer>
         </BottomContainer>
         {children}
