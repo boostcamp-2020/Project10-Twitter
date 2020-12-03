@@ -3,7 +3,7 @@ import { tweetModel, userModel } from '../../models';
 import { createNotifiaction } from '../notification/index';
 
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 
 interface Args {

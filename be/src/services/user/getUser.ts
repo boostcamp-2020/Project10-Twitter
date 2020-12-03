@@ -1,18 +1,19 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { userModel } from '../../models';
+import { stringToObjectId } from '../../lib/utilty';
 
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 
 interface Args {
-  oldest_user_id: String;
-  search_word: String;
-  user_id: String;
+  oldest_user_id: string;
+  search_word: string;
+  user_id: string;
 }
 
-const getNextUsersCondition = (oldest_user_id: String): Object => {
-  return oldest_user_id ? { _id: { $lt: oldest_user_id } } : {};
+const getNextUsersCondition = (oldest_user_id: string): Object => {
+  return oldest_user_id ? { _id: { $lt: stringToObjectId(oldest_user_id) } } : {};
 };
 
 const getFollowingList = async (_: any, { user_id, oldest_user_id }: Args, { authUser }: Auth) => {

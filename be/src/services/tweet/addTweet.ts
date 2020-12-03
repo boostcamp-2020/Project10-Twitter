@@ -3,17 +3,17 @@ import { tweetModel, userModel } from '../../models';
 import { createNotifiaction } from '../notification';
 
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 
 interface Args {
-  content: String;
-  img_url_list?: [String];
-  parent_id?: String;
-  retweet_id?: String;
+  content: string;
+  img_url_list?: [string];
+  parent_id?: string;
+  retweet_id?: string;
 }
 
-const findMentionUser = async (content: String, tweetId: String) => {
+const findMentionUser = async (content: string, tweetId: string) => {
   const users = content.match(/@[a-zA-Z0-9]+/gi);
   if (users) {
     const test = users.map((user) => user.replace(/@/g, ''));

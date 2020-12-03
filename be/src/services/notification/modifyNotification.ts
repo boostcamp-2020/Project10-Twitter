@@ -2,7 +2,7 @@ import { AuthenticationError } from 'apollo-server-express';
 import { notificationModel } from '../../models';
 
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 
 const updateNotification = async (_: any, __: any, { authUser }: Auth) => {

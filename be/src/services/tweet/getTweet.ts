@@ -1,28 +1,28 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { userModel, tweetModel } from '../../models';
 import { commonReadCondition } from './common';
-
+import { stringToObjectId } from '../../lib/utilty';
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 interface Args {
-  oldest_tweet_id: String;
-  latest_tweet_id: String;
-  search_word: String;
-  tweet_id: String;
-  user_id: String;
+  oldest_tweet_id: string;
+  latest_tweet_id: string;
+  search_word: string;
+  tweet_id: string;
+  user_id: string;
   time: Date;
 }
 
-const getNextTweetsCondition = (oldest_tweet_id: String): Object => {
-  return oldest_tweet_id ? { _id: { $lt: oldest_tweet_id } } : {};
+const getNextTweetsCondition = (oldest_tweet_id: string): Object => {
+  return oldest_tweet_id ? { _id: { $lt: stringToObjectId(oldest_tweet_id) } } : {};
 };
 
 const getFollowingTweetList = async (_: any, { oldest_tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
-  const userInfo = await userModel.findOne({ userId });
+  const userInfo = await userModel.findOne({ user_id: userId });
 
   const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
 
@@ -94,7 +94,7 @@ const getDetailTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) =>
 
   const [tweet]: Document[] = await tweetModel.aggregate([
     {
-      $match: { _id: tweet_id },
+      $match: { _id: stringToObjectId(tweet_id) },
     },
     ...commonReadCondition,
   ]);
@@ -113,7 +113,7 @@ const getChildTweetList = async (
 
   const childTweetList: Document[] = await tweetModel.aggregate([
     {
-      $match: { $and: [{ parent_id: tweet_id }, nextTweetsCondition] },
+      $match: { $and: [{ parent_id: stringToObjectId(tweet_id) }, nextTweetsCondition] },
     },
     ...commonReadCondition,
     { $sort: { createAt: -1 } },
@@ -172,7 +172,7 @@ const getLatestTweetList = async (_: any, { latest_tweet_id }: Args, { authUser 
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
-  const userInfo = await userModel.findOne({ userId });
+  const userInfo = await userModel.findOne({ user_id: userId });
 
   const latestTweetList: Document[] = await tweetModel.aggregate([
     {
@@ -185,7 +185,7 @@ const getLatestTweetList = async (_: any, { latest_tweet_id }: Args, { authUser 
             ],
           },
           { parent_id: { $exists: false } },
-          { _id: { $gt: latest_tweet_id } },
+          { _id: { $gt: stringToObjectId(latest_tweet_id) } },
         ],
       },
     },
@@ -204,4 +204,5 @@ export {
   getChildTweetList,
   getHeartTweetList,
   getSearchedTweetList,
+  getLatestTweetList,
 };

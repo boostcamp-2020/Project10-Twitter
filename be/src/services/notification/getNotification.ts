@@ -1,16 +1,13 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { notificationModel } from '../../models';
+import { stringToObjectId } from '../../lib/utilty';
 
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 
-interface Args {
-  oldest_notification_id: String;
-}
-
-const getNextnotificationsCondition = (oldest_notification_id: String): Object => {
-  return oldest_notification_id ? { _id: { $lt: oldest_notification_id } } : {};
+const getNextnotificationsCondition = (oldest_notification_id: string): Object => {
+  return oldest_notification_id ? { _id: { $lt: stringToObjectId(oldest_notification_id) } } : {};
 };
 
 const getNotification = async (_: any, { oldest_notification_id }: any, { authUser }: Auth) => {
@@ -32,6 +29,7 @@ const getNotification = async (_: any, { oldest_notification_id }: any, { authUs
         follower_id: 1,
         type: 1,
         is_read: 1,
+        createAt: 1,
       },
     },
     {
