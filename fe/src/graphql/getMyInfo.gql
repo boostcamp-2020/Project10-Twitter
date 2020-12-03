@@ -1,7 +1,8 @@
 query {
-  myProfile: user_info {
+  myProfile: my_info {
     user_id
     name
+    comment
     profile_img_url
   }
 }
