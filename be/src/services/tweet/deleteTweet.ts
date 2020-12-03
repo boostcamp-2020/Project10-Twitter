@@ -2,19 +2,18 @@ import { AuthenticationError } from 'apollo-server-express';
 import { tweetModel } from '../../models';
 
 interface Auth {
-  authUser: { user_id: string };
+  authUser: { id: String };
 }
 
 interface Args {
   tweet_id?: String;
 }
-const deleteTweet = async (_: any, args: Args, { authUser }: Auth) => {
+const deleteTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
-  const tweetId = args.tweet_id;
+  const userId = authUser.id;
 
-  const { deletedCount } = await tweetModel.deleteOne({ author_id: userId, _id: tweetId });
+  const { deletedCount } = await tweetModel.deleteOne({ author_id: userId, _id: tweet_id });
   if (deletedCount === 0) {
     throw new AuthenticationError('not authenticated');
   }

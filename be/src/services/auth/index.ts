@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { signToken } from '../lib/jwt-token';
-import { userModel } from '../models';
-import { registerUser } from '../services/user/addUser';
-import getHashedPassword from '../lib/hash-password';
+import { signToken } from '../../lib/jwt-token';
+import { userModel } from '../../models';
+import { registerUser } from '../../services/user/addUser';
+import getHashedPassword from '../../lib/hash-password';
 
 interface UserInfo {
   user_id: string;
@@ -52,12 +52,7 @@ const getGithubUserInfo = async (githubToken: string) => {
 };
 
 const makeRandomName = () => {
-  let result = '';
-  const NICKNAME_LENGTH = 15;
-  const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < NICKNAME_LENGTH; i += 1) {
-    result += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length));
-  }
+  const result = Math.random().toString(36).substring(16);
   return result;
 };
 
@@ -69,8 +64,7 @@ const getOurUser = async (userInfo: UserInfo) => {
   return user;
 };
 
-const githubLogin = async (_: any, args: { code: string }) => {
-  const { code } = args;
+const githubLogin = async (_: any, { code }: { code: string }) => {
   const githubToken = await getGithubToken(code);
   const githubUserInfo = await getGithubUserInfo(githubToken);
   const user = await getOurUser({
@@ -78,7 +72,6 @@ const githubLogin = async (_: any, args: { code: string }) => {
     name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(),
     profile_img_url: githubUserInfo.avatar_url,
   });
-
   const signedToken = signToken({ id: user.get('user_id') });
   return { token: signedToken };
 };

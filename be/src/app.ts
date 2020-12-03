@@ -7,7 +7,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import dbStarter from './providers/dbProvider';
 
-import schema from './schema';
+import typeDefs from './schema';
 import resolvers from './resolvers';
 import { verifyToken } from './lib/jwt-token';
 
@@ -17,7 +17,7 @@ const app = express();
 const port: number = Number(process.env.PORT) || 3000;
 
 const server = new ApolloServer({
-  typeDefs: schema,
+  typeDefs,
   resolvers,
   context: ({ req }) => {
     if (!req.headers.authorization) return { authUser: undefined };

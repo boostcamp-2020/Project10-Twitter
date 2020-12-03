@@ -3,7 +3,7 @@ import { tweetModel, userModel } from '../../models';
 import { createNotifiaction } from '../notification';
 
 interface Auth {
-  authUser: { user_id: string };
+  authUser: { id: String };
 }
 
 interface Args {
@@ -24,17 +24,16 @@ const findMentionUser = async (content: String, tweetId: String) => {
   }
 };
 
-const addBasicTweet = async (_: any, args: Args, { authUser }: Auth) => {
+const addBasicTweet = async (_: any, { content, img_url_list }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
+  if (!content && !img_url_list) throw new Error('빈 트윗입니다.');
 
-  const userId = authUser.user_id;
-  const { content } = args;
-  const imgUrls = args.img_url_list;
+  const userId = authUser.id;
   const newTweet = await tweetModel.create({
     author_id: userId,
     content,
-    img_url_list: imgUrls,
-    child_tweet_list: [],
+    img_url_list,
+    child_tweet_id_list: [],
     retweet_list: [],
     heart_list: [],
   });
@@ -44,26 +43,28 @@ const addBasicTweet = async (_: any, args: Args, { authUser }: Auth) => {
   return newTweet;
 };
 
-const addReplyTweet = async (_: any, args: Args, { authUser }: Auth) => {
+const addReplyTweet = async (
+  _: any,
+  { content, img_url_list, parent_id }: Args,
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
+  if (!parent_id) throw new Error('parent 트윗이 존재하지 않습니다.');
 
-  const userId = authUser.user_id;
-  const { content } = args;
-  const imgUrls = args.img_url_list;
-  const parentId = args.parent_id;
+  const userId = authUser.id;
   const replyTweet = await tweetModel.create({
     author_id: userId,
     content,
-    img_url_list: imgUrls,
-    parent_id: parentId,
-    child_tweet_list: [],
+    img_url_list,
+    parent_id,
+    child_tweet_id_list: [],
     retweet_list: [],
     heart_list: [],
   });
   const childId = replyTweet?.get('_id');
   const parentTweet = await tweetModel.findOneAndUpdate(
-    { _id: parentId },
-    { $push: { child_tweet_list: childId } },
+    { _id: parent_id },
+    { $push: { child_tweet_id_list: childId } },
     { new: true },
   );
 
@@ -78,25 +79,24 @@ const addReplyTweet = async (_: any, args: Args, { authUser }: Auth) => {
   return replyTweet;
 };
 
-const addRetweet = async (_: any, args: Args, { authUser }: Auth) => {
+const addRetweet = async (_: any, { content, retweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
+  if (!retweet_id) throw new Error('retweet할 트윗이 존재하지 않습니다.');
 
-  const userId = authUser.user_id;
-  const { content } = args;
-  const retweetId = args.retweet_id;
+  const userId = authUser.id;
 
   const newRetweet = await tweetModel.create({
     author_id: userId,
     content,
-    retweet_id: retweetId,
-    child_tweet_list: [],
+    retweet_id,
+    child_tweet_id_list: [],
     retweet_list: [],
     heart_list: [],
   });
 
   const parentTweet = await tweetModel.findOneAndUpdate(
-    { _id: retweetId },
-    { $push: { retweet_user_list: userId } },
+    { _id: retweet_id },
+    { $push: { retweet_user_id_list: userId } },
     { new: true },
   );
 

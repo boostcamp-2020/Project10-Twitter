@@ -13,9 +13,9 @@ const registerUser = async (userInfo: UserInfo) => {
     user_id: userInfo.user_id,
     name: userInfo.name,
     password: userInfo.password,
-    following_list: [],
+    following_id_list: [],
     profile_img_url: userInfo.profile_img_url,
-    heart_tweet_list: [],
+    heart_tweet_id_list: [],
   });
   return user;
 };
