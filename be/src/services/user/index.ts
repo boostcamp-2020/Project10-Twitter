@@ -1,4 +1,10 @@
-import { getFollowerList, getFollowingList, getSearchedUserList, getUserInfo } from './getUser';
+import {
+  getFollowerList,
+  getFollowingList,
+  getSearchedUserList,
+  getUserInfo,
+  getMyUserInfo,
+} from './getUser';
 import {
   followUser,
   unfollowUser,
@@ -13,6 +19,7 @@ export {
   getFollowerList,
   getFollowingList,
   getSearchedUserList,
+  getMyUserInfo,
   getUserInfo,
   followUser,
   unfollowUser,
