@@ -16,4 +16,9 @@ const MainContainer = styled(Box)`
   border-right: 1px solid rgb(235, 238, 240);
 `;
 
-export { Container, MainContainer };
+const UserBox = styled(Box)`
+  padding: 5px;
+  border-bottom: 1px solid rgb(235, 238, 240);
+`;
+
+export { Container, MainContainer, UserBox };
