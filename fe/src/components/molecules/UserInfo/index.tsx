@@ -7,7 +7,6 @@ interface Props {
   img?: string;
   title: string;
   sub: string;
-  inRow?: boolean;
   width?: string;
 }
 
@@ -16,7 +15,6 @@ const UserInfo: FunctionComponent<Props> = ({
   img,
   title,
   sub,
-  inRow,
   width = '',
 }) => (
   <Container component="div" onClick={onClick} width={width}>
