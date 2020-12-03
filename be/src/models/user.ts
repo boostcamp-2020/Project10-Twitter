@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    user_id: String,
+    user_id: { type: String, unique: true },
     name: String,
     password: String,
     following_id_list: [String],
