@@ -6,7 +6,6 @@ type User {
   comment: String
   background_img_url: String
   following_id_list: [String]
-  following_user: User
 }
 type Auth {
   token: String
@@ -19,10 +18,10 @@ type Query {
 }
 
 type Mutation {
-  update_user_name(name: String!): Response
-  create_user(user_id: String!, name: String!, password: String!, profile_img_url: String): Response
   github_login(code: String!): Auth
+  create_user(user_id: String!, name: String!, password: String!): Response
   local_login(user_id: String!, password: String!): Auth
+  update_user_name(name: String!): Response
   follow_user(follow_user_id: String!): User
   unfollow_user(unfollow_user_id: String!): User
 }

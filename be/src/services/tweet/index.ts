@@ -6,6 +6,7 @@ import {
   getChildTweetList,
   getHeartTweetList,
   getSearchedTweetList,
+  getLatestTweetList,
 } from './getTweet';
 import { addBasicTweet, addReplyTweet, addRetweet } from './addTweet';
 import deleteTweet from './deleteTweet';
@@ -25,4 +26,5 @@ export {
   getChildTweetList,
   getHeartTweetList,
   getSearchedTweetList,
+  getLatestTweetList,
 };
