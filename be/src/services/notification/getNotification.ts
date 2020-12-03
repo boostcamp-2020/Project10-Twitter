@@ -5,14 +5,25 @@ interface Auth {
   authUser: { id: String };
 }
 
-const getNotification = async (_: any, __: any, { authUser }: Auth) => {
+interface Args {
+  oldest_notification_id: String;
+}
+
+const getNextnotificationsCondition = (oldest_notification_id: String): Object => {
+  return oldest_notification_id ? { _id: { $lt: oldest_notification_id } } : {};
+};
+
+const getNotification = async (_: any, { oldest_notification_id }: any, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
+
+  const nextNotificationcondition = getNextnotificationsCondition(oldest_notification_id);
+
   const notifiactions: Document[] = await notificationModel.aggregate([
     {
       $match: {
-        $and: [{ user_id: userId }],
+        $and: [{ user_id: userId }, nextNotificationcondition],
       },
     },
     {
@@ -50,6 +61,8 @@ const getNotification = async (_: any, __: any, { authUser }: Auth) => {
       },
     },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
   ]);
 
   return notifiactions;
