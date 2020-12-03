@@ -1,12 +1,13 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import TabBar from '../../components/molecules/TabBar';
-import TweetContainer from '../../components/organisms/TweetContainer';
 import PageLayout from '../../components/organisms/PageLayout';
+import UserCard from '../../components/organisms/UserCard';
 import GET_FOLLOWINGLIST from '../../graphql/getFollowingList.gql';
+import GET_FOLLOWERLIST from '../../graphql/getFollowerList.gql';
 import { UserBox } from './styled';
 import TitleSubText from '../../components/molecules/TitleSubText';
 import useOnTabChange from '../../hooks/useOnTabChange';
@@ -20,45 +21,43 @@ interface Variable {
 }
 
 interface User {
-  userId: string;
-  name: string;
-  profileImgUrl?: string;
-  comment?: string;
-}
-interface Author {
   user_id: string;
   name: string;
-  profile_img_url: string;
+  profile_img_url?: string;
+  comment?: string;
+  following_user?: User;
 }
 
 const Follow: FunctionComponent = () => {
   const router = useRouter();
   const { userId } = router.query;
-  const queryArr = [GET_FOLLOWINGLIST];
+  const queryArr = { Follower: GET_FOLLOWERLIST, Following: GET_FOLLOWINGLIST };
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const [value, , onChange] = useOnTabChange(0);
+  const param = router.asPath.split('?')[1] || 'Follower';
+  const [value, , onChange] = useOnTabChange(param);
   const { loading, error, data } = useQuery(queryArr[value], queryVariable);
 
-  if (loading) return <div>Loading...</div>;
-  if (error)
-    return (
-      <div>
-        Error!
-        {error.message}
-      </div>
-    );
-
-  const { followList } = data;
+  useEffect(() => {
+    router.replace(`/[userId]/follow`, `/${userId}/follow?${value}`, { shallow: true });
+  }, [value]);
 
   return (
     <PageLayout>
       <UserBox>
         <TitleSubText title={userId as string} sub={userId as string} />
       </UserBox>
-      <TabBar value={value} handleChange={onChange} labels={['Follwer', 'Follwing']} />
-      {followList?.map((user: User, index: number) => (
-        <TweetContainer key={index} tweet={user} />
-      ))}
+      <TabBar value={value} handleChange={onChange} labels={['Follower', 'Following']} />
+      {data ? (
+        data.list?.map((user: User, index: number) =>
+          user.following_user ? (
+            <UserCard key={index} user={user.following_user} />
+          ) : (
+            <UserCard key={index} user={user} />
+          ),
+        )
+      ) : (
+        <>loading..</>
+      )}
     </PageLayout>
   );
 };
