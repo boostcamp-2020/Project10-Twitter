@@ -20,13 +20,11 @@ const BottomContainer = styled(Box)`
 `;
 const UserMainContainer = styled(Box)`
   width: 100%;
-  position: absolute;
-  top: 20vh;
   display: flex;
   flex-direction: column;
 `;
 
-const UserFollowContainer = styled(Box)`
+const UserFollowContainer = styled.div`
   display: flex;
   & div:first-child {
     margin-right: 10px;
@@ -35,8 +33,8 @@ const UserFollowContainer = styled(Box)`
 
 const UserImgContainer = styled(Box)`
   z-index: 1px;
-  margin-left: 15px;
   bottom: 0;
+  position: absolute;
 `;
 
 const ImgCircleContainer = styled(Box)`
@@ -48,11 +46,17 @@ const ImgCircleContainer = styled(Box)`
   padding: 5px;
 `;
 
-const TopContainer = styled(Box)`
+const TopContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  position: relative;
+  padding: 10px;
+  & button {
+    margin-left: auto;
+    margin-bottom: 15px;
+  }
 `;
 
 export {

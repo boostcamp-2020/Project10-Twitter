@@ -1,6 +1,6 @@
 import React, { FunctionComponent, ReactElement } from 'react';
 import { ListItem } from '@material-ui/core';
-import {Container, StyledList} from './styled';
+import { Container, StyledList } from './styled';
 import Button from '../Button';
 
 interface ButtonProps {
@@ -17,7 +17,7 @@ const ITEM: Array<ButtonProps> = [
   { id: 1, text: 'log out' },
 ];
 
-const UserModal: FunctionComponent = () => (
+const UsePopover: FunctionComponent = () => (
   <Container component="div">
     <StyledList>
       {ITEM.map((v) => (
@@ -29,4 +29,4 @@ const UserModal: FunctionComponent = () => (
   </Container>
 );
 
-export default UserModal;
+export default UsePopover;
