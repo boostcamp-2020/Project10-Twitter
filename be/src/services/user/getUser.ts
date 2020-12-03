@@ -72,11 +72,18 @@ const getSearchedUserList = async (
   return userList;
 };
 
-const getUserInfo = async (_: any, __: any, { authUser }: Auth) => {
+const getMyUserInfo = async (_: any, __: any, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const [userInfo] = await userModel.find({ user_id: authUser.id });
   return userInfo;
 };
 
-export { getFollowerList, getFollowingList, getSearchedUserList, getUserInfo };
+const getUserInfo = async (_: any, { user_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const [userInfo] = await userModel.find({ user_id });
+  return userInfo;
+};
+
+export { getFollowerList, getFollowingList, getSearchedUserList, getMyUserInfo, getUserInfo };
