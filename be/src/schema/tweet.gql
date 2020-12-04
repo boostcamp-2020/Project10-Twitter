@@ -15,11 +15,14 @@ type Tweet {
 }
 
 type Query {
-  following_tweet_list(time: Date!): [Tweet]
-  user_tweet_list(user_id: String, time: Date!): [Tweet]
-  user_all_tweet_list(user_id: String, time: Date!): [Tweet]
-  child_tweet_list(tweet_id: String!): [Tweet]
+  following_tweet_list(oldest_tweet_id: String): [Tweet]
+  user_tweet_list(user_id: String, oldest_tweet_id: String): [Tweet]
+  user_all_tweet_list(user_id: String, oldest_tweet_id: String): [Tweet]
+  child_tweet_list(tweet_id: String!, oldest_tweet_id: String): [Tweet]
   detail_tweet(tweet_id: String!): Tweet
+  heart_tweet_list(user_id: String!, oldest_tweet_id: String): [Tweet]
+  search_tweet_list(search_word: String!, oldest_tweet_id: String): [Tweet]
+  latest_tweet_list(latest_tweet_id: String): [Tweet]
 }
 
 type Mutation {

@@ -11,6 +11,9 @@ import {
   unheartTweet,
   getDetailTweet,
   getChildTweetList,
+  getHeartTweetList,
+  getSearchedTweetList,
+  getLatestTweetList,
 } from '../services/tweet';
 
 const tweetResolvers: IResolvers = {
@@ -20,6 +23,9 @@ const tweetResolvers: IResolvers = {
     user_all_tweet_list: getUserAllTweetList,
     child_tweet_list: getChildTweetList,
     detail_tweet: getDetailTweet,
+    heart_tweet_list: getHeartTweetList,
+    search_tweet_list: getSearchedTweetList,
+    latest_tweet_list: getLatestTweetList,
   },
   Mutation: {
     add_basic_tweet: addBasicTweet,

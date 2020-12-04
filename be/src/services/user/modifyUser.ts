@@ -3,12 +3,12 @@ import { userModel } from '../../models';
 import { createNotifiaction } from '../notification';
 
 interface Auth {
-  authUser: { id: String };
+  authUser: { id: string };
 }
 
 const followUser = async (
   _: any,
-  { follow_user_id }: { follow_user_id: String },
+  { follow_user_id }: { follow_user_id: string },
   { authUser }: Auth,
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
@@ -28,7 +28,7 @@ const followUser = async (
 
 const unfollowUser = async (
   _: any,
-  { unfollow_user_id }: { unfollow_user_id: String },
+  { unfollow_user_id }: { unfollow_user_id: string },
   { authUser }: Auth,
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
@@ -43,7 +43,7 @@ const unfollowUser = async (
   return user;
 };
 
-const updateUserName = async (_: any, { name }: { name: String }, { authUser }: Auth) => {
+const updateUserName = async (_: any, { name }: { name: string }, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
@@ -51,7 +51,7 @@ const updateUserName = async (_: any, { name }: { name: String }, { authUser }: 
   return { response: true };
 };
 
-const updateUserComment = async (_: any, { comment }: { comment: String }, { authUser }: Auth) => {
+const updateUserComment = async (_: any, { comment }: { comment: string }, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
@@ -61,7 +61,7 @@ const updateUserComment = async (_: any, { comment }: { comment: String }, { aut
 
 const updateUserProfileImg = async (
   _: any,
-  { profile_img_url }: { profile_img_url: String },
+  { profile_img_url }: { profile_img_url: string },
   { authUser }: Auth,
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
@@ -73,7 +73,7 @@ const updateUserProfileImg = async (
 
 const updateUserBackgroundImg = async (
   _: any,
-  { background_img_url }: { background_img_url: String },
+  { background_img_url }: { background_img_url: string },
   { authUser }: Auth,
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');

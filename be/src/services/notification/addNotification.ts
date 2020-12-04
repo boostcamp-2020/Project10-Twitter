@@ -1,10 +1,10 @@
 import { notificationModel } from '../../models';
 
 interface Args {
-  userId: String;
-  type: String;
-  followerId?: String;
-  tweetId?: String;
+  userId: string;
+  type: string;
+  followerId?: string;
+  tweetId?: string;
 }
 
 const createNotifiaction = async ({ userId, followerId, tweetId, type }: Args) => {

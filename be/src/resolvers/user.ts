@@ -4,6 +4,7 @@ import {
   getFollowerList,
   getSearchedUserList,
   getUserInfo,
+  getMyUserInfo,
   followUser,
   unfollowUser,
   createUser,
@@ -17,6 +18,7 @@ const userResolvers: IResolvers = {
     following_list: getFollowingList,
     follower_list: getFollowerList,
     search_user_list: getSearchedUserList,
+    my_info: getMyUserInfo,
     user_info: getUserInfo,
   },
   Mutation: {

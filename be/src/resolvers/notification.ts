@@ -7,7 +7,7 @@ import {
 
 const notificationResolvers: IResolvers = {
   Query: {
-    notification: getNotification,
+    notification_list: getNotification,
     notification_count: getNotificationCount,
   },
   Mutation: {

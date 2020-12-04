@@ -11,7 +11,7 @@ type Count {
 
 type Query {
   notification_count: Count
-  notification: [Notification]
+  notification_list(old_notification_id: String): [Notification]
 }
 
 type Mutation {

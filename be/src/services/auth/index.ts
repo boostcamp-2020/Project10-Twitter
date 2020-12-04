@@ -2,16 +2,20 @@ import axios from 'axios';
 import { signToken } from '../../lib/jwt-token';
 import { userModel } from '../../models';
 import { registerUser } from '../../services/user/addUser';
-import getHashedPassword from '../../lib/hash-password';
+import { makeRandomName } from '../../lib/utilty';
+
+import bcrypt from 'bcrypt';
 
 interface UserInfo {
   user_id: string;
+  github_id: number;
   name: string;
   profile_img_url?: string;
 }
 
 interface GithubUserInfo {
   login: string;
+  id: number;
   avatar_url: string;
   name?: string;
 }
@@ -51,13 +55,8 @@ const getGithubUserInfo = async (githubToken: string) => {
   return data;
 };
 
-const makeRandomName = () => {
-  const result = Math.random().toString(36).substring(16);
-  return result;
-};
-
 const getOurUser = async (userInfo: UserInfo) => {
-  let user = await userModel.findOne({ user_id: userInfo.user_id });
+  let user = await userModel.findOne({ github_id: userInfo.github_id });
   if (!user) {
     user = await registerUser(userInfo);
   }
@@ -69,7 +68,8 @@ const githubLogin = async (_: any, { code }: { code: string }) => {
   const githubUserInfo = await getGithubUserInfo(githubToken);
   const user = await getOurUser({
     user_id: githubUserInfo.login,
-    name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(),
+    github_id: githubUserInfo.id,
+    name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(16),
     profile_img_url: githubUserInfo.avatar_url,
   });
   const signedToken = signToken({ id: user.get('user_id') });
@@ -77,13 +77,17 @@ const githubLogin = async (_: any, { code }: { code: string }) => {
 };
 
 const localLogin = async (_: any, { user_id, password }: { user_id: string; password: string }) => {
-  password = await getHashedPassword(password);
-  const userInfo = await userModel.findOne({ user_id, password });
-  if (userInfo) {
-    const signedToken = signToken({ id: userInfo?.get('user_id') });
-    return { token: signedToken };
-  }
-  throw new Error('Not Found User');
+  const userInfo = await userModel.findOne({ user_id });
+
+  if (!userInfo) throw new Error('Not Found User');
+
+  const dbPassword = userInfo?.get('password');
+  const isLogined = await bcrypt.compare(password, dbPassword);
+
+  if (!isLogined) throw new Error('Wrong Password');
+
+  const signedToken = signToken({ id: userInfo?.get('user_id') });
+  return { token: signedToken };
 };
 
 export { githubLogin, localLogin };
