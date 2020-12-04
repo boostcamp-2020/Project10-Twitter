@@ -17,6 +17,7 @@ import {
 } from './styled';
 import Text from '../../atoms/Text';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
+import GET_MYINFO from '../../../graphql/getMyInfo.gql';
 
 interface Props {
   userId: string;
@@ -32,7 +33,8 @@ interface Variable {
 
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const { loading, error, data } = useQuery(GET_USERDETAIL,queryVariable);
+  const { loading, error, data } = useQuery(GET_USERDETAIL, queryVariable);
+  const { loading: myInfoLoading, error: myInfoError, data: myInfo } = useQuery(GET_MYINFO);
 
   const PROFILE_IMG_SIZE = 150;
 
@@ -45,16 +47,12 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
       </div>
     );
 
-  const { userDetail , followingList , followerList } = data;
-
+  const { userDetail, followingList, followerList } = data;
 
   return (
     <DetailContainer>
       <UserBackgroundContainer>
-        <img
-          src={userDetail.background_img_url}
-          alt="user background"
-        />
+        <img src={userDetail.background_img_url} alt="user background" />
       </UserBackgroundContainer>
       <UserMainContainer>
         <TopContainer>
@@ -63,10 +61,12 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
               <ProfileImg img={userDetail.profile_img_url} size={PROFILE_IMG_SIZE} />
             </ImgCircleContainer>
           </UserImgContainer>
-          {userDetail.user_id === userDetail.user_id ? (
-            <Button text="edit" variant="outlined" color="primary" />
+          {myInfo.myProfile.following_id_list.includes(userDetail.user_id) ? (
+            <Button text="unfollow" color="primary" variant="contained" />
+          ) : myInfo.myProfile.user_id != userDetail.user_id ? (
+            <Button text="follow" color="primary" variant="outlined" />
           ) : (
-            <Button text="follow" variant="outlined" color="primary" />
+            <Button text="edit" variant="outlined" color="primary" />
           )}
         </TopContainer>
         <BottomContainer>

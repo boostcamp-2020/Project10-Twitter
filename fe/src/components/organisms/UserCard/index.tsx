@@ -24,12 +24,14 @@ const UserCard: FunctionComponent<Props> = ({ user }) => {
   return (
     <Link href={`/${user.user_id}`}>
       <Container>
-        <UserInfo img={user.profile_img_url} title={user.user_id} sub={user.name} />
+        <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
         <Text value={user.comment ? user.comment : ''} />
         {data.myProfile.following_id_list.includes(user.user_id) ? (
           <Button text="unfollow" color="primary" variant="contained" />
-        ) : (
+        ) : data.myProfile.user_id != user.user_id ? (
           <Button text="follow" color="primary" variant="outlined" />
+        ) : (
+          <></>
         )}
       </Container>
     </Link>
