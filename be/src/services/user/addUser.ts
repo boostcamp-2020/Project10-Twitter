@@ -28,7 +28,7 @@ const registerUser = async (userInfo: UserInfo) => {
   const user = await userModel.create({
     user_id: uniqueUserId,
     github_id: userInfo.github_id,
-    name: userInfo.name ? userInfo.name : makeRandomName(16),
+    name: userInfo.name ? userInfo.name : makeRandomName(10),
     password: userInfo.password,
     following_id_list: [],
     profile_img_url: userInfo.profile_img_url,

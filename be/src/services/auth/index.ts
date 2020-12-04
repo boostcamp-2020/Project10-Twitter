@@ -17,7 +17,7 @@ interface GithubUserInfo {
   login: string;
   id: number;
   avatar_url: string;
-  name?: string;
+  name: string;
 }
 
 const getGithubToken = async (code: string) => {
@@ -69,7 +69,7 @@ const githubLogin = async (_: any, { code }: { code: string }) => {
   const user = await getOurUser({
     user_id: githubUserInfo.login,
     github_id: githubUserInfo.id,
-    name: githubUserInfo.name ? githubUserInfo.name : makeRandomName(16),
+    name: githubUserInfo.name,
     profile_img_url: githubUserInfo.avatar_url,
   });
   const signedToken = signToken({ id: user.get('user_id') });

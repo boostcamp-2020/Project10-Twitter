@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
 const makeRandomName = (nameLength: number): string => {
-  const result = Math.random().toString(36).substring(nameLength);
+  const result = Math.random()
+    .toString(36)
+    .substring(2, 2 + nameLength);
   return result;
 };
 
