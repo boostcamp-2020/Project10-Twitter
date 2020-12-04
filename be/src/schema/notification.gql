@@ -1,0 +1,19 @@
+type Notification {
+  user: User
+  tweet: Tweet
+  type: String
+  is_read: Boolean
+  createAt: Date
+}
+type Count {
+  count: Int
+}
+
+type Query {
+  notification_count: Count
+  notification_list(old_notification_id: String): [Notification]
+}
+
+type Mutation {
+  update_notification: Response
+}

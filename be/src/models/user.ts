@@ -4,13 +4,15 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    user_id: String,
+    user_id: { type: String, unique: true },
     name: String,
     password: String,
-    following_list: [String],
+    following_id_list: [String],
     comment: String,
+    github_id: String,
     profile_img_url: String,
     background_img_url: String,
+    heart_tweet_id_list: [mongoose.Types.ObjectId],
   },
   { versionKey: false },
 );

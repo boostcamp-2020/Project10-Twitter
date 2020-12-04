@@ -1,163 +1,208 @@
-import { userModel, tweetModel } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
+import { userModel, tweetModel } from '../../models';
+import { commonReadCondition } from './common';
+import { stringToObjectId } from '../../lib/utilty';
+interface Auth {
+  authUser: { id: string };
+}
+interface Args {
+  oldest_tweet_id: string;
+  latest_tweet_id: string;
+  search_word: string;
+  tweet_id: string;
+  user_id: string;
+  time: Date;
+}
 
-const getFollowingTweetList = async (_: any, args: any, { authUser }: any) => {
+const getNextTweetsCondition = (oldest_tweet_id: string): Object => {
+  return oldest_tweet_id ? { _id: { $lt: stringToObjectId(oldest_tweet_id) } } : {};
+};
+
+const getFollowingTweetList = async (_: any, { oldest_tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = authUser.user_id;
-  const followingList = await userModel.findOne({ user_id: userId });
+  const userId = authUser.id;
+  const userInfo = await userModel.findOne({ user_id: userId });
 
-  const tweetList = await tweetModel.aggregate([
+  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
         $and: [
-          { author_id: { $in: followingList?.get('following_list') } },
+          {
+            $or: [
+              { author_id: { $in: userInfo?.get('following_id_list') } },
+              { author_id: userId },
+            ],
+          },
           { parent_id: { $exists: false } },
+          nextTweetsCondition,
         ],
       },
     },
-    {
-      $project: {
-        author_id: 1,
-        content: 1,
-        img_url_list: 1,
-        parent_id: 1,
-        retweet_id: 1,
-        child_tweet_list: 1,
-        child_tweet_number: { $size: '$child_tweet_list' },
-      },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author_id',
-        foreignField: 'user_id',
-        as: 'author',
-      },
-    },
-    { $unwind: '$author' },
-    {
-      $lookup: {
-        from: 'tweets',
-        localField: 'retweet_id',
-        foreignField: '_id',
-        as: 'retweet',
-      },
-    },
-    { $unwind: { path: '$retweet', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'retweet.author_id',
-        foreignField: 'user_id',
-        as: 'retweet.author',
-      },
-    },
-    { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
   ]);
+
   return tweetList;
 };
 
-const getUserTweetList = async (_: any, args: any, { authUser }: any) => {
+const getUserTweetList = async (_: any, { user_id, oldest_tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = args.user_id;
-  const tweetList = await tweetModel.aggregate([
+  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
       $match: {
-        $and: [{ author_id: userId }, { parent_id: { $exists: false } }],
+        $and: [{ author_id: user_id }, { parent_id: { $exists: false } }, nextTweetsCondition],
       },
     },
-    {
-      $project: {
-        author_id: 1,
-        content: 1,
-        img_url_list: 1,
-        parent_id: 1,
-        retweet_id: 1,
-        child_tweet_list: 1,
-        child_tweet_number: { $size: '$child_tweet_list' },
-      },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author_id',
-        foreignField: 'user_id',
-        as: 'author',
-      },
-    },
-    { $unwind: '$author' },
-    {
-      $lookup: {
-        from: 'tweets',
-        localField: 'retweet_id',
-        foreignField: '_id',
-        as: 'retweet',
-      },
-    },
-    { $unwind: { path: '$retweet', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'retweet.author_id',
-        foreignField: 'user_id',
-        as: 'retweet.author',
-      },
-    },
-    { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
   ]);
+
   return tweetList;
 };
 
-const getUserAllTweetList = async (_: any, args: any, { authUser }: any) => {
+const getUserAllTweetList = async (
+  _: any,
+  { user_id, oldest_tweet_id }: Args,
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = args.user_id;
-  const tweetList = await tweetModel.aggregate([
+  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+
+  const tweetList: Document[] = await tweetModel.aggregate([
     {
-      $match: { author_id: userId },
+      $match: { $and: [{ author_id: user_id }, nextTweetsCondition] },
     },
-    {
-      $project: {
-        author_id: 1,
-        content: 1,
-        img_url_list: 1,
-        parent_id: 1,
-        retweet_id: 1,
-        child_tweet_list: 1,
-        child_tweet_number: { $size: '$child_tweet_list' },
-      },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author_id',
-        foreignField: 'user_id',
-        as: 'author',
-      },
-    },
-    { $unwind: '$author' },
-    {
-      $lookup: {
-        from: 'tweets',
-        localField: 'retweet_id',
-        foreignField: '_id',
-        as: 'retweet',
-      },
-    },
-    { $unwind: { path: '$retweet', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'retweet.author_id',
-        foreignField: 'user_id',
-        as: 'retweet.author',
-      },
-    },
-    { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
   ]);
+
   return tweetList;
 };
 
-export { getFollowingTweetList, getUserTweetList, getUserAllTweetList };
+const getDetailTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const [tweet]: Document[] = await tweetModel.aggregate([
+    {
+      $match: { _id: stringToObjectId(tweet_id) },
+    },
+    ...commonReadCondition,
+  ]);
+
+  return tweet;
+};
+
+const getChildTweetList = async (
+  _: any,
+  { tweet_id, oldest_tweet_id }: Args,
+  { authUser }: Auth,
+) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+
+  const childTweetList: Document[] = await tweetModel.aggregate([
+    {
+      $match: { $and: [{ parent_id: stringToObjectId(tweet_id) }, nextTweetsCondition] },
+    },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
+  ]);
+
+  return childTweetList;
+};
+
+const getHeartTweetList = async (
+  _: any,
+  { user_id, oldest_tweet_id }: Args,
+  { authUser }: Auth,
+) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userInfo = await userModel.findOne({ user_id });
+  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+
+  const tweetList: Document[] = await tweetModel.aggregate([
+    {
+      $match: {
+        $and: [{ _id: { $in: userInfo?.get('heart_tweet_id_list') } }, nextTweetsCondition],
+      },
+    },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
+  ]);
+
+  return tweetList;
+};
+
+const getSearchedTweetList = async (
+  _: any,
+  { search_word, oldest_tweet_id }: Args,
+  { authUser }: Auth,
+) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+
+  const searchedTweetList: Document[] = await tweetModel.aggregate([
+    {
+      $match: { $and: [{ content: { $regex: search_word } }, nextTweetsCondition] },
+    },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
+  ]);
+
+  return searchedTweetList;
+};
+
+const getLatestTweetList = async (_: any, { latest_tweet_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.id;
+  const userInfo = await userModel.findOne({ user_id: userId });
+
+  const latestTweetList: Document[] = await tweetModel.aggregate([
+    {
+      $match: {
+        $and: [
+          {
+            $or: [
+              { author_id: { $in: userInfo?.get('following_id_list') } },
+              { author_id: userId },
+            ],
+          },
+          { parent_id: { $exists: false } },
+          { _id: { $gt: stringToObjectId(latest_tweet_id) } },
+        ],
+      },
+    },
+    ...commonReadCondition,
+    { $sort: { createAt: -1 } },
+  ]);
+
+  return latestTweetList;
+};
+
+export {
+  getFollowingTweetList,
+  getUserTweetList,
+  getUserAllTweetList,
+  getDetailTweet,
+  getChildTweetList,
+  getHeartTweetList,
+  getSearchedTweetList,
+  getLatestTweetList,
+};

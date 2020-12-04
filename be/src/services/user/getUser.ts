@@ -1,55 +1,89 @@
-import { userModel } from '../../models';
 import { AuthenticationError } from 'apollo-server-express';
+import { userModel } from '../../models';
+import { stringToObjectId } from '../../lib/utilty';
 
-const getFollowingList = async (_: any, args: any, { authUser }: any) => {
+interface Auth {
+  authUser: { id: string };
+}
+
+interface Args {
+  oldest_user_id: string;
+  search_word: string;
+  user_id: string;
+}
+
+const getNextUsersCondition = (oldest_user_id: string): Object => {
+  return oldest_user_id ? { _id: { $lt: stringToObjectId(oldest_user_id) } } : {};
+};
+
+const getFollowingList = async (_: any, { user_id, oldest_user_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = args.id;
-  const followingList = await userModel.aggregate([
+  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
+
+  const userInfo = await userModel.findOne({ user_id });
+
+  const followingList: Document[] = await userModel.aggregate([
     {
       $match: {
-        user_id: userId,
+        $and: [{ user_id: { $in: userInfo?.get('following_id_list') } }, nextUsersCondition],
       },
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'following_list',
-        foreignField: 'user_id',
-        as: 'following_user',
-      },
-    },
-    { $unwind: '$following_user' },
+    { $limit: 20 },
   ]);
 
   return followingList;
 };
 
-const getFollowerList = async (_: any, args: any, { authUser }: any) => {
+const getFollowerList = async (_: any, { user_id, oldest_user_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const userId = args.id;
-  const followerList = await userModel.aggregate([
+  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
+
+  const followerList: Document[] = await userModel.aggregate([
     {
       $match: {
-        following_list: userId,
+        $and: [
+          {
+            following_id_list: user_id,
+          },
+          nextUsersCondition,
+        ],
       },
     },
+    { $limit: 20 },
   ]);
+
   return followerList;
 };
 
-const getSearchedUserList = async (_: any, args: any, { authUser }: any) => {
+const getSearchedUserList = async (
+  _: any,
+  { search_word, oldest_user_id }: Args,
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const searchingWord = args.word;
-  const followerList = await userModel.find({ user_id: { $regex: searchingWord } });
-  return followerList;
+  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
+
+  const userList = await userModel
+    .find({ $and: [{ user_id: { $regex: search_word } }, nextUsersCondition] })
+    .limit(20);
+  return userList;
 };
 
-const getUserInfo = (_: any, args: any, { authUser }: any) => {
+const getMyUserInfo = async (_: any, __: any, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
-  return authUser;
+
+  const [userInfo] = await userModel.find({ user_id: authUser.id });
+  return userInfo;
 };
 
-export { getFollowerList, getFollowingList, getSearchedUserList, getUserInfo };
+const getUserInfo = async (_: any, { user_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const [userInfo] = await userModel.find({ user_id });
+  return userInfo;
+};
+
+export { getFollowerList, getFollowingList, getSearchedUserList, getMyUserInfo, getUserInfo };

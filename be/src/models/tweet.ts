@@ -9,8 +9,10 @@ const tweetSchema = new Schema(
     img_url_list: [String],
     parent_id: Schema.Types.ObjectId,
     retweet_id: Schema.Types.ObjectId,
-    child_tweet_list: [Schema.Types.ObjectId],
-    child_tweet_number: Number,
+    child_tweet_id_list: [Schema.Types.ObjectId],
+    retweet_user_id_list: [String],
+    heart_user_id_list: [String],
+    createAt: { type: Date, default: Date.now },
   },
   { versionKey: false },
 );
