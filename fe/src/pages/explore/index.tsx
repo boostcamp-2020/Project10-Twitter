@@ -45,7 +45,8 @@ interface Author {
 const Explore: FunctionComponent = () => {
   const router = useRouter();
   const param = router.asPath.split('?')[2] || 'tweets';
-  const initalText = router.asPath.split('?')[1].split("=")[1] || '';
+  const splitedSearchWord = router.asPath.split('?')[1]
+  const initalText = splitedSearchWord ? splitedSearchWord.split("=")[1] : '';
   const [textValue,setTextValue,onTextChange] = useOnTextChange(initalText); 
   const [value, , onChange] = useOnTabChange(param);
   const queryArr = { tweets: GET_SEARCH_TWEETLIST, 'people': GET_SEARCH_USERLIST };
