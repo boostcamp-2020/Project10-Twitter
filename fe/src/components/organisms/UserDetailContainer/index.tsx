@@ -16,18 +16,26 @@ import {
   ImgCircleContainer,
 } from './styled';
 import Text from '../../atoms/Text';
-import GET_MYINFO from '../../../graphql/getMyInfo.gql';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
 
 interface Props {
   userId: string;
 }
 
+interface QueryVariable {
+  variables: Variable;
+}
+
+interface Variable {
+  userId: string;
+}
+
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
-  const { loading, error, data } = useQuery(GET_MYINFO);
+  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
+  const { loading, error, data } = useQuery(GET_USERDETAIL,queryVariable);
 
   const PROFILE_IMG_SIZE = 150;
-  // const { } = useQuery(GET_USERDETAIL,profileId );
+
   if (loading) return <div>Loading...</div>;
   if (error)
     return (
@@ -37,13 +45,14 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
       </div>
     );
 
-  const { myProfile } = data;
+  const { userDetail , followingList , followerList } = data;
+
 
   return (
     <DetailContainer>
       <UserBackgroundContainer>
         <img
-          src="https://thumbs.dreamstime.com/z/abstract-orange-yellow-screen-design-mobile-app-soft-trendy-color-gradient-background-144162269.jpg"
+          src={userDetail.background_img_url}
           alt="user background"
         />
       </UserBackgroundContainer>
@@ -51,27 +60,27 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
         <TopContainer>
           <UserImgContainer>
             <ImgCircleContainer>
-              <ProfileImg img={myProfile.profile_img_url} size={PROFILE_IMG_SIZE} />
+              <ProfileImg img={userDetail.profile_img_url} size={PROFILE_IMG_SIZE} />
             </ImgCircleContainer>
           </UserImgContainer>
-          {myProfile.user_id === myProfile.user_id ? (
+          {userDetail.user_id === userDetail.user_id ? (
             <Button text="edit" variant="outlined" color="primary" />
           ) : (
             <Button text="follow" variant="outlined" color="primary" />
           )}
         </TopContainer>
         <BottomContainer>
-          <TitleSubText title={myProfile.name} sub={myProfile.user_id} />
-          <Text value={myProfile.comment} />
+          <TitleSubText title={userDetail.name} sub={userDetail.user_id} />
+          <Text value={userDetail.comment} />
           <UserFollowContainer>
-            <Link href={`/${myProfile.user_id}/follow?Following`}>
+            <Link href={`/${userDetail.user_id}/follow?Following`}>
               <a>
-                <TitleSubText title="팔로잉 수" sub="133" />
+                <TitleSubText title="팔로잉 수" sub={followingList.length} />
               </a>
             </Link>
-            <Link href={`/${myProfile.user_id}/follow?Follower`}>
+            <Link href={`/${userDetail.user_id}/follow?Follower`}>
               <a>
-                <TitleSubText title="팔로워 수" sub="222" />
+                <TitleSubText title="팔로워 수" sub={followerList.length} />
               </a>
             </Link>
           </UserFollowContainer>

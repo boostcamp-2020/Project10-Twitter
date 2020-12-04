@@ -1,5 +1,5 @@
-query($userId: String, $oldestTweetId: String) {
-  tweetList: user_all_tweet_list(user_id: $userId, oldest_tweet_id: $oldestTweetId) {
+query($searchWord: String!, $oldestTweetId: String) {
+  tweetList: search_tweet_list(search_word: $searchWord, oldest_tweet_id: $oldestTweetId) {
     content
     child_tweet_number
     retweet_user_number

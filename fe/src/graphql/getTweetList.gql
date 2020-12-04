@@ -1,5 +1,5 @@
-query {
-  tweetList: following_tweet_list(time: "2020-12-03") {
+query($oldestTweetId: String) {
+  tweetList: following_tweet_list(oldest_tweet_id: $oldestTweetId) {
     content
     child_tweet_number
     retweet_user_number

@@ -3,6 +3,7 @@ import { InputProps, TextField } from '@material-ui/core';
 
 interface Props {
   onChange?: (e: React.SyntheticEvent) => void;
+  onKeyDown?: (e: React.SyntheticEvent) => void;
   placeholder?: string;
   type?: string;
   value?: string;
@@ -15,6 +16,7 @@ const Input: FunctionComponent<Props> = ({
   variant = 'standard',
   type = 'text',
   onChange,
+  onKeyDown,
   value = '',
   disableUnderline = true
 }) => (
@@ -23,6 +25,7 @@ const Input: FunctionComponent<Props> = ({
     variant={variant}
     type={type}
     onChange={onChange}
+    onKeyDown={onKeyDown}
     value={value}
     InputProps={{ disableUnderline: disableUnderline }}
   />

@@ -1,9 +1,21 @@
-query {
-  userDetail: user_info {
+query($userId: String) {
+  userDetail: user_info(user_id: $userId) {
     user_id
     name
     comment
     profile_img_url
-    following_list
+    background_img_url
+  }
+  followerList: follower_list(user_id: $userId) {
+    user_id
+    name
+    comment
+    profile_img_url
+  }
+  followingList: following_list(user_id: $userId) {
+    user_id
+    name
+    comment
+    profile_img_url
   }
 }

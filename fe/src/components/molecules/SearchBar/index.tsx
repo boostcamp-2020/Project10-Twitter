@@ -11,6 +11,7 @@ interface Props {
   variant?: 'filled' | 'outlined' | 'standard' | undefined;
   width?: string;
   onChange?: (e: React.SyntheticEvent) => void;
+  onKeyDown?: (e: React.SyntheticEvent) => void;
 }
 
 const SearchBar: FunctionComponent<Props> = ({
@@ -20,6 +21,7 @@ const SearchBar: FunctionComponent<Props> = ({
   variant = undefined,
   width = '',
   onChange = (e) => {},
+  onKeyDown = (e) => {},
 }) => (
   <SearchBox width={width}>
     <SearchIconBox>
@@ -32,6 +34,7 @@ const SearchBar: FunctionComponent<Props> = ({
         variant={variant}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
     </Box>
   </SearchBox>
