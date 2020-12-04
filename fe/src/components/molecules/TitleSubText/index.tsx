@@ -5,13 +5,12 @@ import Text from '../../atoms/Text';
 interface Props {
   title: string;
   sub: string;
-  inRow?: boolean;
+  className?: string;
 }
 
-const TitleSubText: FunctionComponent<Props> = ({ title, sub, inRow = true }) => (
-  <Box component="div">
+const TitleSubText: FunctionComponent<Props> = ({ title, sub, className }) => (
+  <Box component="div" className={className}>
     <Text styled="title" value={title} />
-    {!inRow ? <br /> : <span>&nbsp;</span>}
     <Text styled="sub" value={sub} />
   </Box>
 );

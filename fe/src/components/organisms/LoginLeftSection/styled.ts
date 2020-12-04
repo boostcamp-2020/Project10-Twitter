@@ -15,13 +15,19 @@ const Container = styled(Box)`
 const SvgContainer = styled(SvgIcon)`
   position: fixed;
   overflow: hidden;
-  color: rgba(29, 161, 242, 1);
+  color: rgb(29, 161, 242);
   width: 100% !important;
   height: 100% !important;
 `;
 
 const StyledIconLabel = styled(IconLabel)`
-  margin-bottom: 40px;
+  && {
+    margin-bottom: 40px;
+
+    & svg {
+      fill: #fff;
+    }
+  }
 `;
 
 const IconLabelContainer = styled(Box)`

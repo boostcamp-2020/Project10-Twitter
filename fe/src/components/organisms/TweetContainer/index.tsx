@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { FunctionComponent, ReactElement, useState } from 'react';
+import Markdown from 'react-markdown/with-html';
 import MainContaier from '../MainContainer';
-import TextArea from '../../atoms/TextArea';
 import TitleSubText from '../../molecules/TitleSubText';
 import Button from '../../molecules/Button';
 import { Heart, Comment, Retweet } from '../../atoms/Icons';
@@ -13,6 +13,9 @@ interface Props {
 
 interface Tweet {
   content: string;
+  child_tweet_number: number;
+  retweet_user_number: number;
+  heart_user_number: number;
   author: Author;
 }
 interface Author {
@@ -24,12 +27,12 @@ interface Author {
 const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
   return (
     <MainContaier ProfileImgUrl={tweet.author.profile_img_url}>
-      <TitleSubText title={tweet.author.user_id} sub={tweet.author.name} />
-      <TextArea value={tweet.content} readOnly />
+      <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
+      <Markdown allowDangerousHtml>{tweet.content}</Markdown>
       <ButtonsBox component="div">
-        <Button icon={Comment({})} text="0" />
-        <Button icon={Retweet({})} text="0" />
-        <Button icon={Heart({})} text="0" />
+        <Button icon={Comment({})} text={tweet.child_tweet_number} />
+        <Button icon={Retweet({})} text={tweet.retweet_user_number} />
+        <Button icon={Heart({})} text={tweet.heart_user_number} />
       </ButtonsBox>
     </MainContaier>
   );

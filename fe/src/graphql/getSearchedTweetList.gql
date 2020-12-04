@@ -1,0 +1,13 @@
+query($searchWord: String!, $oldestTweetId: String) {
+  tweetList: search_tweet_list(search_word: $searchWord, oldest_tweet_id: $oldestTweetId) {
+    content
+    child_tweet_number
+    retweet_user_number
+    heart_user_number
+    author {
+      user_id
+      name
+      profile_img_url
+    }
+  }
+}

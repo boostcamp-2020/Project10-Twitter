@@ -1,0 +1,8 @@
+query($userId: String) {
+  list: follower_list(user_id: $userId) {
+    user_id
+    name
+    comment
+    profile_img_url
+  }
+}
