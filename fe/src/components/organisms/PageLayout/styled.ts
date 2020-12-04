@@ -12,6 +12,7 @@ const MainContainer = styled(Box)`
   position: relative;
   margin: 0 0 0 20vw;
   width: 65vw;
+  height: 100%;
   border-left: 1px solid rgb(235, 238, 240);
   border-right: 1px solid rgb(235, 238, 240);
 `;

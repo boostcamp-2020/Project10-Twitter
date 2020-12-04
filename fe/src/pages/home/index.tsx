@@ -4,8 +4,8 @@ import React, { FunctionComponent, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
 import TweetContainer from '../../components/organisms/TweetContainer';
-import SideBar from '../../components/organisms/SideBar';
-import { Container, MainContainer, HomeBox } from './styled';
+import PageLayout from '../../components/organisms/PageLayout';
+import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 
 interface Tweet {
@@ -36,16 +36,13 @@ const Home: FunctionComponent = () => {
   const { tweetList } = data;
 
   return (
-    <Container>
-      <SideBar />
-      <MainContainer>
-        <HomeBox>Home</HomeBox>
-        <NewTweetContainer />
-        {tweetList?.map((tweet: Tweet, index: number) => (
-          <TweetContainer key={index} tweet={tweet} />
-        ))}
-      </MainContainer>
-    </Container>
+    <PageLayout>
+      <HomeBox>Home</HomeBox>
+      <NewTweetContainer />
+      {tweetList?.map((tweet: Tweet, index: number) => (
+        <TweetContainer key={index} tweet={tweet} />
+      ))}
+    </PageLayout>
   );
 };
 

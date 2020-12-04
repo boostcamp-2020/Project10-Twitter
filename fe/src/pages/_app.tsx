@@ -4,6 +4,7 @@ import { ApolloClient, createHttpLink, InMemoryCache, ApolloProvider } from '@ap
 import { setContext } from '@apollo/client/link/context';
 import { AppProps } from 'next/app';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import AuthProvider from '../libs';
 import '../styles/global.css';
 
 const authLink = setContext((_, { headers }) => {
@@ -34,17 +35,16 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const App = ({ Component, pageProps }: AppProps) => (
-  <ApolloProvider client={client}>
-    <MuiThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </MuiThemeProvider>
-  </ApolloProvider>
-);
-
-// App.getInitialProps = ({ Component, pageProps }: AppProps) => {
-//   const user;
-//   return { ...Component, ...pageProps, user };
-// };
+const App = ({ Component, pageProps }: AppProps) => {
+  return (
+    <ApolloProvider client={client}>
+      <MuiThemeProvider theme={theme}>
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
+      </MuiThemeProvider>
+    </ApolloProvider>
+  );
+};
 
 export default App;

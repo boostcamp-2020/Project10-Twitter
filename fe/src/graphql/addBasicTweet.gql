@@ -1,0 +1,6 @@
+mutation($content: String!, $imgUrlList: [String]) {
+  tweet: add_basic_tweet(content: $content, img_url_list: $imgUrlList) {
+    content
+    author_id
+  }
+}

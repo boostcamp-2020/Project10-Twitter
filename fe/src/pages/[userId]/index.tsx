@@ -23,6 +23,9 @@ interface Variable {
 interface Tweet {
   content: string;
   author: Author;
+  child_tweet_number: number;
+  retweet_user_number: number;
+  heart_user_number: number;
 }
 interface Author {
   user_id: string;
@@ -33,10 +36,15 @@ interface Author {
 const UserDetail: FunctionComponent = () => {
   const router = useRouter();
   const { userId } = router.query;
-  const queryArr = [GET_USER_TWEETLIST, GET_USER_ALL_TWEETLIST];
+  const queryArr = { tweets: GET_USER_TWEETLIST, 'tweets & replies': GET_USER_ALL_TWEETLIST };
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const [value, , onChange] = useOnTabChange(0);
+  const param = router.asPath.replace(/%20/gi, ' ').split('?')[1] || 'tweets';
+  const [value, , onChange] = useOnTabChange(param);
   const { loading, error, data, refetch } = useQuery(queryArr[value], queryVariable);
+
+  useEffect(() => {
+    router.replace(`/[userId]`, `/${userId}?${value}`, { shallow: true });
+  }, [value]);
 
   return (
     <Container>

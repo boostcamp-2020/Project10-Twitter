@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
 
 const useOnTabChange = (
-  initalValue: number,
+  initalValue: string,
 ): [
-  number,
-  React.Dispatch<React.SetStateAction<number>>,
-  (e: React.ChangeEvent<{}>, newValue: number) => void,
+  string,
+  React.Dispatch<React.SetStateAction<string>>,
+  (e: React.ChangeEvent<{}>, newValue: string) => void,
 ] => {
   const [value, setValue] = useState(initalValue);
 
   const onTabChange = useCallback(
-    (e: React.ChangeEvent<{}>, newValue: number) => {
+    (e: React.ChangeEvent<{}>, newValue: string) => {
       setValue(newValue);
     },
     [value],
