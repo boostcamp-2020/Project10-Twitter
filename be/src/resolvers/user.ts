@@ -2,6 +2,8 @@ import { IResolvers } from 'apollo-server-express';
 import {
   getFollowingList,
   getFollowerList,
+  getHeartUserList,
+  getRetweetUserList,
   getSearchedUserList,
   getUserInfo,
   getMyUserInfo,
@@ -17,6 +19,8 @@ const userResolvers: IResolvers = {
   Query: {
     following_list: getFollowingList,
     follower_list: getFollowerList,
+    heart_user_list: getHeartUserList,
+    retweet_user_list: getRetweetUserList,
     search_user_list: getSearchedUserList,
     my_info: getMyUserInfo,
     user_info: getUserInfo,
