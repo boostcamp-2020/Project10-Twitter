@@ -9,7 +9,7 @@ interface User {
 
 const useUserState = (user: User): [string, () => void, () => void] => {
   const [userState, setUserState] = useState('unfollowUser');
-  const { data } = useQuery(GET_MYINFO);
+  const { data, refetch } = useQuery(GET_MYINFO);
 
   const getUserType = (user: User, myProfile: User) => {
     if (myProfile.user_id === user.user_id) return 'me';
@@ -19,10 +19,12 @@ const useUserState = (user: User): [string, () => void, () => void] => {
 
   const setFollowUser = () => {
     setUserState('followUser');
+    refetch();
   };
 
   const setUnfollowUser = () => {
     setUserState('unfollowUser');
+    refetch();
   };
 
   useEffect(() => {
