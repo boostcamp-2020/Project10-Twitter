@@ -1,17 +1,21 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
+import useUserState from '../../../hooks/useUserState';
 import UserInfo from '../../molecules/UserInfo';
 import Button from '../../molecules/Button';
 import Text from '../../atoms/Text';
 import Container from './styled';
-import GET_MYINFO from '../../../graphql/getMyInfo.gql';
+import { getJSXwithUserState } from '../../../utilitys';
+import FOLLOW_USER from '../../../graphql/followUser.gql';
+import UNFOLLOW_USER from '../../../graphql/unfollowUser.gql';
 
 interface User {
   user_id: string;
   name: string;
   profile_img_url?: string;
   comment?: string;
+  following_id_list: string[];
 }
 
 interface Props {
@@ -19,22 +23,37 @@ interface Props {
 }
 
 const UserCard: FunctionComponent<Props> = ({ user }) => {
-  const { loading, error, data } = useQuery(GET_MYINFO);
+  const [userState, setFollowUser, setUnfollowUser] = useUserState(user);
+
+  const [followUser] = useMutation(FOLLOW_USER);
+
+  const [unfollowUser] = useMutation(UNFOLLOW_USER);
+
+  const onClickFollow = () => {
+    followUser({ variables: { follow_user_id: user.user_id } });
+    setFollowUser();
+  };
+
+  const onClickUnfollow = () => {
+    unfollowUser({ variables: { unfollow_user_id: user.user_id } });
+    setUnfollowUser();
+  };
 
   return (
-    <Link href={`/${user.user_id}`}>
-      <Container>
+    <Container>
+      <Link href={`/${user.user_id}`}>
         <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
+      </Link>
+      <Link href={`/${user.user_id}`}>
         <Text value={user.comment ? user.comment : ''} />
-        {data.myProfile.following_id_list.includes(user.user_id) ? (
-          <Button text="unfollow" color="primary" variant="contained" />
-        ) : data.myProfile.user_id != user.user_id ? (
-          <Button text="follow" color="primary" variant="outlined" />
-        ) : (
-          <></>
-        )}
-      </Container>
-    </Link>
+      </Link>
+      {getJSXwithUserState(
+        userState,
+        <></>,
+        <Button text="unfollow" color="primary" variant="contained" onClick={onClickUnfollow} />,
+        <Button text="follow" color="primary" variant="outlined" onClick={onClickFollow} />,
+      )}
+    </Container>
   );
 };
 
