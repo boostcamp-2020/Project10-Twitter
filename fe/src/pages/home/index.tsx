@@ -9,6 +9,7 @@ import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 
 interface Tweet {
+  _id: string;
   content: string;
   child_tweet_number: number;
   retweet_user_number: number;
