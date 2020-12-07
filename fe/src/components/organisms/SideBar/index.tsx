@@ -20,7 +20,8 @@ interface ButtonProps {
   color?: 'primary' | 'inherit' | 'default' | 'secondary' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
   width?: string;
-  link: string;
+  link?: string;
+  onClick?: () => void;
 }
 
 const TITLE: Array<ButtonProps> = [
@@ -40,7 +41,6 @@ const TITLE: Array<ButtonProps> = [
     color: 'primary',
     variant: 'contained',
     width: '90%',
-    link: '',
   },
 ];
 
@@ -50,7 +50,7 @@ const SideBar: FunctionComponent = () => {
   const { myProfile } = useMyInfo();
   const [value, , onTextChange] = useOnTextChange('');
   const [displayPopover, , onClickUserprofile] = useDisplay(false);
-  const [displayModal, , onClickTweetBtn] = useDisplay(true);
+  const [displayModal, , onClickTweetBtn] = useDisplay(false);
 
   const onKeyDown = (e: any) => {
     if (e.key === 'Enter') {
@@ -62,6 +62,7 @@ const SideBar: FunctionComponent = () => {
   const userName: string = myProfile.name;
   const userProfileImg: string = myProfile.profile_img_url;
   TITLE[4].link = `/${userId}`;
+  TITLE[5].onClick = onClickTweetBtn;
 
   const placeholder = 'Search Twitter';
   const type = 'text';
@@ -72,15 +73,26 @@ const SideBar: FunctionComponent = () => {
       <Container component="ul">
         {TITLE.map((v) => (
           <ListItem key={v.id}>
-            <Link href={v.link}>
+            {v.link ? (
+              <Link href={v.link}>
+                <Button
+                  text={v.text}
+                  icon={v.icon}
+                  color={v.color}
+                  variant={v.variant}
+                  width={v.width}
+                />
+              </Link>
+            ) : (
               <Button
                 text={v.text}
                 icon={v.icon}
                 color={v.color}
                 variant={v.variant}
                 width={v.width}
+                onClick={v.onClick}
               />
-            </Link>
+            )}
           </ListItem>
         ))}
         <ListItem>
