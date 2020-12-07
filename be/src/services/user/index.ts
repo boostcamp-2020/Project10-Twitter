@@ -1,8 +1,6 @@
 import {
   getFollowerList,
   getFollowingList,
-  getHeartUserList,
-  getRetweetUserList,
   getSearchedUserList,
   getUserInfo,
   getMyUserInfo,
@@ -20,8 +18,6 @@ import { createUser } from './addUser';
 export {
   getFollowerList,
   getFollowingList,
-  getHeartUserList,
-  getRetweetUserList,
   getSearchedUserList,
   getMyUserInfo,
   getUserInfo,
