@@ -6,6 +6,7 @@ type User {
   comment: String
   background_img_url: String
   following_id_list: [String]
+  heart_tweet_id_list: [String]
 }
 type Auth {
   token: String
