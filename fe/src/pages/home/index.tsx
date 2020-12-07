@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
 import TweetContainer from '../../components/organisms/TweetContainer';
 import PageLayout from '../../components/organisms/PageLayout';
+import Modal from '../../components/molecules/Modal';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 
@@ -37,6 +38,9 @@ const Home: FunctionComponent = () => {
 
   return (
     <PageLayout>
+      <Modal>
+        <div>안농</div>
+      </Modal>
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
       {tweetList?.map((tweet: Tweet, index: number) => (
