@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
+import IconButton from '../../molecules/IconButton';
 
 const DetailContainer = styled(Box)`
   display: flex;
@@ -21,4 +22,12 @@ const ButtonsContainer = styled(Box)`
   justify-content: space-around;
 `;
 
-export { DetailContainer, TweetDetailInfoContainer, ButtonsContainer };
+const PinkIconButton = styled(IconButton)`
+  && {
+    & svg {
+      fill: #f783ac;
+    }
+  }
+`;
+
+export { DetailContainer, TweetDetailInfoContainer, ButtonsContainer, PinkIconButton };
