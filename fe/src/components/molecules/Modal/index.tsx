@@ -3,16 +3,13 @@ import { Dialog } from '@material-ui/core';
 import Portal from './Portal';
 
 interface Props {
-  children: ReactChild;
+  children: ReactChild[];
+  open: boolean;
 }
 
-const Modal: FunctionComponent<Props> = ({ children }) =>
+const Modal: FunctionComponent<Props> = ({ children, open }) =>
   Portal({
-    children: (
-      <Dialog open>
-        <div>hello</div>
-      </Dialog>
-    ),
+    children: <Dialog open={open}>{children}</Dialog>,
   });
 
-export default { Modal };
+export default Modal;
