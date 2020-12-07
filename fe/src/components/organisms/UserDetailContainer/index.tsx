@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import useUserState from '../../../hooks/useUserState';
 import TitleSubText from '../../molecules/TitleSubText';
 import ProfileImg from '../../atoms/ProfileImg';
@@ -19,8 +19,6 @@ import {
 import Text from '../../atoms/Text';
 import { getJSXwithUserState } from '../../../utilitys';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
-import FOLLOW_USER from '../../../graphql/followUser.gql';
-import UNFOLLOW_USER from '../../../graphql/unfollowUser.gql';
 
 interface Props {
   userId: string;
@@ -37,28 +35,9 @@ interface Variable {
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
   const { loading, error, data } = useQuery(GET_USERDETAIL, queryVariable);
-  const [userValue, setUserValue] = useState({ user_id: 'initial', following_id_list: [''] });
-  const [userState, setFollowUser, setUnfollowUser] = useUserState(userValue);
-
-  useEffect(() => {
-    if (data) setUserValue(data.user);
-  }, [data]);
-
-  const [followUser] = useMutation(FOLLOW_USER);
-
-  const [unfollowUser] = useMutation(UNFOLLOW_USER);
+  const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
 
   const onClickEdit = () => {};
-
-  const onClickFollow = () => {
-    followUser({ variables: { follow_user_id: user.user_id } });
-    setFollowUser();
-  };
-
-  const onClickUnfollow = () => {
-    unfollowUser({ variables: { unfollow_user_id: user.user_id } });
-    setUnfollowUser();
-  };
 
   if (loading) return <div>Loading...</div>;
   if (error)

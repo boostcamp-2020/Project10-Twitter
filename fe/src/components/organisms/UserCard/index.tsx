@@ -1,14 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import { useQuery, useMutation } from '@apollo/client';
 import useUserState from '../../../hooks/useUserState';
 import UserInfo from '../../molecules/UserInfo';
 import Button from '../../molecules/Button';
 import Text from '../../atoms/Text';
 import Container from './styled';
 import { getJSXwithUserState } from '../../../utilitys';
-import FOLLOW_USER from '../../../graphql/followUser.gql';
-import UNFOLLOW_USER from '../../../graphql/unfollowUser.gql';
 
 interface User {
   user_id: string;
@@ -23,21 +20,7 @@ interface Props {
 }
 
 const UserCard: FunctionComponent<Props> = ({ user }) => {
-  const [userState, setFollowUser, setUnfollowUser] = useUserState(user);
-
-  const [followUser] = useMutation(FOLLOW_USER);
-
-  const [unfollowUser] = useMutation(UNFOLLOW_USER);
-
-  const onClickFollow = () => {
-    followUser({ variables: { follow_user_id: user.user_id } });
-    setFollowUser();
-  };
-
-  const onClickUnfollow = () => {
-    unfollowUser({ variables: { unfollow_user_id: user.user_id } });
-    setUnfollowUser();
-  };
+  const [userState, onClickFollow, onClickUnfollow] = useUserState(user);
 
   return (
     <Container>
