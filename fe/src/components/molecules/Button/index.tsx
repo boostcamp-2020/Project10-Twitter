@@ -6,7 +6,7 @@ interface Props {
   color?: 'primary' | 'secondary' | 'inherit' | 'default' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
   text: string | number;
-  onClick?: () => void;
+  onClick?: (() => void) | (() => Promise<void>);
   icon?: ReactNode;
   isStart?: true;
   borderRadius?: number;

@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
+import useUserState from '../../../hooks/useUserState';
 import TitleSubText from '../../molecules/TitleSubText';
 import ProfileImg from '../../atoms/ProfileImg';
 import Button from '../../molecules/Button';
@@ -16,8 +17,8 @@ import {
   ImgCircleContainer,
 } from './styled';
 import Text from '../../atoms/Text';
+import { getJSXwithUserState } from '../../../utilitys';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
-import GET_MYINFO from '../../../graphql/getMyInfo.gql';
 
 interface Props {
   userId: string;
@@ -34,9 +35,9 @@ interface Variable {
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
   const { loading, error, data } = useQuery(GET_USERDETAIL, queryVariable);
-  const { loading: myInfoLoading, error: myInfoError, data: myInfo } = useQuery(GET_MYINFO);
+  const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
 
-  const PROFILE_IMG_SIZE = 150;
+  const onClickEdit = () => {};
 
   if (loading) return <div>Loading...</div>;
   if (error)
@@ -47,38 +48,44 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
       </div>
     );
 
-  const { userDetail, followingList, followerList } = data;
+  const PROFILE_IMG_SIZE = 150;
+
+  const { user, followingList, followerList } = data;
 
   return (
     <DetailContainer>
       <UserBackgroundContainer>
-        <img src={userDetail.background_img_url} alt="user background" />
+        <img src={user.background_img_url} alt="user background" />
       </UserBackgroundContainer>
       <UserMainContainer>
         <TopContainer>
           <UserImgContainer>
             <ImgCircleContainer>
-              <ProfileImg img={userDetail.profile_img_url} size={PROFILE_IMG_SIZE} />
+              <ProfileImg img={user.profile_img_url} size={PROFILE_IMG_SIZE} />
             </ImgCircleContainer>
           </UserImgContainer>
-          {myInfo.myProfile.following_id_list.includes(userDetail.user_id) ? (
-            <Button text="unfollow" color="primary" variant="contained" />
-          ) : myInfo.myProfile.user_id != userDetail.user_id ? (
-            <Button text="follow" color="primary" variant="outlined" />
-          ) : (
-            <Button text="edit" variant="outlined" color="primary" />
+          {getJSXwithUserState(
+            userState,
+            <Button text="edit" variant="outlined" color="primary" onClick={onClickEdit} />,
+            <Button
+              text="unfollow"
+              color="primary"
+              variant="contained"
+              onClick={onClickUnfollow}
+            />,
+            <Button text="follow" color="primary" variant="outlined" onClick={onClickFollow} />,
           )}
         </TopContainer>
         <BottomContainer>
-          <TitleSubText title={userDetail.name} sub={userDetail.user_id} />
-          <Text value={userDetail.comment} />
+          <TitleSubText title={user.name} sub={user.user_id} />
+          <Text value={user.comment} />
           <UserFollowContainer>
-            <Link href={`/${userDetail.user_id}/follow?Following`}>
+            <Link href={`/${user.user_id}/follow?Following`}>
               <a>
                 <TitleSubText title="팔로잉 수" sub={followingList.length} />
               </a>
             </Link>
-            <Link href={`/${userDetail.user_id}/follow?Follower`}>
+            <Link href={`/${user.user_id}/follow?Follower`}>
               <a>
                 <TitleSubText title="팔로워 수" sub={followerList.length} />
               </a>
