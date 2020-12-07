@@ -1,6 +1,5 @@
 import React, { ReactElement, FunctionComponent, useState } from 'react';
 import { ListItem } from '@material-ui/core';
-import useMyInfo from '../../../hooks/useMyInfo';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Button from '../../molecules/Button';
@@ -11,6 +10,7 @@ import SearchBar from '../../molecules/SearchBar';
 import Container from './styled';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import useDisplay from '../../../hooks/useDisplay';
+import useMyInfo from '../../../hooks/useMyInfo';
 
 interface ButtonProps {
   id: number;
@@ -30,7 +30,7 @@ const TITLE: Array<ButtonProps> = [
     id: 3,
     text: '알림',
     icon: Notifications({ width: '30px', height: '30px' }),
-    link: '/notification',
+    link: '/notifications/all',
   },
   { id: 4, text: '프로필', icon: Profiles({ width: '30px', height: '30px' }), link: '/' },
   {

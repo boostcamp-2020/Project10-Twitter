@@ -17,7 +17,7 @@ const UserInfo: FunctionComponent<Props> = ({
   sub,
   width = '',
 }) => (
-  <Container component="div" onClick={onClick} width={width}>
+  <Container component="div" onClick={onClick}>
     <ProfileImg img={img} />
     <StyledTitleSub title={title} sub={sub} />
   </Container>
