@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { tweetModel, userModel } from '../../models';
+import { userModel } from '../../models';
 import { stringToObjectId } from '../../lib/utilty';
 
 interface Auth {
@@ -10,7 +10,6 @@ interface Args {
   oldest_user_id: string;
   search_word: string;
   user_id: string;
-  tweet_id: string;
 }
 
 const getNextUsersCondition = (oldest_user_id: string): Object => {
@@ -58,48 +57,6 @@ const getFollowerList = async (_: any, { user_id, oldest_user_id }: Args, { auth
   return followerList;
 };
 
-const getHeartUserList = async (_: any, { tweet_id, oldest_user_id }: Args, { authUser }: Auth) => {
-  if (!authUser) throw new AuthenticationError('not authenticated');
-
-  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
-
-  const tweet = await tweetModel.findOne({ _id: tweet_id });
-
-  const heartUserList: Document[] = await userModel.aggregate([
-    {
-      $match: {
-        $and: [{ user_id: { $in: tweet?.get('heart_user_id_list') } }, nextUsersCondition],
-      },
-    },
-    { $limit: 20 },
-  ]);
-
-  return heartUserList;
-};
-
-const getRetweetUserList = async (
-  _: any,
-  { tweet_id, oldest_user_id }: Args,
-  { authUser }: Auth,
-) => {
-  if (!authUser) throw new AuthenticationError('not authenticated');
-
-  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
-
-  const tweet = await tweetModel.findOne({ _id: tweet_id });
-
-  const retweetUserList: Document[] = await userModel.aggregate([
-    {
-      $match: {
-        $and: [{ user_id: { $in: tweet?.get('retweet_user_id_list') } }, nextUsersCondition],
-      },
-    },
-    { $limit: 20 },
-  ]);
-
-  return retweetUserList;
-};
-
 const getSearchedUserList = async (
   _: any,
   { search_word, oldest_user_id }: Args,
@@ -129,12 +86,4 @@ const getUserInfo = async (_: any, { user_id }: Args, { authUser }: Auth) => {
   return userInfo;
 };
 
-export {
-  getFollowerList,
-  getFollowingList,
-  getHeartUserList,
-  getRetweetUserList,
-  getSearchedUserList,
-  getMyUserInfo,
-  getUserInfo,
-};
+export { getFollowerList, getFollowingList, getSearchedUserList, getMyUserInfo, getUserInfo };
