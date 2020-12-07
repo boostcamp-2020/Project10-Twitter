@@ -1,10 +1,16 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
+import useHeartState from '../../../hooks/useHeartState';
 import TitleSubText from '../../molecules/TitleSubText';
 import IconButton from '../../molecules/IconButton';
 import Markdown from 'react-markdown/with-html';
-import { DetailContainer, TweetDetailInfoContainer, ButtonsContainer } from './styled';
+import {
+  DetailContainer,
+  TweetDetailInfoContainer,
+  ButtonsContainer,
+  PinkIconButton,
+} from './styled';
 import { Heart, Comment, Retweet } from '../../atoms/Icons';
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
 import UserInfo from '../../molecules/UserInfo';
@@ -24,6 +30,7 @@ interface Variable {
 const UserDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) => {
   const queryVariable: QueryVariable = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
+  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweet);
 
   if (loading) return <div>Loading...</div>;
   if (error)
@@ -61,7 +68,11 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =>
       <ButtonsContainer>
         <IconButton icon={Comment} />
         <IconButton icon={Retweet} />
-        <IconButton icon={Heart} />
+        {isHeart ? (
+          <PinkIconButton icon={Heart} onClick={onClickUnheart} />
+        ) : (
+          <IconButton icon={Heart} onClick={onClickHeart} />
+        )}
       </ButtonsContainer>
     </DetailContainer>
   );
