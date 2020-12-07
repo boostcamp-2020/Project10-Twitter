@@ -1,5 +1,5 @@
-query($oldestTweetId: String) {
-  tweetList: following_tweet_list(oldest_tweet_id: $oldestTweetId) {
+query($tweetId: String!, $oldestTweetId: String) {
+  tweetList: child_tweet_list(tweet_id: $tweetId, oldest_tweet_id: $oldestTweetId) {
     _id
     content
     child_tweet_number
