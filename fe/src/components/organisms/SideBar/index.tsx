@@ -2,6 +2,7 @@ import React, { ReactElement, FunctionComponent, useState } from 'react';
 import { ListItem } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import useMyInfo from '../../../hooks/useMyInfo';
 import Button from '../../molecules/Button';
 import UserPopover from '../../molecules/UserPopover';
 import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
@@ -10,7 +11,7 @@ import SearchBar from '../../molecules/SearchBar';
 import Container from './styled';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import useDisplay from '../../../hooks/useDisplay';
-import useMyInfo from '../../../hooks/useMyInfo';
+import Modal from '../../molecules/Modal';
 
 interface ButtonProps {
   id: number;
@@ -19,7 +20,8 @@ interface ButtonProps {
   color?: 'primary' | 'inherit' | 'default' | 'secondary' | undefined;
   variant?: 'contained' | 'text' | 'outlined' | undefined;
   width?: string;
-  link: string;
+  link?: string;
+  onClick?: () => void;
 }
 
 const TITLE: Array<ButtonProps> = [
@@ -39,7 +41,6 @@ const TITLE: Array<ButtonProps> = [
     color: 'primary',
     variant: 'contained',
     width: '90%',
-    link: '/home',
   },
 ];
 
@@ -48,7 +49,8 @@ const SideBar: FunctionComponent = () => {
 
   const { myProfile } = useMyInfo();
   const [value, , onTextChange] = useOnTextChange('');
-  const [display, , onClick] = useDisplay(false);
+  const [displayPopover, , onClickUserprofile] = useDisplay(false);
+  const [displayModal, , onClickTweetBtn] = useDisplay(false);
 
   const onKeyDown = (e: any) => {
     if (e.key === 'Enter') {
@@ -60,42 +62,60 @@ const SideBar: FunctionComponent = () => {
   const userName: string = myProfile.name;
   const userProfileImg: string = myProfile.profile_img_url;
   TITLE[4].link = `/${userId}`;
+  TITLE[5].onClick = onClickTweetBtn;
 
   const placeholder = 'Search Twitter';
   const type = 'text';
   const variant = 'standard';
 
   return (
-    <Container component="ul">
-      {TITLE.map((v) => (
-        <ListItem key={v.id}>
-          <Link href={v.link}>
-            <Button
-              text={v.text}
-              icon={v.icon}
-              color={v.color}
-              variant={v.variant}
-              width={v.width}
-            />
-          </Link>
+    <>
+      <Container component="ul">
+        {TITLE.map((v) => (
+          <ListItem key={v.id}>
+            {v.link ? (
+              <Link href={v.link}>
+                <Button
+                  text={v.text}
+                  icon={v.icon}
+                  color={v.color}
+                  variant={v.variant}
+                  width={v.width}
+                />
+              </Link>
+            ) : (
+              <Button
+                text={v.text}
+                icon={v.icon}
+                color={v.color}
+                variant={v.variant}
+                width={v.width}
+                onClick={v.onClick}
+              />
+            )}
+          </ListItem>
+        ))}
+        <ListItem>
+          <SearchBar
+            placeholder={placeholder}
+            type={type}
+            variant={variant}
+            width="90%"
+            value={value}
+            onChange={onTextChange}
+            onKeyDown={onKeyDown}
+          />
         </ListItem>
-      ))}
-      <ListItem>
-        <SearchBar
-          placeholder={placeholder}
-          type={type}
-          variant={variant}
-          width="90%"
-          value={value}
-          onChange={onTextChange}
-          onKeyDown={onKeyDown}
-        />
-      </ListItem>
-      {display ? <UserPopover /> : <></>}
-      <ListItem onClick={onClick}>
-        <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />
-      </ListItem>
-    </Container>
+        {displayPopover ? <UserPopover /> : <></>}
+        <ListItem onClick={onClickUserprofile}>
+          <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />
+        </ListItem>
+      </Container>
+      <Modal open={displayModal}>
+        <div>안농</div>
+        <Button onClick={onClickTweetBtn} color="primary" text="닫기" variant="contained" />
+      </Modal>
+    </>
   );
 };
 
