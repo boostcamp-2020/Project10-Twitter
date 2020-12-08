@@ -8,7 +8,6 @@ import NotificationContainer from '../../components/organisms/NotificationContai
 import PageLayout from '../../components/organisms/PageLayout';
 import GET_NOTIFICATION from '../../graphql/getNotification.gql';
 import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
-import useOnTabChange from '../../hooks/useOnTabChange';
 
 interface QueryVariable {
   variables: Variable;
@@ -34,6 +33,7 @@ interface User {
 }
 
 interface Tweet {
+  _id: string;
   content: string;
   child_tweet_number: number;
   retweet_user_number: number;
@@ -52,33 +52,38 @@ interface Author {
 const Notification: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
-  const [value, , onChange] = useOnTabChange(type);
   const { data } = useQuery(GET_NOTIFICATION);
   const [mutate] = useMutation(UPDATE_NOTIFICATION);
+  const value = type ? type[0] : 'all';
 
-  useEffect(() => {
-    router.replace('/notifications/[type]', `/notifications/${value}`, { shallow: true });
-  }, [value]);
+  const onClick = (e: React.SyntheticEvent<EventTarget>) => {
+    const target = e.target as HTMLInputElement;
+    let newValue = target.textContent;
+    if (newValue !== value) {
+      if (newValue === 'all') newValue = '';
+      router.replace('/notifications/[[...type]]', `/notifications/${newValue}`, { shallow: true });
+    }
+  };
 
-  useEffect(() => {
-    setTimeout(() => {
-      mutate({
-        update: (cache) => {
-          const newData = data?.notifications.map((noti: Noti) => {
-            return { ...noti, is_read: true };
-          });
-          cache.writeQuery({
-            query: GET_NOTIFICATION,
-            data: { notifications: newData },
-          });
-        },
-      });
-    }, 3000);
-  }, [data]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     mutate({
+  //       update: (cache) => {
+  //         const newData = data?.notifications.map((noti: Noti) => {
+  //           return { ...noti, is_read: true };
+  //         });
+  //         cache.writeQuery({
+  //           query: GET_NOTIFICATION,
+  //           data: { notifications: newData },
+  //         });
+  //       },
+  //     });
+  //   }, 3000);
+  // }, [data]);
 
   return (
     <PageLayout>
-      <TabBar value={value} handleChange={onChange} labels={['all', 'mention']} />
+      <TabBar value={value} handleChange={onClick} labels={['all', 'mention']} />
       {data ? (
         data.notifications?.map((noti: Noti, index: number) => (
           <NotificationContainer noti={{ ...noti, curTabValue: value }} />
