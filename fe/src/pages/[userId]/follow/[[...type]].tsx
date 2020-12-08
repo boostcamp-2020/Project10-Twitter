@@ -10,7 +10,6 @@ import GET_FOLLOWINGLIST from '../../../graphql/getFollowingList.gql';
 import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
 import { UserBox } from '../styled';
 import TitleSubText from '../../../components/molecules/TitleSubText';
-import useOnTabChange from '../../../hooks/useOnTabChange';
 
 interface QueryVariable {
   variables: Variable;

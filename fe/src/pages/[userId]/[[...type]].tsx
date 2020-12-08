@@ -11,7 +11,6 @@ import UserDetailContainer from '../../components/organisms/UserDetailContainer'
 import GET_USER_TWEETLIST from '../../graphql/getUserTweetList.gql';
 import GET_USER_ALL_TWEETLIST from '../../graphql/getUserAllTweetList.gql';
 import GET_HEART_TWEETLIST from '../../graphql/getHeartTweetList.gql';
-import useOnTabChange from '../../hooks/useOnTabChange';
 
 interface QueryVariable {
   variables: Variable;

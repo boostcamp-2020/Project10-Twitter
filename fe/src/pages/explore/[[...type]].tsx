@@ -10,7 +10,6 @@ import TabBar from '../../components/molecules/TabBar';
 import { Container, MainContainer } from './styled';
 import TweetContainer from '../../components/organisms/TweetContainer';
 import UserCard from '../../components/organisms/UserCard';
-import useOnTabChange from '../../hooks/useOnTabChange';
 import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
 import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
 import useOnTextChange from '../../hooks/useOnTextChange';
