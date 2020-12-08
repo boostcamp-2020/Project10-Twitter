@@ -1,12 +1,10 @@
-/* eslint-disable camelcase */
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import PageLayout from '../../components/organisms/PageLayout';
 import TabBar from '../../components/molecules/TabBar';
 import { Container, MainContainer } from './styled';
-import TweetContainer from '../../components/organisms/TweetContainer';
+import TweetStateContainer from '../../components/organisms/TweetStateContainer';
 import UserDetailContainer from '../../components/organisms/UserDetailContainer';
 import GET_USER_TWEETLIST from '../../graphql/getUserTweetList.gql';
 import GET_USER_ALL_TWEETLIST from '../../graphql/getUserAllTweetList.gql';
@@ -27,6 +25,7 @@ interface Tweet {
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
+  retweet: Tweet;
 }
 interface Author {
   user_id: string;
@@ -65,7 +64,7 @@ const UserDetail: FunctionComponent = () => {
       />
       {data ? (
         data.tweetList?.map((tweet: Tweet, index: number) => (
-          <TweetContainer key={index} tweet={tweet} />
+          <TweetStateContainer key={index} tweet={tweet} />
         ))
       ) : (
         <>loading..</>

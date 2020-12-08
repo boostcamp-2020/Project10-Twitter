@@ -3,11 +3,10 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
-import TweetContainer from '../../components/organisms/TweetContainer';
+import TweetStateContainer from '../../components/organisms/TweetStateContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
-import ReTweetContainer from '../../components/organisms/ReTweetContainer';
 
 interface Tweet {
   _id: string;
@@ -43,13 +42,9 @@ const Home: FunctionComponent = () => {
     <PageLayout>
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
-      {tweetList?.map((tweet: Tweet, index: number) =>
-        tweet.retweet_id ? (
-          <ReTweetContainer key={index} tweet={tweet} />
-        ) : (
-          <TweetContainer key={index} tweet={tweet} />
-        ),
-      )}
+      {tweetList?.map((tweet: Tweet, index: number) => (
+        <TweetStateContainer tweet={tweet} />
+      ))}
     </PageLayout>
   );
 };
