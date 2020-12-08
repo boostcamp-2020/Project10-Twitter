@@ -52,9 +52,6 @@ const Explore: FunctionComponent = () => {
   const queryVariable: QueryVariable = { variables: { searchWord: textValue } };
   const { loading, error, data, refetch } = useQuery(queryArr[value], queryVariable);
 
-  const placeholder = 'Search Twitter';
-  const variant = 'standard';
-
   useEffect(() => {
     router.replace(
       `/explore/[[...type]]`,
@@ -79,9 +76,9 @@ const Explore: FunctionComponent = () => {
       <SideBar />
       <MainContainer>
         <SearchBar
-          placeholder={placeholder}
+          placeholder="Search Twitter"
           type="text"
-          variant={variant}
+          variant="standard"
           width="90%"
           value={textValue}
           onChange={onTextChange}

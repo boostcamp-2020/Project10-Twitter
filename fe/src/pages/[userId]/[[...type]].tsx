@@ -45,12 +45,12 @@ const UserDetail: FunctionComponent = () => {
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
   const value = type ? type[0] : 'tweets';
   const { loading, error, data, refetch } = useQuery(queryArr[value], queryVariable);
+
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
     let newValue = target.textContent;
     if (newValue !== value) {
       if (newValue === 'tweets') newValue = '';
-      console.log(newValue, value);
       router.replace('/[userId]/[type]', `/${userId}/${newValue}`, { shallow: true });
     }
   };
