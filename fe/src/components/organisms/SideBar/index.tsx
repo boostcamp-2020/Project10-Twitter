@@ -32,7 +32,7 @@ const TITLE: Array<ButtonProps> = [
     id: 3,
     text: '알림',
     icon: Notifications({ width: '30px', height: '30px' }),
-    link: '/notification',
+    link: '/notifications/all',
   },
   { id: 4, text: '프로필', icon: Profiles({ width: '30px', height: '30px' }), link: '/' },
   {

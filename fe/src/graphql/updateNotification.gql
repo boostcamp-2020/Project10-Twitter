@@ -1,0 +1,5 @@
+mutation {
+  notifications: update_notification {
+    response
+  }
+}

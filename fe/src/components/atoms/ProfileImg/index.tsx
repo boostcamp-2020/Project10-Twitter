@@ -11,6 +11,13 @@ const ProfileImg: FunctionComponent<Props> = ({
   img = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
   onClick = () => {},
   size = 50,
-}) => <Profile alt="user" style = { {width : `${size}px` , height : `${size}px`}}  src={img} onClick={onClick} />;
+}) => (
+  <Profile
+    alt="user"
+    style={{ width: `${size}px`, height: `${size}px` }}
+    src={img}
+    onClick={onClick}
+  />
+);
 
 export default ProfileImg;
