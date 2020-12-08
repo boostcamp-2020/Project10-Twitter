@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { FunctionComponent, ReactElement, useState } from 'react';
+import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
 import MainContaier from '../MainContainer';
 import TitleSubText from '../../molecules/TitleSubText';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 interface Tweet {
+  _id: string;
   content: string;
   child_tweet_number: number;
   retweet_user_number: number;
@@ -28,17 +30,29 @@ interface Author {
 
 const ReTweetContainer: FunctionComponent<Props> = ({ tweet }) => {
   return (
-    <MainContaier ProfileImgUrl={tweet.author.profile_img_url}>
-      <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
-      <Markdown allowDangerousHtml>{tweet.content}</Markdown>
+    <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
+      <Link href={`/${tweet.author.user_id}`}>
+        <a>
+          <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
+        </a>
+      </Link>
+      <Link href={`/status/${tweet._id}`}>
+        <a>
+          <Markdown allowDangerousHtml>{tweet.content}</Markdown>
+        </a>
+      </Link>
       <RetweetBox>
-        <HeaderContainer>
-          <ProfileImg img={tweet.author.profile_img_url} size={30} />
-          <TitleSubText title={tweet.retweet.author.name} sub={tweet.retweet.author.user_id} />
-        </HeaderContainer>
-        <BodyContainer>
-          <Markdown allowDangerousHtml>{tweet.retweet.content}</Markdown>
-        </BodyContainer>
+        <Link href={`/status/${tweet.retweet._id}`}>
+          <a>
+            <HeaderContainer>
+              <ProfileImg img={tweet.author.profile_img_url} size={30} />
+              <TitleSubText title={tweet.retweet.author.name} sub={tweet.retweet.author.user_id} />
+            </HeaderContainer>
+            <BodyContainer>
+              <Markdown allowDangerousHtml>{tweet.retweet.content}</Markdown>
+            </BodyContainer>
+          </a>
+        </Link>
       </RetweetBox>
       <ButtonsBox component="div">
         <Button icon={Comment({})} text={tweet.child_tweet_number} />
