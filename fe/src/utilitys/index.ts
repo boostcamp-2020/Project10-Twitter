@@ -8,4 +8,4 @@ const getJSXwithUserState = (userState: string, meJSX: JSX, followJSX: JSX, unfo
   return unfollowJSX;
 };
 
-export { getJSXwithUserState };
+export default getJSXwithUserState;

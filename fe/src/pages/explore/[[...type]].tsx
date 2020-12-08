@@ -1,6 +1,4 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable camelcase */
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -8,7 +6,7 @@ import SearchBar from '../../components/molecules/SearchBar';
 import SideBar from '../../components/organisms/SideBar';
 import TabBar from '../../components/molecules/TabBar';
 import { Container, MainContainer } from './styled';
-import TweetContainer from '../../components/organisms/TweetContainer';
+import TweetStateContainer from '../../components/organisms/TweetStateContainer';
 import UserCard from '../../components/organisms/UserCard';
 import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
 import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
@@ -29,6 +27,7 @@ interface Tweet {
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
+  retweet: Tweet;
 }
 
 interface User {
@@ -53,13 +52,9 @@ const Explore: FunctionComponent = () => {
   const { loading, error, data, refetch } = useQuery(queryArr[value], queryVariable);
 
   useEffect(() => {
-    router.replace(
-      `/explore/[[...type]]`,
-      `/explore/${value !== '' ? `${value}/` : ''}${textValue}`,
-      {
-        shallow: true,
-      },
-    );
+    router.replace(`/explore/[[...type]]`, `/explore/${value}/${textValue}`, {
+      shallow: true,
+    });
   }, [textValue]);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
@@ -87,7 +82,7 @@ const Explore: FunctionComponent = () => {
         {data ? (
           data.tweetList ? (
             data.tweetList?.map((tweet: Tweet, index: number) => (
-              <TweetContainer key={index} tweet={tweet} />
+              <TweetStateContainer key={index} tweet={tweet} />
             ))
           ) : (
             data.userList?.map((user: User, index: number) => <UserCard key={index} user={user} />)

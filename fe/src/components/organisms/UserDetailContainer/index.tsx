@@ -17,7 +17,7 @@ import {
   ImgCircleContainer,
 } from './styled';
 import Text from '../../atoms/Text';
-import { getJSXwithUserState } from '../../../utilitys';
+import getJSXwithUserState from '../../../utilitys';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
 
 interface Props {

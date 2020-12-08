@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, ReactEventHandler, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
