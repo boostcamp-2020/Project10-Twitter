@@ -33,7 +33,7 @@ const NewTweetContainer: FunctionComponent = () => {
   const borderRadius = 50;
 
   return (
-    <MainContaier ProfileImgUrl={myProfile.profile_img_url}>
+    <MainContaier userId={myProfile.user_id} ProfileImgUrl={myProfile.profile_img_url}>
       <TextArea placeholder={placeholder} value={value} onChange={onTextChange} />
       <ButtonsBox component="div">
         <IconButton icon={Picture} />

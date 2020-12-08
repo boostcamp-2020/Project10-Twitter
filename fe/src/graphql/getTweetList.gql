@@ -1,5 +1,6 @@
 query($oldestTweetId: String) {
   tweetList: following_tweet_list(oldest_tweet_id: $oldestTweetId) {
+    _id
     content
     child_tweet_number
     retweet_user_number

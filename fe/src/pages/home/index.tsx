@@ -10,6 +10,7 @@ import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 import ReTweetContainer from '../../components/organisms/ReTweetContainer';
 
 interface Tweet {
+  _id: string;
   content: string;
   child_tweet_number: number;
   retweet_user_number: number;
