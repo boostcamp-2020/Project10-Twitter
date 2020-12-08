@@ -12,7 +12,7 @@ interface User {
   name: string;
   profile_img_url?: string;
   comment?: string;
-  following_id_list: string[];
+  following_id_list?: string[];
 }
 
 interface Props {

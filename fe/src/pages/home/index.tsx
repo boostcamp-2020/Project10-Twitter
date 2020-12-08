@@ -7,6 +7,7 @@ import TweetContainer from '../../components/organisms/TweetContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
+import ReTweetContainer from '../../components/organisms/ReTweetContainer';
 
 interface Tweet {
   content: string;
@@ -14,6 +15,8 @@ interface Tweet {
   retweet_user_number: number;
   heart_user_number: number;
   author: Author;
+  retweet_id: string;
+  retweet: Tweet;
 }
 interface Author {
   user_id: string;
@@ -34,14 +37,18 @@ const Home: FunctionComponent = () => {
     );
 
   const { tweetList } = data;
-
+  console.log(tweetList);
   return (
     <PageLayout>
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
-      {tweetList?.map((tweet: Tweet, index: number) => (
-        <TweetContainer key={index} tweet={tweet} />
-      ))}
+      {tweetList?.map((tweet: Tweet, index: number) =>
+        tweet.retweet_id ? (
+          <ReTweetContainer key={index} tweet={tweet} />
+        ) : (
+          <TweetContainer key={index} tweet={tweet} />
+        ),
+      )}
     </PageLayout>
   );
 };
