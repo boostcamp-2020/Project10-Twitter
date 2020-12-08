@@ -7,10 +7,16 @@ export default {
 };
 
 const tweet = {
-  user_id: '1',
-  name: 'test',
+  _id: '1',
+  child_tweet_number: 0,
   content: 'test',
-  profile_img_url: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+  retweet_user_number: 0,
+  heart_user_number: 0,
+  author: {
+    user_id: '1',
+    name: 'test',
+    profile_img_url: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+  },
 };
 
 export const Default = () => <TweetContainer tweet={tweet} />;
