@@ -1,0 +1,7 @@
+query($tweetId: String, $oldestUserId: String) {
+  userList: heart_user_list(tweet_id: $tweetId, oldest_user_id: $oldestUserId) {
+    user_id
+    name
+    profile_img_url
+  }
+}
