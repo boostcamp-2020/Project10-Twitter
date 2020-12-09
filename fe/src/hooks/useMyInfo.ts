@@ -1,4 +1,3 @@
-import React, { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import GET_MYINFO from '../graphql/getMyInfo.gql';
 
