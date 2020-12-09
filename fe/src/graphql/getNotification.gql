@@ -33,7 +33,7 @@ query($id: String) {
       }
     }
     type
-    is_read
+    _id
     createAt
   }
 }

@@ -12,6 +12,6 @@ query {
       }
     }
     type
-    is_read
+    _id
   }
 }
