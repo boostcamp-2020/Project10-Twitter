@@ -11,7 +11,7 @@ import SearchBar from '../../molecules/SearchBar';
 import Container from './styled';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import useDisplay from '../../../hooks/useDisplay';
-import Modal from '../../molecules/Modal';
+import NewTweetModal from '../TweetModal/NewTweetModal';
 
 interface ButtonProps {
   id: number;
@@ -111,10 +111,7 @@ const SideBar: FunctionComponent = () => {
           <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />
         </ListItem>
       </Container>
-      <Modal open={displayModal}>
-        <div>안농</div>
-        <Button onClick={onClickTweetBtn} color="primary" text="닫기" variant="contained" />
-      </Modal>
+      <NewTweetModal displayModal={displayModal} onClickCloseBtn={onClickTweetBtn} />
     </>
   );
 };
