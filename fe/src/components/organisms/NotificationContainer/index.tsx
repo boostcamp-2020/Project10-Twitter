@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import UserInfo from '../../molecules/UserInfo';
-import TweetStateContainer from '../TweetStateContainer';
+import TweetContainer from '../TweetContainer';
 import { BodyContainer, Container, UnderLine } from './styled';
 
 interface Props {
@@ -46,15 +46,15 @@ const NotificationContainer: FunctionComponent<Props> = ({
 }) => {
   if (type === 'mention')
     return (
-      <Container color={!is_read ? '#CCFFFF' : undefined}>
-        <TweetStateContainer tweet={tweet} />
+      <Container color={!is_read ? 'rgba(29,161,242,0.1)' : undefined}>
+        <TweetContainer tweet={tweet} />
       </Container>
     );
 
   if (curTabValue === 'all') {
     if (type === 'follow') {
       return (
-        <Container color={!is_read ? '#CCFFFF' : undefined}>
+        <Container color={!is_read ? 'rgba(29,161,242,0.1)' : undefined}>
           <Link href={`/${user.user_id}/`}>
             <UnderLine>
               <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
@@ -66,8 +66,8 @@ const NotificationContainer: FunctionComponent<Props> = ({
     }
     if (tweet.retweet_id) {
       return (
-        <Container color={!is_read ? '#CCFFFF' : undefined}>
-          <TweetStateContainer tweet={tweet} />
+        <Container color={!is_read ? 'rgba(29,161,242,0.1)' : undefined}>
+          <TweetContainer tweet={tweet} />
         </Container>
       );
     }
