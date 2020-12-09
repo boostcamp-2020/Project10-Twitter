@@ -21,7 +21,7 @@ const getNotification = async (
 
   const nextNotificationcondition = getNextnotificationsCondition(oldest_notification_id);
 
-  const notifiactions: Document[] = await notificationModel.aggregate([
+  const notifications: Document[] = await notificationModel.aggregate([
     {
       $match: {
         $and: [{ user_id: userId }, nextNotificationcondition],
@@ -67,7 +67,7 @@ const getNotification = async (
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
   ]);
 
-  return notifiactions;
+  return notifications;
 };
 
 const getNotificationWithMention = async (
@@ -81,7 +81,7 @@ const getNotificationWithMention = async (
 
   const nextNotificationcondition = getNextnotificationsCondition(oldest_notification_id);
 
-  const notifiactions: Document[] = await notificationModel.aggregate([
+  const notifications: Document[] = await notificationModel.aggregate([
     {
       $match: {
         $and: [{ user_id: userId }, { type: 'mention' }, nextNotificationcondition],
@@ -127,7 +127,7 @@ const getNotificationWithMention = async (
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
   ]);
 
-  return notifiactions;
+  return notifications;
 };
 
 const getNotificationCount = async (
@@ -139,18 +139,19 @@ const getNotificationCount = async (
 
   const userId = authUser.id;
 
-  const nextNotificationcondition = getNextnotificationsCondition(lastest_notification_id);
+  const condition = lastest_notification_id
+    ? { _id: { $gt: stringToObjectId(lastest_notification_id) } }
+    : {};
   const [count]: Document[] = await notificationModel.aggregate([
     {
       $match: {
-        $and: [{ user_id: userId }, nextNotificationcondition],
+        $and: [{ user_id: userId }, condition],
       },
     },
     {
       $count: 'count',
     },
   ]);
-
   return count;
 };
 
