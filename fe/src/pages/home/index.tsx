@@ -1,13 +1,13 @@
 /* eslint-disable react/no-array-index-key */
-import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { FunctionComponent, useState, useEffect, useRef } from 'react'[import { useQuery, useMutation } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
-import TweetStateContainer from '../../components/organisms/TweetStateContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
+import TweetContainer from '../../components/organisms/TweetContainer';
+import ADD_BASIC_TWEET from '../../graphql/addBasicTweet.gql';
 
 interface Tweet {
   _id: string;
@@ -32,22 +32,12 @@ const Home: FunctionComponent = () => {
   const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
   const { _id: bottomTweetId } = tweetList[tweetList.length - 1] || {};
   const { _id: topTweetId } = tweetList[0] || {};
+  const [addBasicTweet, { loading: mutationLoading, error: mutationError }] = useMutation(
+    ADD_BASIC_TWEET,
+  );
 
   useEffect(() => {
-    const fetchLatestTweet = async () => {
-      console.log(topTweetId);
-      const { data: fetchMoreData } = await fetchMore({
-        variables: { latestTweetId: topTweetId },
-      });
-    };
-    setInterval(() => {
-      fetchLatestTweet();
-    }, 1000 * 5);
-  }, []);
-
-  useEffect(() => {
-    const tweetList = data?.tweetList;
-    if (tweetList) setTweetList(tweetList);
+    if (data?.tweetList) setTweetList(data?.tweetList);
   }, [data?.tweetList]);
 
   useEffect(() => {
@@ -73,11 +63,11 @@ const Home: FunctionComponent = () => {
   return (
     <PageLayout>
       <HomeBox>Home</HomeBox>
-      <NewTweetContainer />
+      <NewTweetContainer onClickQuery={addBasicTweet} />
       <div>
         {tweetList?.map((tweet: Tweet, index: number) => (
-        <TweetStateContainer tweet={tweet} />
-      ))}
+          <TweetContainer tweet={tweet} />
+        ))}
       </div>
       <div ref={fetchMoreEl} />
     </PageLayout>
