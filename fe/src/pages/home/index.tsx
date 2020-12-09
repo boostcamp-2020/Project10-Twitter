@@ -32,9 +32,20 @@ const Home: FunctionComponent = () => {
   const { loading, error, data, fetchMore } = useQuery(GET_TWEETLIST);
   const fetchMoreEl = useRef(null);
   const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
-  const { _id: incomingId } = tweetList[tweetList.length - 1] || {};
+  const { _id: bottomTweetId } = tweetList[tweetList.length - 1] || {};
+  const { _id: topTweetId } = tweetList[0] || {};
 
-  console.log(apolloClient);
+  useEffect(() => {
+    const fetchLatestTweet = async () => {
+      console.log(topTweetId);
+      const { data: fetchMoreData } = await fetchMore({
+        variables: { latestTweetId: topTweetId },
+      });
+    };
+    setInterval(() => {
+      fetchLatestTweet();
+    }, 1000 * 5);
+  }, []);
 
   useEffect(() => {
     const tweetList = data?.tweetList;
@@ -43,9 +54,9 @@ const Home: FunctionComponent = () => {
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !incomingId) return;
+      if (!intersecting || loadFinished || !bottomTweetId) return;
       const { data: fetchMoreData } = await fetchMore({
-        variables: { oldestTweetId: incomingId },
+        variables: { oldestTweetId: bottomTweetId },
       });
       if (fetchMoreData.tweetList.length < 20) setLoadFinished(true);
     };
@@ -65,7 +76,7 @@ const Home: FunctionComponent = () => {
     <PageLayout>
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
-      <>
+      <div>
         {tweetList?.map((tweet: Tweet, index: number) =>
           tweet.retweet_id ? (
             <ReTweetContainer key={index} tweet={tweet} />
@@ -73,7 +84,7 @@ const Home: FunctionComponent = () => {
             <TweetContainer key={index} tweet={tweet} />
           ),
         )}
-      </>
+      </div>
       <div ref={fetchMoreEl} />
     </PageLayout>
   );
