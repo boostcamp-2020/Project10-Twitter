@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import SearchBar from '../../components/molecules/SearchBar';
@@ -11,6 +11,8 @@ import UserCard from '../../components/organisms/UserCard';
 import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
 import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
 import useOnTextChange from '../../hooks/useOnTextChange';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import apolloClient from '../../libs/apolloClient';
 
 interface QueryVariable {
   variables: Variable;
@@ -46,16 +48,31 @@ const Explore: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
   const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
+  const [searchWord, setSearchWord] = useState(textValue);
   const value = type ? type[0] : 'tweets';
   const queryArr = { tweets: GET_SEARCH_TWEETLIST, people: GET_SEARCH_USERLIST };
-  const queryVariable: QueryVariable = { variables: { searchWord: textValue } };
-  const { loading, error, data, refetch } = useQuery(queryArr[value], queryVariable);
+  const queryVariable: Variable = { searchWord };
+  const { loading, error, data, fetchMore } = useQuery(queryArr[value], {
+    variables: queryVariable,
+  });
+  const { _id: bottomTweetId } = data?.tweetList?.[data?.tweetList?.length - 1] || {};
+  const { _id: bottomUserId } = data?.userList?.[data?.userList?.length - 1] || {};
+  const fetchMoreEl = useRef(null);
+  const [intersecting] = useInfiniteScroll(fetchMoreEl);
+
+  const onKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      router.replace(`/explore/[[...type]]`, `/explore/${value}/${textValue}`, {
+        shallow: true,
+      });
+      setSearchWord(textValue);
+    }
+  };
 
   useEffect(() => {
-    router.replace(`/explore/[[...type]]`, `/explore/${value}/${textValue}`, {
-      shallow: true,
-    });
-  }, [textValue]);
+    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'search_tweet_list' });
+    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'search_user_list' });
+  }, [searchWord]);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -65,6 +82,17 @@ const Explore: FunctionComponent = () => {
       router.replace('/explore/[[...type]]', `/explore/${newValue}`, { shallow: true });
     }
   };
+
+  useEffect(() => {
+    const asyncEffect = async () => {
+      if (!intersecting || !bottomTweetId || !fetchMore) return;
+      const newQueryVariable =
+        value === 'tweets' ? { oldestTweetId: bottomTweetId } : { oldestUserId: bottomUserId };
+      const mergeQueryVariable = { ...queryVariable, ...newQueryVariable };
+      const { data: fetchMoreData } = await fetchMore({ variables: mergeQueryVariable });
+    };
+    asyncEffect();
+  }, [intersecting]);
 
   return (
     <Container>
@@ -77,19 +105,25 @@ const Explore: FunctionComponent = () => {
           width="90%"
           value={textValue}
           onChange={onTextChange}
+          onKeyDown={onKeyDown}
         />
         <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
-        {data ? (
-          data.tweetList ? (
-            data.tweetList?.map((tweet: Tweet, index: number) => (
-              <TweetStateContainer key={index} tweet={tweet} />
-            ))
+        <div>
+          {data ? (
+            data.tweetList ? (
+              data.tweetList?.map((tweet: Tweet, index: number) => (
+                <TweetStateContainer key={index} tweet={tweet} />
+              ))
+            ) : (
+              data.userList?.map((user: User, index: number) => (
+                <UserCard key={index} user={user} />
+              ))
+            )
           ) : (
-            data.userList?.map((user: User, index: number) => <UserCard key={index} user={user} />)
-          )
-        ) : (
-          <div> loading..</div>
-        )}
+            <div> loading..</div>
+          )}
+        </div>
+        <div ref={fetchMoreEl} />
       </MainContainer>
     </Container>
   );
