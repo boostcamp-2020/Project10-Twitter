@@ -1,0 +1,30 @@
+query($oldestTweetId: String, $latestTweetId: String) {
+  tweetList: following_tweet_list(
+    oldest_tweet_id: $oldestTweetId
+    latest_tweet_id: $latestTweetId
+  ) {
+    _id
+    content
+    child_tweet_number
+    retweet_user_number
+    heart_user_number
+    retweet_id
+    retweet {
+      _id
+      content
+      child_tweet_number
+      retweet_user_number
+      heart_user_number
+      author {
+        user_id
+        name
+        profile_img_url
+      }
+    }
+    author {
+      user_id
+      name
+      profile_img_url
+    }
+  }
+}

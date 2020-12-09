@@ -1,0 +1,22 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/react
+# Edit at https://www.toptal.com/developers/gitignore?templates=react
+
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+next-env.d.ts
+node_modules
+bower_components
+
+*.sublime*
+.next
+psd
+thumb
+sketch
+
+# End of https://www.toptal.com/developers/gitignore/api/react
