@@ -5,6 +5,7 @@ query($searchWord: String!, $oldestTweetId: String) {
     child_tweet_number
     retweet_user_number
     heart_user_number
+    retweet_id
     retweet {
       _id
       content
