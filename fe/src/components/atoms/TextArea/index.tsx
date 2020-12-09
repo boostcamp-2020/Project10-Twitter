@@ -5,16 +5,14 @@ interface Props {
   onChange?: (e: React.SyntheticEvent) => void;
   placeholder?: string;
   value?: string;
-  readOnly?: boolean;
 }
 
 const TextArea: FunctionComponent<Props> = ({
   onChange = () => {},
   placeholder = '',
   value = '',
-  readOnly,
 }) => {
-  return <Text placeholder={placeholder} onChange={onChange} value={value} readOnly={readOnly} />;
+  return <Text placeholder={placeholder} onChange={onChange} value={value} />;
 };
 
 export default TextArea;
