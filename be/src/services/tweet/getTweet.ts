@@ -160,11 +160,13 @@ const getSearchedTweetList = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
+  const searchTweetsCondition = search_word === '' ? {} : { content: { $regex: search_word } };
+
   const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const searchedTweetList: Document[] = await tweetModel.aggregate([
     {
-      $match: { $and: [{ content: { $regex: search_word } }, nextTweetsCondition] },
+      $match: { $and: [searchTweetsCondition, nextTweetsCondition] },
     },
     ...commonReadCondition,
     { $sort: { createAt: -1 } },
