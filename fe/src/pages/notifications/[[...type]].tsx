@@ -5,6 +5,7 @@ import TabBar from '../../components/molecules/TabBar';
 import NotificationContainer from '../../components/organisms/NotificationContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import GET_NOTIFICATION from '../../graphql/getNotification.gql';
+import GET_MENTION_NOTIFICATION from '../../graphql/getMentionNotification.gql';
 import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
 
 interface QueryVariable {
@@ -51,10 +52,10 @@ interface Author {
 const Notification: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
-  const { data } = useQuery(GET_NOTIFICATION);
-  const [mutate] = useMutation(UPDATE_NOTIFICATION);
+  const queryArr = { all: GET_NOTIFICATION, mention: GET_MENTION_NOTIFICATION };
   const value = type ? type[0] : 'all';
-
+  const { data } = useQuery(queryArr[value]);
+  // const [mutate] = useMutation(UPDATE_NOTIFICATION);
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
     let newValue = target.textContent;

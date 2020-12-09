@@ -1,0 +1,17 @@
+query {
+  notifications: notification_mention_list {
+    user {
+      user_id
+      profile_img_url
+    }
+    tweet {
+      content
+      author {
+        user_id
+        profile_img_url
+      }
+    }
+    type
+    is_read
+  }
+}
