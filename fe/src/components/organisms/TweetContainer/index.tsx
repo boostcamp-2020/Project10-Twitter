@@ -33,7 +33,6 @@ interface Author {
 const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
   const [isHeart, onClickHeart, onClickUnheart] = useHeartState(tweet);
   const [displayModal, , onClickReplyBtn] = useDisplay(false);
-  console.log(tweet);
   return (
     <>
       <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>

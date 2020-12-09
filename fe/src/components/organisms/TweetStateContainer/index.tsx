@@ -23,7 +23,6 @@ interface Author {
 }
 
 const TweetStateContainer: FunctionComponent<Props> = ({ tweet }) => {
-  console.log(tweet.img_url_list);
   if (tweet.retweet && tweet.retweet._id) return <ReTweetContainer tweet={tweet} />;
   return <TweetContainer tweet={tweet} />;
 };

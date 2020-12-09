@@ -35,7 +35,6 @@ const Home: FunctionComponent = () => {
 
   useEffect(() => {
     const fetchLatestTweet = async () => {
-      console.log(topTweetId);
       const { data: fetchMoreData } = await fetchMore({
         variables: { latestTweetId: topTweetId },
       });
