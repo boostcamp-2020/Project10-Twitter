@@ -3,6 +3,7 @@ import Link from 'next/link';
 import UserInfo from '../../molecules/UserInfo';
 import TweetStateContainer from '../TweetStateContainer';
 import { BodyContainer, Container, UnderLine } from './styled';
+import useMyInfo from '../../../hooks/useMyInfo';
 
 interface Props {
   noti: Noti;
@@ -13,7 +14,7 @@ interface Noti {
   user: User;
   tweet: Tweet;
   type: string;
-  is_read: boolean;
+  _id: string;
 }
 
 interface User {
@@ -43,19 +44,22 @@ interface Author {
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
-  noti: { user, tweet, type, is_read, curTabValue },
+  noti: { user, tweet, type, _id, curTabValue },
 }) => {
+  const { myProfile } = useMyInfo();
+  const isRead = myProfile.lastest_notification_id < _id;
+
   if (type === 'mention')
     return (
-      <Container color={!is_read ? '#CCFFFF' : undefined}>
+      <Container color={isRead ? '#CCFFFF' : undefined}>
         <TweetStateContainer tweet={tweet} />
       </Container>
     );
 
   if (curTabValue === 'all') {
-    if (type === 'follow') {
+    if (type === 'follow')
       return (
-        <Container color={!is_read ? '#CCFFFF' : undefined}>
+        <Container color={isRead ? '#CCFFFF' : undefined}>
           <Link href={`/${user.user_id}/`}>
             <UnderLine>
               <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
@@ -64,16 +68,13 @@ const NotificationContainer: FunctionComponent<Props> = ({
           </Link>
         </Container>
       );
-    }
-    if (tweet.retweet_id) {
-      return (
-        <Container color={!is_read ? '#CCFFFF' : undefined}>
-          <TweetStateContainer tweet={tweet} />
-        </Container>
-      );
-    }
+    return (
+      <Container color={isRead ? '#CCFFFF' : undefined}>
+        <TweetStateContainer tweet={tweet} />
+      </Container>
+    );
   }
-  return null;
+  return <></>;
 };
 
 export default NotificationContainer;
