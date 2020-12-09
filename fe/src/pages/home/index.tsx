@@ -7,7 +7,6 @@ import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import apolloClient from '../../libs/apolloClient';
 
 interface Tweet {
   _id: string;
@@ -27,32 +26,22 @@ interface Author {
 
 const Home: FunctionComponent = () => {
   const [tweetList, setTweetList] = useState<Tweet[]>([]);
-  const { loading, error, data, fetchMore } = useQuery(GET_TWEETLIST);
-  const fetchMoreEl = useRef(null);
-  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
   const { _id: bottomTweetId } = tweetList[tweetList.length - 1] || {};
   const { _id: topTweetId } = tweetList[0] || {};
+  const { loading, error, data, fetchMore } = useQuery(GET_TWEETLIST, {
+    variables: { latestTweetId: topTweetId },
+    pollInterval: 500,
+  });
+  const fetchMoreEl = useRef(null);
+  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
 
   useEffect(() => {
-    const fetchLatestTweet = async () => {
-      console.log(topTweetId);
-      const { data: fetchMoreData } = await fetchMore({
-        variables: { latestTweetId: topTweetId },
-      });
-    };
-    setInterval(() => {
-      fetchLatestTweet();
-    }, 1000 * 5);
-  }, []);
-
-  useEffect(() => {
-    const tweetList = data?.tweetList;
-    if (tweetList) setTweetList(tweetList);
+    if (data?.tweetList) setTweetList(data.tweetList);
   }, [data?.tweetList]);
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !bottomTweetId) return;
+      if (!intersecting || loadFinished || !bottomTweetId || !fetchMore) return;
       const { data: fetchMoreData } = await fetchMore({
         variables: { oldestTweetId: bottomTweetId },
       });
@@ -61,23 +50,14 @@ const Home: FunctionComponent = () => {
     asyncEffect();
   }, [intersecting]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error)
-    return (
-      <div>
-        Error!
-        {error.message}
-      </div>
-    );
-
   return (
     <PageLayout>
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
       <div>
-        {tweetList?.map((tweet: Tweet, index: number) => (
-        <TweetStateContainer tweet={tweet} />
-      ))}
+        {tweetList.map((tweet: Tweet, index: number) => (
+          <TweetStateContainer key={index} tweet={tweet} />
+        ))}
       </div>
       <div ref={fetchMoreEl} />
     </PageLayout>
