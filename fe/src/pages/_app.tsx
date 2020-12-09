@@ -1,21 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { ApolloClient, createHttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import AuthProvider from '../libs';
+import apolloClient from '../libs/apolloClient';
 import '../styles/global.css';
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('jwt_token');
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
 
 const theme = createMuiTheme({
   palette: {
@@ -26,18 +16,9 @@ const theme = createMuiTheme({
   },
 });
 
-const httpLink = createHttpLink({
-  uri: 'http://127.0.0.1:3001/graphql',
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink), // api 서버 url
-  cache: new InMemoryCache(),
-});
-
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <MuiThemeProvider theme={theme}>
         <AuthProvider>
           <Component {...pageProps} />
