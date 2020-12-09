@@ -3,7 +3,7 @@ import { imgUpload } from '../services/upload';
 
 const fileResolvers: IResolvers = {
   Query: {
-    upload_images: (parent: any, args: any) => {},
+    upload_images: () => {},
   },
   Mutation: {
     single_upload: imgUpload,

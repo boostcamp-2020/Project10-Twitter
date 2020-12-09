@@ -16,4 +16,4 @@ const createNotifiaction = async ({ userId, followerId, tweetId, type }: Args) =
   });
 };
 
-export { createNotifiaction };
+export default createNotifiaction;
