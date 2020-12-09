@@ -15,7 +15,7 @@ type Tweet {
 }
 
 type Query {
-  following_tweet_list(oldest_tweet_id: String): [Tweet]
+  following_tweet_list(oldest_tweet_id: String, latest_tweet_id: String): [Tweet]
   user_tweet_list(user_id: String, oldest_tweet_id: String): [Tweet]
   user_all_tweet_list(user_id: String, oldest_tweet_id: String): [Tweet]
   child_tweet_list(tweet_id: String!, oldest_tweet_id: String): [Tweet]

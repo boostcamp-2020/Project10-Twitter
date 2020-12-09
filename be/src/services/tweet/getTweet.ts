@@ -14,17 +14,23 @@ interface Args {
   time: Date;
 }
 
-const getNextTweetsCondition = (oldest_tweet_id: string): Object => {
-  return oldest_tweet_id ? { _id: { $lt: stringToObjectId(oldest_tweet_id) } } : {};
+const getNextTweetsCondition = ({ oldest_tweet_id = '', latest_tweet_id = '' }) => {
+  if (oldest_tweet_id) return { _id: { $lt: stringToObjectId(oldest_tweet_id) } };
+  if (latest_tweet_id) return { _id: { $gt: stringToObjectId(latest_tweet_id) } };
+  return {};
 };
 
-const getFollowingTweetList = async (_: any, { oldest_tweet_id }: Args, { authUser }: Auth) => {
+const getFollowingTweetList = async (
+  _: any,
+  { oldest_tweet_id, latest_tweet_id }: Args,
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
   const userInfo = await userModel.findOne({ user_id: userId });
 
-  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+  const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id, latest_tweet_id });
 
   const tweetList: Document[] = await tweetModel.aggregate([
     {
@@ -52,7 +58,7 @@ const getFollowingTweetList = async (_: any, { oldest_tweet_id }: Args, { authUs
 const getUserTweetList = async (_: any, { user_id, oldest_tweet_id }: Args, { authUser }: Auth) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+  const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const tweetList: Document[] = await tweetModel.aggregate([
     {
@@ -75,7 +81,7 @@ const getUserAllTweetList = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+  const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const tweetList: Document[] = await tweetModel.aggregate([
     {
@@ -109,7 +115,7 @@ const getChildTweetList = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+  const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const childTweetList: Document[] = await tweetModel.aggregate([
     {
@@ -131,7 +137,7 @@ const getHeartTweetList = async (
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userInfo = await userModel.findOne({ user_id });
-  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+  const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const tweetList: Document[] = await tweetModel.aggregate([
     {
@@ -154,7 +160,7 @@ const getSearchedTweetList = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
-  const nextTweetsCondition = getNextTweetsCondition(oldest_tweet_id);
+  const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const searchedTweetList: Document[] = await tweetModel.aggregate([
     {
