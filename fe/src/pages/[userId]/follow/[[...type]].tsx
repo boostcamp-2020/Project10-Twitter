@@ -19,6 +19,7 @@ interface Variable {
 
 interface User {
   user_id: string;
+  following_id_list: string[];
   name: string;
   profile_img_url?: string;
   comment?: string;

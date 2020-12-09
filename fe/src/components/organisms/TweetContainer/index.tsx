@@ -9,6 +9,7 @@ import { ButtonsBox, PinkButton } from './styled';
 import useHeartState from '../../../hooks/useHeartState';
 import RelyModal from '../TweetModal/ReplyModal';
 import useDisplay from '../../../hooks/useDisplay';
+import UploadImg from '../../molecules/UploadImg';
 
 interface Props {
   tweet: Tweet;
@@ -17,6 +18,7 @@ interface Props {
 interface Tweet {
   _id: string;
   content: string;
+  img_url_list: [string];
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
@@ -31,7 +33,7 @@ interface Author {
 const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
   const [isHeart, onClickHeart, onClickUnheart] = useHeartState(tweet);
   const [displayModal, , onClickReplyBtn] = useDisplay(false);
-
+  console.log(tweet);
   return (
     <>
       <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
@@ -45,6 +47,11 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
             <Markdown allowDangerousHtml>{tweet.content}</Markdown>
           </a>
         </Link>
+        {tweet.img_url_list && tweet.img_url_list[0] ? (
+          <UploadImg img={tweet.img_url_list[0]} />
+        ) : (
+          ''
+        )}
         <ButtonsBox component="div">
           <Button icon={Comment({})} text={tweet.child_tweet_number} onClick={onClickReplyBtn} />
           <Button icon={Retweet({})} text={tweet.retweet_user_number} />
