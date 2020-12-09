@@ -23,10 +23,9 @@ const tweetPolicies = {
   read(existing: any) {
     return existing;
   },
-  merge(existing = [], incoming = [], { args: { oldestTweetId }, readField }: any) {
-    const extIndex = existing.findIndex((e) => readField('_id', e) === oldestTweetId);
-    if (extIndex > -1) return mergeItems(existing, incoming);
-    return mergeItems(incoming, existing);
+  merge(existing = [], incoming = [], { args: { oldestTweetId, latestTweetId }, readField }: any) {
+    if (latestTweetId) mergeItems(incoming, existing);
+    return mergeItems(existing, incoming);
   },
 };
 
@@ -35,9 +34,7 @@ const userPolicies = {
     return existing;
   },
   merge(existing = [], incoming = [], { args: { oldestUserId }, readField }: any) {
-    const extIndex = existing.findIndex((e) => readField('_id', e) === oldestUserId);
-    if (extIndex > -1) return mergeItems(existing, incoming);
-    return mergeItems(incoming, existing);
+    return mergeItems(existing, incoming);
   },
 };
 
@@ -46,9 +43,7 @@ const notificationPolicies = {
     return existing;
   },
   merge(existing = [], incoming = [], { args: { oldestNotificationId }, readField }: any) {
-    const extIndex = existing.findIndex((e) => readField('_id', e) === oldestNotificationId);
-    if (extIndex > -1) return mergeItems(existing, incoming);
-    return mergeItems(incoming, existing);
+    return mergeItems(existing, incoming);
   },
 };
 
@@ -58,7 +53,7 @@ const apolloClient = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          tweetList: tweetPolicies,
+          following_tweet_list: tweetPolicies,
         },
       },
     },
