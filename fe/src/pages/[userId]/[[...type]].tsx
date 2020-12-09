@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import PageLayout from '../../components/organisms/PageLayout';
 import TabBar from '../../components/molecules/TabBar';
 import { Container, MainContainer } from './styled';
-import TweetStateContainer from '../../components/organisms/TweetStateContainer';
+import TweetContainer from '../../components/organisms/TweetContainer';
 import UserDetailContainer from '../../components/organisms/UserDetailContainer';
 import GET_USER_TWEETLIST from '../../graphql/getUserTweetList.gql';
 import GET_USER_ALL_TWEETLIST from '../../graphql/getUserAllTweetList.gql';
@@ -64,7 +64,7 @@ const UserDetail: FunctionComponent = () => {
       />
       {data ? (
         data.tweetList?.map((tweet: Tweet, index: number) => (
-          <TweetStateContainer key={index} tweet={tweet} />
+          <TweetContainer key={index} tweet={tweet} />
         ))
       ) : (
         <>loading..</>

@@ -6,7 +6,7 @@ import SearchBar from '../../components/molecules/SearchBar';
 import SideBar from '../../components/organisms/SideBar';
 import TabBar from '../../components/molecules/TabBar';
 import { Container, MainContainer } from './styled';
-import TweetStateContainer from '../../components/organisms/TweetStateContainer';
+import TweetContainer from '../../components/organisms/TweetContainer';
 import UserCard from '../../components/organisms/UserCard';
 import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
 import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
@@ -82,7 +82,7 @@ const Explore: FunctionComponent = () => {
         {data ? (
           data.tweetList ? (
             data.tweetList?.map((tweet: Tweet, index: number) => (
-              <TweetStateContainer key={index} tweet={tweet} />
+              <TweetContainer key={index} tweet={tweet} />
             ))
           ) : (
             data.userList?.map((user: User, index: number) => <UserCard key={index} user={user} />)
