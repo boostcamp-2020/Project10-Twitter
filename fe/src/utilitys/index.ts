@@ -4,8 +4,8 @@ interface JSX {}
 
 const getJSXwithUserState = (userState: string, meJSX: JSX, followJSX: JSX, unfollowJSX: JSX) => {
   if (userState === 'me') return meJSX;
-  else if (userState === 'followUser') return followJSX;
+  if (userState === 'followUser') return followJSX;
   return unfollowJSX;
 };
 
-export { getJSXwithUserState };
+export default getJSXwithUserState;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
+import Button from '../../molecules/Button';
 
 const ButtonsBox = styled(Box)`
   display: flex;
@@ -22,4 +23,12 @@ const HeaderContainer = styled(Box)`
   display: flex;
 `;
 
-export { ButtonsBox, RetweetBox, BodyContainer, HeaderContainer };
+const PinkButton = styled(Button)`
+  && {
+    & svg {
+      fill: #f783ac;
+    }
+  }
+`;
+
+export { ButtonsBox, RetweetBox, BodyContainer, HeaderContainer, PinkButton };

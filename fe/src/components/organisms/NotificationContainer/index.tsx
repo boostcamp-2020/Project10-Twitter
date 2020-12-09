@@ -1,9 +1,7 @@
-/* eslint-disable camelcase */
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import UserInfo from '../../molecules/UserInfo';
-import ReTweetContainer from '../ReTweetContainer';
-import TweetContainer from '../TweetContainer';
+import TweetStateContainer from '../TweetStateContainer';
 import { BodyContainer, Container, UnderLine } from './styled';
 
 interface Props {
@@ -27,6 +25,7 @@ interface User {
 }
 
 interface Tweet {
+  _id: string;
   content: string;
   child_tweet_number: number;
   retweet_user_number: number;
@@ -45,20 +44,12 @@ interface Author {
 const NotificationContainer: FunctionComponent<Props> = ({
   noti: { user, tweet, type, is_read, curTabValue },
 }) => {
-  if (type === 'mention') {
-    if (tweet.retweet_id) {
-      return (
-        <Container color={!is_read ? '#CCFFFF' : undefined}>
-          <ReTweetContainer tweet={tweet} />
-        </Container>
-      );
-    }
+  if (type === 'mention')
     return (
       <Container color={!is_read ? '#CCFFFF' : undefined}>
-        <TweetContainer tweet={tweet} />
+        <TweetStateContainer tweet={tweet} />
       </Container>
     );
-  }
 
   if (curTabValue === 'all') {
     if (type === 'follow') {
@@ -76,7 +67,7 @@ const NotificationContainer: FunctionComponent<Props> = ({
     if (tweet.retweet_id) {
       return (
         <Container color={!is_read ? '#CCFFFF' : undefined}>
-          <ReTweetContainer tweet={tweet} />
+          <TweetStateContainer tweet={tweet} />
         </Container>
       );
     }

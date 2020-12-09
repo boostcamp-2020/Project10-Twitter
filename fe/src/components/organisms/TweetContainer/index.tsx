@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React, { FunctionComponent, ReactElement, useState } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';

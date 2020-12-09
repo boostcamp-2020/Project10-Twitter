@@ -1,9 +1,9 @@
 import React, { FunctionComponent, ReactElement } from 'react';
 import { Box } from '@material-ui/core';
 import styled from 'styled-components';
+import Link from 'next/link';
 import ProfileImg from '../../atoms/ProfileImg';
 import { BodyContainer, MainBox } from './styled';
-import Link from 'next/link';
 
 interface Props {
   userId?: string;

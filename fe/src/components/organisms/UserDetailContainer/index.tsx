@@ -17,7 +17,7 @@ import {
   ImgCircleContainer,
 } from './styled';
 import Text from '../../atoms/Text';
-import { getJSXwithUserState } from '../../../utilitys';
+import getJSXwithUserState from '../../../utilitys';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
 
 interface Props {
@@ -80,14 +80,14 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           <TitleSubText title={user.name} sub={user.user_id} />
           <Text value={user.comment} />
           <UserFollowContainer>
-            <Link href={`/${user.user_id}/follow?Following`}>
-              <a>
-                <TitleSubText title="팔로잉 수" sub={followingList.length} />
-              </a>
-            </Link>
-            <Link href={`/${user.user_id}/follow?Follower`}>
+            <Link href={`/${user.user_id}/follow/`}>
               <a>
                 <TitleSubText title="팔로워 수" sub={followerList.length} />
+              </a>
+            </Link>
+            <Link href={`/${user.user_id}/follow/following`}>
+              <a>
+                <TitleSubText title="팔로잉 수" sub={followingList.length} />
               </a>
             </Link>
           </UserFollowContainer>

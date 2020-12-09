@@ -1,13 +1,11 @@
-/* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
-import TweetContainer from '../../components/organisms/TweetContainer';
+import TweetStateContainer from '../../components/organisms/TweetStateContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
-import ReTweetContainer from '../../components/organisms/ReTweetContainer';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
 
@@ -77,13 +75,9 @@ const Home: FunctionComponent = () => {
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
       <div>
-        {tweetList?.map((tweet: Tweet, index: number) =>
-          tweet.retweet_id ? (
-            <ReTweetContainer key={index} tweet={tweet} />
-          ) : (
-            <TweetContainer key={index} tweet={tweet} />
-          ),
-        )}
+        {tweetList?.map((tweet: Tweet, index: number) => (
+        <TweetStateContainer tweet={tweet} />
+      ))}
       </div>
       <div ref={fetchMoreEl} />
     </PageLayout>
