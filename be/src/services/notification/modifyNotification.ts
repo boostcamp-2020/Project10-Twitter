@@ -9,12 +9,8 @@ const updateNotification = async (_: any, { id }: { id: string }, { authUser }: 
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
-  console.log(userId, id);
-  const user = await userModel.updateOne(
-    { user_id: userId },
-    { $set: { lastest_notification_id: id } },
-  );
-  console.log(user);
+  await userModel.updateOne({ user_id: userId }, { $set: { lastest_notification_id: id } });
+
   return { response: true };
 };
 
