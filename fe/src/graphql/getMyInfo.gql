@@ -6,5 +6,6 @@ query {
     profile_img_url
     following_id_list
     heart_tweet_id_list
+    lastest_notification_id
   }
 }
