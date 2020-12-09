@@ -2,7 +2,7 @@ type Notification {
   user: User
   tweet: Tweet
   type: String
-  is_read: Boolean
+  _id: String
   createAt: Date
 }
 type Count {
