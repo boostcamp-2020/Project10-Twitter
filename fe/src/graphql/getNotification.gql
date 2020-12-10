@@ -1,5 +1,5 @@
 query($id: String) {
-  notifications: notification_list(old_notification_id: $id) {
+  notifications: notification_list(oldest_notification_id: $id) {
     user {
       _id
       user_id
