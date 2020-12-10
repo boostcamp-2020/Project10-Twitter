@@ -6,7 +6,7 @@ const notificationSchema = new Schema(
   {
     user_id: String,
     tweet_id: Schema.Types.ObjectId,
-    follower_id: String,
+    giver_id: String,
     type: String,
     createAt: { type: Date, default: Date.now },
   },
