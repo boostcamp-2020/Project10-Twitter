@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
-import React, { FunctionComponent, useState, useEffect, useRef } from 'react'[import { useQuery, useMutation } from '@apollo/client';
+import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
