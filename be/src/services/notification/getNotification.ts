@@ -61,10 +61,10 @@ const getNotification = async (
         from: 'users',
         localField: 'giver_id',
         foreignField: 'user_id',
-        as: 'user',
+        as: 'giver',
       },
     },
-    { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+    { $unwind: { path: '$giver', preserveNullAndEmptyArrays: true } },
   ]);
 
   return notifications;
