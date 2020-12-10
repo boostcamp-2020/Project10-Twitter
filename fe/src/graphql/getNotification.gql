@@ -9,6 +9,7 @@ query($id: String) {
     }
     tweet {
       _id
+      createAt
       content
       child_tweet_number
       retweet_user_number
