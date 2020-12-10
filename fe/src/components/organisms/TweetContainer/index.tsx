@@ -2,13 +2,13 @@ import React, { FunctionComponent, ReactElement, useState } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
 import { ApolloCache, useMutation } from '@apollo/client';
-import { DocumentNode, GraphQLType } from 'graphql';
+import { DocumentNode } from 'graphql';
 import MainContaier from '../MainContainer';
-import TitleSubText from '../../molecules/TitleSubText';
+import Text from '../../atoms/Text';
 import IconButton from '../../molecules/IconButton';
 import Button from '../../molecules/Button';
-import { Heart, Comment, Retweet } from '../../atoms/Icons';
-import { ButtonsBox, PinkButton, TweetHeaderContainer } from './styled';
+import { Heart, Comment, Retweet, X } from '../../atoms/Icons';
+import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
 import useHeartState from '../../../hooks/useHeartState';
 import { ReplyModal, RetweetModal } from '../TweetModal';
 import useDisplay from '../../../hooks/useDisplay';
@@ -16,6 +16,7 @@ import ReTweetContainer from '../ReTweetContainer';
 import UploadImg from '../../molecules/UploadImg';
 import useUserState from '../../../hooks/useUserState';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
+import { makeTimeText } from '../../../libs/utility';
 
 interface Props {
   tweet: Tweet;
@@ -31,6 +32,7 @@ interface Tweet {
   heart_user_number: number;
   author: Author;
   retweet: Tweet;
+  createAt: string;
 }
 interface Author {
   user_id: string;
@@ -72,12 +74,16 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
     <>
       <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
         <TweetHeaderContainer>
-          <Link href={`/${tweet.author.user_id}`}>
-            <a>
-              <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
-            </a>
-          </Link>
-          {userState === 'me' ? <IconButton icon={Retweet} onClick={onClickDeleteBtn} /> : <></>}
+          <HeaderInfoContainer>
+            <Link href={`/${tweet.author.user_id}`}>
+              <a>
+                <Text styled="title" size="15px" value={tweet.author.name} />
+                <Text styled="sub" size="15px" value={tweet.author.user_id} />
+                <Text styled="sub" size="11px" value={makeTimeText(tweet.createAt)} />
+              </a>
+            </Link>
+          </HeaderInfoContainer>
+          {userState === 'me' ? <IconButton icon={X} onClick={onClickDeleteBtn} /> : <></>}
         </TweetHeaderContainer>
         <Link href={`/status/${tweet._id}`}>
           <a>

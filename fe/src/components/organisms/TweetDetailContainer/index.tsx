@@ -9,11 +9,12 @@ import IconButton from '../../molecules/IconButton';
 import {
   DetailContainer,
   TweetHeaderContainer,
+  TimeContainer,
   TweetDetailInfoContainer,
   ButtonsContainer,
   PinkIconButton,
 } from './styled';
-import { Heart, Comment, Retweet } from '../../atoms/Icons';
+import { Heart, Comment, Retweet, X } from '../../atoms/Icons';
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
 import UserInfo from '../../molecules/UserInfo';
 import useDisplay from '../../../hooks/useDisplay';
@@ -22,6 +23,7 @@ import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '../T
 import useUserState from '../../../hooks/useUserState';
 import Text from '../../atoms/Text';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
+import { makeTimeText } from '../../../libs/utility';
 
 interface Props {
   tweetId: string;
@@ -78,10 +80,12 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
               sub={tweet.author.user_id}
             />
           </Link>
-          {userState === 'me' ? <IconButton icon={Retweet} onClick={onClickDeleteBtn} /> : <></>}
+          {userState === 'me' ? <IconButton icon={X} onClick={onClickDeleteBtn} /> : <></>}
         </TweetHeaderContainer>
-
         <Markdown allowDangerousHtml>{tweet.content}</Markdown>
+        <TimeContainer>
+          <Text styled="sub" size="15px" value={makeTimeText(tweet.createAt)} />
+        </TimeContainer>
         <TweetDetailInfoContainer>
           {tweet.retweet_user_number > 0 ? (
             <TitleSubText
