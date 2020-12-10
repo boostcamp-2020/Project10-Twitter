@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import UserInfo from '../../molecules/UserInfo';
 import TweetContainer from '../TweetContainer';
-import HeartContainer from '../HeartContainer';
-import { BodyContainer, Container, UnderLine } from './styled';
+import HeartContainer from './HeartContainer';
+import { Container, UnderLine } from './styled';
 import useMyInfo from '../../../hooks/useMyInfo';
+import FollowContainer from './FollowContainer';
 
 interface Props {
   noti: Noti;
@@ -62,11 +62,9 @@ const NotificationContainer: FunctionComponent<Props> = ({
       return (
         <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
           <Link href={`/${user.user_id}/`}>
-            <UnderLine>
-              <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
-              <BodyContainer>님이 follow 했습니다.</BodyContainer>
-            </UnderLine>
+            <FollowContainer user={user} />
           </Link>
+          <UnderLine />
         </Container>
       );
     if (type === 'heart')
