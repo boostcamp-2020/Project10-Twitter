@@ -1,5 +1,6 @@
 query($userId: String) {
   user: user_info(user_id: $userId) {
+    _id
     user_id
     name
     comment
@@ -7,12 +8,14 @@ query($userId: String) {
     background_img_url
   }
   followerList: follower_list(user_id: $userId) {
+    _id
     user_id
     name
     comment
     profile_img_url
   }
   followingList: following_list(user_id: $userId) {
+    _id
     user_id
     name
     comment

@@ -1,5 +1,6 @@
 query($userId: String) {
   list: following_list(user_id: $userId) {
+    _id
     user_id
     name
     comment

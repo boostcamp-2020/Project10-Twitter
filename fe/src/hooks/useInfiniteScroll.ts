@@ -11,14 +11,17 @@ const useInfiniteScroll = (
 
   const getObserver = useCallback((): IntersectionObserver => {
     if (!observerRef.current) {
-      observerRef.current = new IntersectionObserver((entries) => {
-        const intersecting = entries.some((entry) => entry.isIntersecting);
-        if (isFirstRender.current && intersecting) {
-          isFirstRender.current = false;
-          return;
-        }
-        setIntersecting(intersecting);
-      });
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          const intersecting = entries.some((entry) => entry.isIntersecting);
+          if (isFirstRender.current && intersecting) {
+            isFirstRender.current = false;
+            return;
+          }
+          setIntersecting(intersecting);
+        },
+        { root: null, rootMargin: '0px 0px 30px 0px', threshold: 0 },
+      );
     }
     return observerRef.current;
   }, [observerRef.current]);

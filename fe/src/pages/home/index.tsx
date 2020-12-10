@@ -6,7 +6,6 @@ import PageLayout from '../../components/organisms/PageLayout';
 import HomeBox from './styled';
 import GET_TWEETLIST from '../../graphql/getTweetList.gql';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import apolloClient from '../../libs/apolloClient';
 
 interface Tweet {
   _id: string;
@@ -27,22 +26,14 @@ interface Author {
 
 const Home: FunctionComponent = () => {
   const [tweetList, setTweetList] = useState<Tweet[]>([]);
-  const { loading, error, data, fetchMore } = useQuery(GET_TWEETLIST);
-  const fetchMoreEl = useRef(null);
-  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
   const { _id: bottomTweetId } = tweetList[tweetList.length - 1] || {};
   const { _id: topTweetId } = tweetList[0] || {};
-
-  useEffect(() => {
-    const fetchLatestTweet = async () => {
-      const { data: fetchMoreData } = await fetchMore({
-        variables: { latestTweetId: topTweetId },
-      });
-    };
-    setInterval(() => {
-      fetchLatestTweet();
-    }, 1000 * 5);
-  }, []);
+  const { loading, error, data, fetchMore } = useQuery(GET_TWEETLIST, {
+    variables: { latestTweetId: topTweetId },
+    pollInterval: 500,
+  });
+  const fetchMoreEl = useRef(null);
+  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
 
   useEffect(() => {
     const tweetList = data?.tweetList;
@@ -51,7 +42,7 @@ const Home: FunctionComponent = () => {
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !bottomTweetId) return;
+      if (!intersecting || loadFinished || !bottomTweetId || !fetchMore) return;
       const { data: fetchMoreData } = await fetchMore({
         variables: { oldestTweetId: bottomTweetId },
       });
@@ -59,15 +50,6 @@ const Home: FunctionComponent = () => {
     };
     asyncEffect();
   }, [intersecting]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error)
-    return (
-      <div>
-        Error!
-        {error.message}
-      </div>
-    );
 
   return (
     <PageLayout>
