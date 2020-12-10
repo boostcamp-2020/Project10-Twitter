@@ -11,7 +11,7 @@ interface Props {
 
 interface Noti {
   curTabValue: string;
-  user: User;
+  giver: User;
   tweet: Tweet;
   type: string;
   _id: string;
@@ -44,7 +44,7 @@ interface Author {
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
-  noti: { user, tweet, type, _id, curTabValue },
+  noti: { giver, tweet, type, _id, curTabValue },
 }) => {
   const { myProfile } = useMyInfo();
   const isRead = myProfile.lastest_notification_id < _id;
@@ -60,9 +60,9 @@ const NotificationContainer: FunctionComponent<Props> = ({
     if (type === 'follow')
       return (
         <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-          <Link href={`/${user.user_id}/`}>
+          <Link href={`/${giver.user_id}/`}>
             <UnderLine>
-              <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
+              <UserInfo img={giver.profile_img_url} title={giver.name} sub={giver.user_id} />
               <BodyContainer>님이 follow 했습니다.</BodyContainer>
             </UnderLine>
           </Link>

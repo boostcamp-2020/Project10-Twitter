@@ -19,7 +19,7 @@ interface Variable {
 
 interface Noti {
   _id: string;
-  user: User;
+  giver: User;
   tweet: Tweet;
   type: string;
 }
