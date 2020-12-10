@@ -35,10 +35,15 @@ const TweetHeaderContainer = styled(Box)`
   justify-content: space-between;
 `;
 
+const TimeContainer = styled(Box)`
+  margin-top: 5px;
+`;
+
 export {
   DetailContainer,
   TweetDetailInfoContainer,
   ButtonsContainer,
   PinkIconButton,
   TweetHeaderContainer,
+  TimeContainer,
 };

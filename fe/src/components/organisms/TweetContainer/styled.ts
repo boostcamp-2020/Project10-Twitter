@@ -20,4 +20,12 @@ const TweetHeaderContainer = styled(Box)`
   justify-content: space-between;
 `;
 
-export { ButtonsBox, PinkButton, TweetHeaderContainer };
+const HeaderInfoContainer = styled(Box)`
+  display: flex;
+
+  & span {
+    margin-right: 5px;
+  }
+`;
+
+export { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer };
