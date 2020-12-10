@@ -1,13 +1,14 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
-import { useQuery } from '@apollo/client';
-
+import { useQuery, useMutation } from '@apollo/client';
 import useHeartState from '../../../hooks/useHeartState';
 import TitleSubText from '../../molecules/TitleSubText';
 import IconButton from '../../molecules/IconButton';
 import {
   DetailContainer,
+  TweetHeaderContainer,
   TweetDetailInfoContainer,
   ButtonsContainer,
   PinkIconButton,
@@ -16,8 +17,11 @@ import { Heart, Comment, Retweet } from '../../atoms/Icons';
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
 import UserInfo from '../../molecules/UserInfo';
 import useDisplay from '../../../hooks/useDisplay';
+import useDisplayWithShallow from '../../../hooks/useDisplayWithShallow';
 import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '../TweetModal';
+import useUserState from '../../../hooks/useUserState';
 import Text from '../../atoms/Text';
+import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 
 interface Props {
   tweetId: string;
@@ -32,13 +36,25 @@ interface Variable {
 }
 
 const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) => {
+  const router = useRouter();
   const queryVariable: QueryVariable = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
   const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweet);
+  const [userState] = useUserState(data?.tweet.author);
   const [displayReplyModal, , onClickReplyBtn] = useDisplay(false);
   const [displayRetweetModal, , onClickRetweetBtn] = useDisplay(false);
-  const [displayHeartListModal, , onClickHeartList] = useDisplay(false);
-  const [displayRetweetListModal, , onClickRetweetList] = useDisplay(false);
+  const [displayHeartListModal, onOpenHeartList, onCloseHeartList] = useDisplayWithShallow('likes');
+  const [displayRetweetListModal, onOpenRetweetList, onCloseRetweetList] = useDisplayWithShallow(
+    'retweets',
+  );
+  const [deleteTweet] = useMutation(DELETE_TWEET);
+
+  const onClickDeleteBtn = async () => {
+    await deleteTweet({
+      variables: { tweetId: tweet._id },
+    });
+    router.push('/home');
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error)
@@ -54,36 +70,30 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
   return (
     <>
       <DetailContainer>
-        <Link href={`/${tweet.author.user_id}`}>
-          <UserInfo
-            img={tweet.author.profile_img_url}
-            title={tweet.author.name}
-            sub={tweet.author.user_id}
-          />
-        </Link>
+        <TweetHeaderContainer>
+          <Link href={`/${tweet.author.user_id}`}>
+            <UserInfo
+              img={tweet.author.profile_img_url}
+              title={tweet.author.name}
+              sub={tweet.author.user_id}
+            />
+          </Link>
+          {userState === 'me' ? <IconButton icon={Retweet} onClick={onClickDeleteBtn} /> : <></>}
+        </TweetHeaderContainer>
+
         <Markdown allowDangerousHtml>{tweet.content}</Markdown>
         <TweetDetailInfoContainer>
-          {/* <Link href={`/status/${tweetId}/retweets`}>
-            <a>
-              <TitleSubText title={tweet.retweet_user_number} sub="Retweets" />
-            </a>
-          </Link>
-          <Link href={`/status/${tweetId}/likes`}>
-            <a>
-              <TitleSubText title={tweet.heart_user_number} sub="Likes" />
-            </a>
-          </Link> */}
           {tweet.retweet_user_number > 0 ? (
             <TitleSubText
               title={tweet.retweet_user_number}
               sub="Retweets"
-              onClick={onClickRetweetList}
+              onClick={onOpenRetweetList}
             />
           ) : (
             <></>
           )}
           {tweet.heart_user_number > 0 ? (
-            <TitleSubText title={tweet.heart_user_number} sub="Likes" onClick={onClickHeartList} />
+            <TitleSubText title={tweet.heart_user_number} sub="Likes" onClick={onOpenHeartList} />
           ) : (
             <></>
           )}
@@ -115,12 +125,12 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
       />
       <HeartListModal
         displayModal={displayHeartListModal}
-        onClickCloseBtn={onClickHeartList}
+        onClickCloseBtn={onCloseHeartList}
         tweetId={tweet._id}
       />
       <RetweetListModal
         displayModal={displayRetweetListModal}
-        onClickCloseBtn={onClickRetweetList}
+        onClickCloseBtn={onCloseRetweetList}
         tweetId={tweet._id}
       />
     </>
