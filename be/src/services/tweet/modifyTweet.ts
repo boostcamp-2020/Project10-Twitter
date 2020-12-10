@@ -20,7 +20,7 @@ const heartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
     { new: true },
   );
 
-  const user = await userModel.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     { user_id: userId },
     { $addToSet: { heart_tweet_id_list: tweet_id } },
     { new: true },
@@ -40,7 +40,7 @@ const unheartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
     { $pull: { heart_user_id_list: userId } },
     { new: true },
   );
-  const user = await userModel.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     { user_id: userId },
     { $pull: { heart_tweet_id_list: tweet_id } },
     { new: true },

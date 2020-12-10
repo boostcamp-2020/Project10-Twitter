@@ -10,6 +10,7 @@
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "no-console": "off",
     "import/extensions": 0,
-    "import/no-unresolved": 0
+    "import/no-unresolved": 0,
+    "camelcase": 0
   }
 }

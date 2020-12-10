@@ -1,10 +1,8 @@
+import bcrypt from 'bcrypt';
 import axios from 'axios';
 import { signToken } from '../../lib/jwt-token';
 import { userModel } from '../../models';
 import { registerUser } from '../../services/user/addUser';
-import { makeRandomName } from '../../lib/utilty';
-
-import bcrypt from 'bcrypt';
 
 interface UserInfo {
   user_id: string;

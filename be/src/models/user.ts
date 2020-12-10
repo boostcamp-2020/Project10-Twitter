@@ -13,6 +13,7 @@ const userSchema = new Schema(
     profile_img_url: String,
     background_img_url: String,
     heart_tweet_id_list: [mongoose.Types.ObjectId],
+    lastest_notification_id: Schema.Types.ObjectId,
   },
   { versionKey: false },
 );
