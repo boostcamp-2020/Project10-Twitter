@@ -12,7 +12,7 @@ import SearchBar from '../../molecules/SearchBar';
 import Container from './styled';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import useDisplay from '../../../hooks/useDisplay';
-import NewTweetModal from '../TweetModal/NewTweetModal';
+import { NewTweetModal } from '../TweetModal';
 import GET_NOTIFICATION_COUNT from '../../../graphql/getNotificationCount.gql';
 
 interface ButtonProps {

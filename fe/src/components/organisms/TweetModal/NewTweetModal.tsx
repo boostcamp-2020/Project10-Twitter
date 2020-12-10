@@ -1,16 +1,23 @@
 import React, { FunctionComponent } from 'react';
+import { useMutation } from '@apollo/client';
 import Modal from '../../molecules/Modal';
 import NewTweetContainer from '../NewTweetContainer';
+import ADD_BASIC_TWEET from '../../../graphql/addBasicTweet.gql';
 
 interface Props {
   displayModal: boolean;
   onClickCloseBtn: () => void;
 }
 
-const TweetModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => (
-  <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
-    <NewTweetContainer />
-  </Modal>
-);
+const NewTweetModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
+  const [addBasicTweet, { loading: mutationLoading, error: mutationError }] = useMutation(
+    ADD_BASIC_TWEET,
+  );
+  return (
+    <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
+      <NewTweetContainer onClickQuery={addBasicTweet} />
+    </Modal>
+  );
+};
 
-export default TweetModal;
+export default NewTweetModal;

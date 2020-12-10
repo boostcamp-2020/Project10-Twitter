@@ -1,21 +1,41 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, MutationFunctionOptions, FetchResult } from '@apollo/client';
 import useMyInfo from '../../../hooks/useMyInfo';
 import MainContaier from '../MainContainer';
+import ReTweetContaier from '../ReTweetContainer';
 import TextArea from '../../atoms/TextArea';
 import { Picture } from '../../atoms/Icons';
 import TweetFooter from '../../molecules/TweetFooter';
-import ADD_BASIC_TWEET from '../../../graphql/addBasicTweet.gql';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import IMAGE_UPLOAD from '../../../graphql/imageUpload.gql';
 import UploadImg from '../../molecules/UploadImg';
 import UploadImage from './styled';
+import ADD_BASIC_TWEET from '../../../graphql/addBasicTweet.gql';
 
 interface Props {
   children?: ReactChild;
+  tweet?: Tweet;
+  onClickQuery: (
+    options?: MutationFunctionOptions<any, Record<string, any>> | undefined,
+  ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  parentId?: string;
 }
 
-const NewTweetContainer: FunctionComponent<Props> = () => {
+interface Tweet {
+  _id: string;
+  content: string;
+  child_tweet_number: number;
+  retweet_user_number: number;
+  heart_user_number: number;
+  author: Author;
+}
+interface Author {
+  user_id: string;
+  name: string;
+  profile_img_url: string;
+}
+
+const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, parentId }) => {
   const { myProfile } = useMyInfo();
   const [value, setValue, onTextChange] = useOnTextChange('');
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -32,7 +52,9 @@ const NewTweetContainer: FunctionComponent<Props> = () => {
   }, [value, image]);
 
   const onTweetBtnClick = () => {
-    addBasicTweet({ variables: { content: value, imgUrlList: [image] } });
+    if (parentId) onClickQuery({ variables: { content: value, parentId, imgUrlList: [image] } });
+    else if (tweet) onClickQuery({ variables: { content: value, retweetId: tweet._id } });
+    else onClickQuery({ variables: { content: value, imgUrlList: [image] } });
     setValue('');
     imgCloseBtnClick();
   };
@@ -67,6 +89,7 @@ const NewTweetContainer: FunctionComponent<Props> = () => {
   return (
     <MainContaier userId={myProfile.user_id} ProfileImgUrl={myProfile.profile_img_url}>
       <TextArea placeholder={placeholder} value={value} onChange={onTextChange} />
+      {tweet ? <ReTweetContaier tweet={tweet} /> : <></>}
       {image ? <UploadImg img={image} onClick={imgCloseBtnClick} /> : ''}
       <UploadImage type="file" ref={fileUpload} onChange={onChange} accept=".gif, .jpg, .png" />
       <TweetFooter

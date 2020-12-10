@@ -6,10 +6,11 @@ interface Props {
   title: string;
   sub: string;
   className?: string;
+  onClick?: () => void;
 }
 
-const TitleSubText: FunctionComponent<Props> = ({ title, sub, className }) => (
-  <Box component="div" className={className}>
+const TitleSubText: FunctionComponent<Props> = ({ title, sub, className, onClick }) => (
+  <Box component="div" className={className} onClick={onClick}>
     <Text styled="title" value={title} />
     <Text styled="sub" value={sub} />
   </Box>
