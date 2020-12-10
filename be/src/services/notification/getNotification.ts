@@ -30,15 +30,6 @@ const getNotification = async (
     { $sort: { createAt: -1 } },
     { $limit: 20 },
     {
-      $project: {
-        tweet_id: 1,
-        follower_id: 1,
-        type: 1,
-        is_read: 1,
-        createAt: 1,
-      },
-    },
-    {
       $lookup: {
         from: 'tweets',
         localField: 'tweet_id',
@@ -90,15 +81,6 @@ const getNotificationWithMention = async (
     { $sort: { createAt: -1 } },
     { $limit: 20 },
     {
-      $project: {
-        tweet_id: 1,
-        follower_id: 1,
-        type: 1,
-        is_read: 1,
-        createAt: 1,
-      },
-    },
-    {
       $lookup: {
         from: 'tweets',
         localField: 'tweet_id',
@@ -116,15 +98,6 @@ const getNotificationWithMention = async (
       },
     },
     { $unwind: { path: '$tweet.author', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'follower_id',
-        foreignField: 'user_id',
-        as: 'user',
-      },
-    },
-    { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
   ]);
 
   return notifications;

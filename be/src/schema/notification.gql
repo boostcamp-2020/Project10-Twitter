@@ -1,4 +1,5 @@
 type Notification {
+  user_id: String
   user: User
   tweet: Tweet
   type: String
@@ -11,8 +12,8 @@ type Count {
 
 type Query {
   notification_count(lastest_notification_id: String): Count
-  notification_list(old_notification_id: String): [Notification]
-  notification_mention_list(old_notification_id: String): [Notification]
+  notification_list(oldest_notification_id: String): [Notification]
+  notification_mention_list(oldest_notification_id: String): [Notification]
 }
 
 type Mutation {
