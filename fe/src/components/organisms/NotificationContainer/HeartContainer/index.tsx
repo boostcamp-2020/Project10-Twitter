@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import UserInfo from '../../molecules/UserInfo';
-import { FullHeart } from '../../atoms/Icons';
+import UserInfo from '../../../molecules/UserInfo';
+import { FullHeart } from '../../../atoms/Icons';
 import { Container, SubContainer, Span, Content } from './styled';
 
 interface Props {
@@ -29,7 +29,7 @@ const HeartContainer: FunctionComponent<Props> = ({ tweet, user }) => {
       <SubContainer>
         <Container>
           <UserInfo img={user.profile_img_url} title={user.user_id} sub="" />
-          <Span> is likes your Tweet!</Span>
+          <Span> liked your Tweet!</Span>
         </Container>
         <Content>{tweet.content}</Content>
       </SubContainer>
