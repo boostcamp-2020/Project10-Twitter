@@ -18,6 +18,7 @@ query($tweetId: String!, $oldestTweetId: String) {
         profile_img_url
       }
     }
+    img_url_list
     author {
       user_id
       name

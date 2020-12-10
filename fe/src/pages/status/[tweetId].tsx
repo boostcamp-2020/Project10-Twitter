@@ -23,6 +23,7 @@ interface Tweet {
   _id: string;
   content: string;
   author: Author;
+  img_url_list: [string];
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;

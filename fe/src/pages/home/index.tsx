@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import NewTweetContainer from '../../components/organisms/NewTweetContainer';
@@ -12,6 +11,7 @@ interface Tweet {
   _id: string;
   content: string;
   child_tweet_number: number;
+  img_url_list: [string];
   retweet_user_number: number;
   heart_user_number: number;
   author: Author;
@@ -36,7 +36,8 @@ const Home: FunctionComponent = () => {
   const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
 
   useEffect(() => {
-    if (data?.tweetList) setTweetList(data.tweetList);
+    const tweetList = data?.tweetList;
+    if (tweetList) setTweetList(tweetList);
   }, [data?.tweetList]);
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const Home: FunctionComponent = () => {
       <HomeBox>Home</HomeBox>
       <NewTweetContainer />
       <div>
-        {tweetList.map((tweet: Tweet, index: number) => (
+        {tweetList?.map((tweet: Tweet, index: number) => (
           <TweetStateContainer key={index} tweet={tweet} />
         ))}
       </div>

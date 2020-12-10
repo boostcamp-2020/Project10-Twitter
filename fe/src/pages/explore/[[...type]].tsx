@@ -25,6 +25,7 @@ interface Variable {
 interface Tweet {
   _id: string;
   content: string;
+  img_url_list: [string];
   author: Author;
   child_tweet_number: number;
   retweet_user_number: number;
@@ -36,6 +37,7 @@ interface User {
   user_id: string;
   name: string;
   profile_img_url?: string;
+  following_id_list: string[];
   comment?: string;
 }
 interface Author {

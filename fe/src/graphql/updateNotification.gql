@@ -1,5 +1,5 @@
-mutation {
-  notifications: update_notification {
+mutation($id: String) {
+  update_notification(id: $id) {
     response
   }
 }

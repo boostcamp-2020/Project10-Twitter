@@ -1,4 +1,5 @@
 import React, { ReactElement, FunctionComponent, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import { ListItem } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -12,6 +13,7 @@ import Container from './styled';
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import useDisplay from '../../../hooks/useDisplay';
 import NewTweetModal from '../TweetModal/NewTweetModal';
+import GET_NOTIFICATION_COUNT from '../../../graphql/getNotificationCount.gql';
 
 interface ButtonProps {
   id: number;
@@ -46,21 +48,26 @@ const TITLE: Array<ButtonProps> = [
 
 const SideBar: FunctionComponent = () => {
   const router = useRouter();
-
   const { myProfile } = useMyInfo();
   const [value, , onTextChange] = useOnTextChange('');
   const [displayPopover, , onClickUserprofile] = useDisplay(false);
   const [displayModal, , onClickTweetBtn] = useDisplay(false);
+  const variables = { id: myProfile ? myProfile.lastest_notification_id : undefined };
+  const { data } = useQuery(GET_NOTIFICATION_COUNT, {
+    variables,
+    pollInterval: 1000,
+  });
 
   const onKeyDown = (e: any) => {
     if (e.key === 'Enter') {
-      router.push(`explore?searchWord=${value}?tweets`);
+      router.push('/explore/[[...type]]', `/explore/tweets/${value}`, { shallow: false });
     }
   };
 
   const userId: string = myProfile.user_id;
   const userName: string = myProfile.name;
   const userProfileImg: string = myProfile.profile_img_url;
+  if (data) TITLE[3].text = `알림 ${data.count ? data.count.count : ''}`;
   TITLE[4].link = `/${userId}`;
   TITLE[5].onClick = onClickTweetBtn;
 
