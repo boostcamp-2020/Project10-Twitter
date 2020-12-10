@@ -32,7 +32,7 @@ const getNotification = async (
     {
       $project: {
         tweet_id: 1,
-        follower_id: 1,
+        giver_id: 1,
         type: 1,
         is_read: 1,
         createAt: 1,
@@ -59,7 +59,7 @@ const getNotification = async (
     {
       $lookup: {
         from: 'users',
-        localField: 'follower_id',
+        localField: 'giver_id',
         foreignField: 'user_id',
         as: 'user',
       },
@@ -92,7 +92,7 @@ const getNotificationWithMention = async (
     {
       $project: {
         tweet_id: 1,
-        follower_id: 1,
+        giver_id: 1,
         type: 1,
         is_read: 1,
         createAt: 1,
@@ -119,7 +119,7 @@ const getNotificationWithMention = async (
     {
       $lookup: {
         from: 'users',
-        localField: 'follower_id',
+        localField: 'giver_id',
         foreignField: 'user_id',
         as: 'user',
       },

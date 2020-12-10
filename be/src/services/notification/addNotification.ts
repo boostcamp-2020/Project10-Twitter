@@ -3,17 +3,17 @@ import { notificationModel } from '../../models';
 interface Args {
   userId: string;
   type: string;
-  followerId?: string;
+  giverId?: string;
   tweetId?: string;
 }
 
-const createNotifiaction = async ({ userId, followerId, tweetId, type }: Args) => {
+const createNotification = async ({ userId, giverId, tweetId, type }: Args) => {
   await notificationModel.create({
     user_id: userId,
-    follower_id: followerId,
+    giver_id: giverId,
     tweet_id: tweetId,
     type,
   });
 };
 
-export default createNotifiaction;
+export default createNotification;
