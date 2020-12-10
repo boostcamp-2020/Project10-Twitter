@@ -73,7 +73,7 @@ const LoginRightSection: FunctionComponent = () => {
           />
         </JoinBox>
       </Container>
-      {/* <SignupModal displayModal={displaySignupModal} onClickCloseBtn={onClickSignupBtn} /> */}
+      <SignupModal displayModal={displaySignupModal} onClickCloseBtn={onClickSignupBtn} />
     </>
   );
 };
