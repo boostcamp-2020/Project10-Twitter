@@ -1,4 +1,4 @@
-import createNotifiaction from './addNotification';
+import createNotification from './addNotification';
 import {
   getNotificationCount,
   getNotificationWithMention,
@@ -8,7 +8,7 @@ import updateNotification from './modifyNotification';
 
 export {
   getNotificationCount,
-  createNotifiaction,
+  createNotification,
   getNotification,
   updateNotification,
   getNotificationWithMention,
