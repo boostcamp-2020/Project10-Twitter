@@ -9,6 +9,7 @@ query($oldestTweetId: String, $latestTweetId: String) {
     retweet_user_number
     heart_user_number
     retweet_id
+    img_url_list
     retweet {
       _id
       content

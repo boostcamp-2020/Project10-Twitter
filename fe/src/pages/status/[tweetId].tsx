@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -21,6 +19,7 @@ interface Tweet {
   _id: string;
   content: string;
   author: Author;
+  img_url_list: [string];
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;

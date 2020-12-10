@@ -5,12 +5,14 @@ query($userId: String, $oldestTweetId: String) {
     child_tweet_number
     retweet_user_number
     heart_user_number
+    img_url_list
     retweet {
       _id
       content
       child_tweet_number
       retweet_user_number
       heart_user_number
+      img_url_list
       author {
         user_id
         name

@@ -1,12 +1,12 @@
-/* eslint-disable camelcase */
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import TabBar from '../../components/molecules/TabBar';
 import NotificationContainer from '../../components/organisms/NotificationContainer';
 import PageLayout from '../../components/organisms/PageLayout';
+import GET_MYINFO from '../../graphql/getMyInfo.gql';
 import GET_NOTIFICATION from '../../graphql/getNotification.gql';
+import GET_MENTION_NOTIFICATION from '../../graphql/getMentionNotification.gql';
 import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
 
 interface QueryVariable {
@@ -18,10 +18,10 @@ interface Variable {
 }
 
 interface Noti {
+  _id: string;
   user: User;
   tweet: Tweet;
   type: string;
-  is_read: boolean;
 }
 
 interface User {
@@ -38,6 +38,7 @@ interface Tweet {
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
+  img_url_list: [string];
   author: Author;
   retweet_id: string;
   retweet: Tweet;
@@ -52,9 +53,10 @@ interface Author {
 const Notification: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
-  const { data } = useQuery(GET_NOTIFICATION);
-  const [mutate] = useMutation(UPDATE_NOTIFICATION);
+  const queryArr = { all: GET_NOTIFICATION, mention: GET_MENTION_NOTIFICATION };
   const value = type ? type[0] : 'all';
+  const { data } = useQuery(queryArr[value]);
+  const [mutate] = useMutation(UPDATE_NOTIFICATION);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -65,21 +67,22 @@ const Notification: FunctionComponent = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     mutate({
-  //       update: (cache) => {
-  //         const newData = data?.notifications.map((noti: Noti) => {
-  //           return { ...noti, is_read: true };
-  //         });
-  //         cache.writeQuery({
-  //           query: GET_NOTIFICATION,
-  //           data: { notifications: newData },
-  //         });
-  //       },
-  //     });
-  //   }, 3000);
-  // }, [data]);
+  useEffect(() => {
+    const lastestNotification = data?.notifications[0];
+    if (lastestNotification)
+      mutate({
+        variables: { id: lastestNotification._id },
+        update: (cache: any) => {
+          const updateData = cache.readQuery({ query: GET_MYINFO });
+          cache.writeQuery({
+            query: GET_MYINFO,
+            data: {
+              myProfile: { ...updateData, lastest_notification_id: lastestNotification._id },
+            },
+          });
+        },
+      });
+  }, [data?.notifications]);
 
   return (
     <PageLayout>

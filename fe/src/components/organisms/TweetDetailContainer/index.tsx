@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
+import Markdown from 'react-markdown/with-html';
 import useHeartState from '../../../hooks/useHeartState';
 import TitleSubText from '../../molecules/TitleSubText';
 import IconButton from '../../molecules/IconButton';
-import Markdown from 'react-markdown/with-html';
 import {
   DetailContainer,
   TweetDetailInfoContainer,
@@ -56,12 +56,12 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =>
       <TweetDetailInfoContainer>
         <Link href={`/status/${tweetId}/retweets`}>
           <a>
-            <TitleSubText title={tweet.retweet_user_number} sub={'Retweets'} />
+            <TitleSubText title={tweet.retweet_user_number} sub="Retweets" />
           </a>
         </Link>
         <Link href={`/status/${tweetId}/likes`}>
           <a>
-            <TitleSubText title={tweet.heart_user_number} sub={'Likes'} />
+            <TitleSubText title={tweet.heart_user_number} sub="Likes" />
           </a>
         </Link>
       </TweetDetailInfoContainer>

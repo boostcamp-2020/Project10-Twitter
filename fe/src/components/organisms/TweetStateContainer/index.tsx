@@ -12,6 +12,7 @@ interface Tweet {
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
+  img_url_list: [string];
   author: Author;
   retweet: Tweet;
 }
