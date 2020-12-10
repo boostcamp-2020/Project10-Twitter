@@ -1,13 +1,17 @@
 import ReactDOM from 'react-dom';
-import { ReactChild, FunctionComponent } from 'react';
+import { ReactChild, FunctionComponent, useState, useEffect } from 'react';
 
 interface Props {
   children: ReactChild;
 }
 
 const Portal: FunctionComponent<Props> = ({ children }) => {
-  const el = document.getElementById('modal');
-  return ReactDOM.createPortal(children, el as Element);
+  const [el, setEl] = useState<null | HTMLElement>();
+  useEffect(() => {
+    setEl(document.getElementById('modal'));
+  }, []);
+  if (el) return ReactDOM.createPortal(children, el as Element);
+  return <div />;
 };
 
 export default Portal;
