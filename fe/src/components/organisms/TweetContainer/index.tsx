@@ -10,6 +10,7 @@ import useHeartState from '../../../hooks/useHeartState';
 import { ReplyModal, RetweetModal } from '../TweetModal';
 import useDisplay from '../../../hooks/useDisplay';
 import ReTweetContainer from '../ReTweetContainer';
+import UploadImg from '../../molecules/UploadImg';
 
 interface Props {
   tweet: Tweet;
@@ -18,6 +19,7 @@ interface Props {
 interface Tweet {
   _id: string;
   content: string;
+  img_url_list: [string];
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
@@ -49,6 +51,11 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
           </a>
         </Link>
         {tweet.retweet?._id ? <ReTweetContainer tweet={tweet.retweet} /> : <></>}
+        {tweet.img_url_list && tweet.img_url_list[0] ? (
+          <UploadImg img={tweet.img_url_list[0]} />
+        ) : (
+          ''
+        )}
         <ButtonsBox component="div">
           <Button icon={Comment({})} text={tweet.child_tweet_number} onClick={onClickReplyBtn} />
           <Button icon={Retweet({})} text={tweet.retweet_user_number} onClick={onClickRetweetBtn} />

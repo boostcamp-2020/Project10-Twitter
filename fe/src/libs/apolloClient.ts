@@ -1,4 +1,5 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 
 const authLink = setContext((_, { headers }) => {
@@ -11,7 +12,7 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: 'http://127.0.0.1:3001/graphql',
 });
 
@@ -23,8 +24,8 @@ const tweetPolicies = {
   read(existing: any) {
     return existing;
   },
-  merge(existing = [], incoming = [], { args: { oldestTweetId, latestTweetId }, readField }: any) {
-    if (latestTweetId) mergeItems(incoming, existing);
+  merge(existing = [], incoming = [], { args: { oldest_tweet_id } }: any) {
+    if (!oldest_tweet_id) return mergeItems(incoming, existing);
     return mergeItems(existing, incoming);
   },
 };
@@ -33,7 +34,7 @@ const userPolicies = {
   read(existing: any) {
     return existing;
   },
-  merge(existing = [], incoming = [], { args: { oldestUserId }, readField }: any) {
+  merge(existing = [], incoming = [], { args }: any) {
     return mergeItems(existing, incoming);
   },
 };
@@ -42,7 +43,8 @@ const notificationPolicies = {
   read(existing: any) {
     return existing;
   },
-  merge(existing = [], incoming = [], { args: { oldestNotificationId }, readField }: any) {
+  merge(existing = [], incoming = [], { args: { oldest_notification_id } }: any) {
+    if (!oldest_notification_id) return mergeItems(incoming, existing);
     return mergeItems(existing, incoming);
   },
 };
@@ -54,6 +56,12 @@ const apolloClient = new ApolloClient({
       Query: {
         fields: {
           following_tweet_list: tweetPolicies,
+          child_tweet_list: tweetPolicies,
+          heart_tweet_list: tweetPolicies,
+          search_tweet_list: tweetPolicies,
+          user_tweet_list: tweetPolicies,
+          user_all_tweet_list: tweetPolicies,
+          search_user_list: userPolicies,
         },
       },
     },

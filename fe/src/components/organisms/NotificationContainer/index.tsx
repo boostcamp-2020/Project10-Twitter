@@ -3,6 +3,7 @@ import Link from 'next/link';
 import UserInfo from '../../molecules/UserInfo';
 import TweetContainer from '../TweetContainer';
 import { BodyContainer, Container, UnderLine } from './styled';
+import useMyInfo from '../../../hooks/useMyInfo';
 
 interface Props {
   noti: Noti;
@@ -13,7 +14,7 @@ interface Noti {
   user: User;
   tweet: Tweet;
   type: string;
-  is_read: boolean;
+  _id: string;
 }
 
 interface User {
@@ -30,6 +31,7 @@ interface Tweet {
   child_tweet_number: number;
   retweet_user_number: number;
   heart_user_number: number;
+  img_url_list: [string];
   author: Author;
   retweet_id: string;
   retweet: Tweet;
@@ -42,19 +44,22 @@ interface Author {
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
-  noti: { user, tweet, type, is_read, curTabValue },
+  noti: { user, tweet, type, _id, curTabValue },
 }) => {
+  const { myProfile } = useMyInfo();
+  const isRead = myProfile.lastest_notification_id < _id;
+
   if (type === 'mention')
     return (
-      <Container color={!is_read ? 'rgba(29,161,242,0.1)' : undefined}>
+      <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
         <TweetContainer tweet={tweet} />
       </Container>
     );
 
   if (curTabValue === 'all') {
-    if (type === 'follow') {
+    if (type === 'follow')
       return (
-        <Container color={!is_read ? 'rgba(29,161,242,0.1)' : undefined}>
+        <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
           <Link href={`/${user.user_id}/`}>
             <UnderLine>
               <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
@@ -63,16 +68,13 @@ const NotificationContainer: FunctionComponent<Props> = ({
           </Link>
         </Container>
       );
-    }
-    if (tweet.retweet_id) {
-      return (
-        <Container color={!is_read ? 'rgba(29,161,242,0.1)' : undefined}>
-          <TweetContainer tweet={tweet} />
-        </Container>
-      );
-    }
+    return (
+      <Container color={isRead ? '#rgba(29,161,242,0.1)' : undefined}>
+        <TweetContainer tweet={tweet} />
+      </Container>
+    );
   }
-  return null;
+  return <></>;
 };
 
 export default NotificationContainer;

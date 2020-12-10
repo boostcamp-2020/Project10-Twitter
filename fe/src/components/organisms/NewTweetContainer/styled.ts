@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { Box } from '@material-ui/core';
 
-const Container = styled(Box)`
-  height: 100%;
+const UploadImage = styled.input`
+  display: none;
 `;
 
-export default Container;
+export default UploadImage;

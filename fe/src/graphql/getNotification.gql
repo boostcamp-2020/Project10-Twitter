@@ -1,6 +1,7 @@
 query($id: String) {
   notifications: notification_list(old_notification_id: $id) {
     user {
+      _id
       user_id
       name
       comment
@@ -12,12 +13,14 @@ query($id: String) {
       child_tweet_number
       retweet_user_number
       heart_user_number
+      img_url_list
       retweet {
         _id
         content
         child_tweet_number
         retweet_user_number
         heart_user_number
+        img_url_list
         author {
           user_id
           name
@@ -31,7 +34,7 @@ query($id: String) {
       }
     }
     type
-    is_read
+    _id
     createAt
   }
 }
