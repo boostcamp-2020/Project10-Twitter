@@ -20,7 +20,7 @@ const checkUnique = async (userId: string): Promise<Boolean> => {
 const makeUniqueUserId = async (userId: string): Promise<string> => {
   const isUnique = await checkUnique(userId);
   if (isUnique) return userId;
-  return makeUniqueUserId(userId + '_' + makeRandomName(4));
+  return makeUniqueUserId(`${userId} ${makeRandomName(4)}`);
 };
 
 const registerUser = async (userInfo: UserInfo) => {

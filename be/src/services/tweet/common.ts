@@ -1,4 +1,4 @@
-export const commonReadCondition = [
+const commonReadCondition = [
   {
     $project: {
       author_id: 1,
@@ -6,6 +6,7 @@ export const commonReadCondition = [
       parent_id: 1,
       retweet_id: 1,
       child_tweet_id_list: 1,
+      img_url_list: 1,
       child_tweet_number: { $size: '$child_tweet_id_list' },
       retweet_user_id_list: 1,
       retweet_user_number: { $size: '$retweet_user_id_list' },
@@ -42,3 +43,5 @@ export const commonReadCondition = [
   },
   { $unwind: { path: '$retweet.author', preserveNullAndEmptyArrays: true } },
 ];
+
+export default commonReadCondition;

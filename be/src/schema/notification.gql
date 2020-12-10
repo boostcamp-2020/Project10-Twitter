@@ -2,7 +2,7 @@ type Notification {
   user: User
   tweet: Tweet
   type: String
-  is_read: Boolean
+  _id: String
   createAt: Date
 }
 type Count {
@@ -10,10 +10,11 @@ type Count {
 }
 
 type Query {
-  notification_count: Count
+  notification_count(lastest_notification_id: String): Count
   notification_list(old_notification_id: String): [Notification]
+  notification_mention_list(old_notification_id: String): [Notification]
 }
 
 type Mutation {
-  update_notification: Response
+  update_notification(id: String): Response
 }

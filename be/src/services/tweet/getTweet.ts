@@ -1,7 +1,8 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { userModel, tweetModel } from '../../models';
-import { commonReadCondition } from './common';
+import commonReadCondition from './common';
 import { stringToObjectId } from '../../lib/utilty';
+
 interface Auth {
   authUser: { id: string };
 }
@@ -47,9 +48,9 @@ const getFollowingTweetList = async (
         ],
       },
     },
-    ...commonReadCondition,
     { $sort: { createAt: -1 } },
     { $limit: 20 },
+    ...commonReadCondition,
   ]);
 
   return tweetList;
@@ -66,9 +67,9 @@ const getUserTweetList = async (_: any, { user_id, oldest_tweet_id }: Args, { au
         $and: [{ author_id: user_id }, { parent_id: { $exists: false } }, nextTweetsCondition],
       },
     },
-    ...commonReadCondition,
     { $sort: { createAt: -1 } },
     { $limit: 20 },
+    ...commonReadCondition,
   ]);
 
   return tweetList;
@@ -87,9 +88,9 @@ const getUserAllTweetList = async (
     {
       $match: { $and: [{ author_id: user_id }, nextTweetsCondition] },
     },
-    ...commonReadCondition,
     { $sort: { createAt: -1 } },
     { $limit: 20 },
+    ...commonReadCondition,
   ]);
 
   return tweetList;
@@ -121,9 +122,9 @@ const getChildTweetList = async (
     {
       $match: { $and: [{ parent_id: stringToObjectId(tweet_id) }, nextTweetsCondition] },
     },
-    ...commonReadCondition,
     { $sort: { createAt: -1 } },
     { $limit: 20 },
+    ...commonReadCondition,
   ]);
 
   return childTweetList;
@@ -145,9 +146,9 @@ const getHeartTweetList = async (
         $and: [{ _id: { $in: userInfo?.get('heart_tweet_id_list') } }, nextTweetsCondition],
       },
     },
-    ...commonReadCondition,
     { $sort: { createAt: -1 } },
     { $limit: 20 },
+    ...commonReadCondition,
   ]);
 
   return tweetList;
@@ -160,15 +161,17 @@ const getSearchedTweetList = async (
 ) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
+  const searchTweetsCondition = search_word === '' ? {} : { content: { $regex: search_word } };
+
   const nextTweetsCondition = getNextTweetsCondition({ oldest_tweet_id });
 
   const searchedTweetList: Document[] = await tweetModel.aggregate([
     {
-      $match: { $and: [{ content: { $regex: search_word } }, nextTweetsCondition] },
+      $match: { $and: [searchTweetsCondition, nextTweetsCondition] },
     },
-    ...commonReadCondition,
     { $sort: { createAt: -1 } },
     { $limit: 20 },
+    ...commonReadCondition,
   ]);
 
   return searchedTweetList;
