@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import UserInfo from '../../molecules/UserInfo';
 import TweetContainer from '../TweetContainer';
+import HeartContainer from '../HeartContainer';
 import { BodyContainer, Container, UnderLine } from './styled';
 import useMyInfo from '../../../hooks/useMyInfo';
 
@@ -68,8 +69,15 @@ const NotificationContainer: FunctionComponent<Props> = ({
           </Link>
         </Container>
       );
+    if (type === 'heart')
+      return (
+        <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
+          <HeartContainer tweet={tweet} user={user} />
+          <UnderLine />
+        </Container>
+      );
     return (
-      <Container color={isRead ? '#rgba(29,161,242,0.1)' : undefined}>
+      <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
         <TweetContainer tweet={tweet} />
       </Container>
     );
