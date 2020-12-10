@@ -60,7 +60,7 @@ const Home: FunctionComponent = () => {
       <NewTweetContainer onClickQuery={addBasicTweet} />
       <div>
         {tweetList?.map((tweet: Tweet, index: number) => (
-          <TweetContainer key={index} tweet={tweet} />
+          <TweetContainer key={index} tweet={tweet} updateQuery={GET_TWEETLIST} />
         ))}
       </div>
       <div ref={fetchMoreEl} />
