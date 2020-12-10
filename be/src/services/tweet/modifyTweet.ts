@@ -26,7 +26,12 @@ const heartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
     { new: true },
   );
 
-  await createNotifiaction({ userId: tweet?.get('author_id'), tweetId: tweet_id, type: 'heart' });
+  await createNotifiaction({
+    userId: tweet?.get('author_id'),
+    followerId: userId,
+    tweetId: tweet_id,
+    type: 'heart',
+  });
   return tweet;
 };
 
