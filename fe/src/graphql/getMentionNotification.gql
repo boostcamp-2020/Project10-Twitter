@@ -1,6 +1,6 @@
 query {
   notifications: notification_mention_list {
-    user {
+    giver {
       user_id
       profile_img_url
     }

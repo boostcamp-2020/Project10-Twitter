@@ -1,6 +1,6 @@
 query($id: String) {
   notifications: notification_list(old_notification_id: $id) {
-    user {
+    giver {
       _id
       user_id
       name

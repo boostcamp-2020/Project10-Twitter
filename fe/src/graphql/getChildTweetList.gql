@@ -1,6 +1,7 @@
 query($tweetId: String!, $oldestTweetId: String) {
   tweetList: child_tweet_list(tweet_id: $tweetId, oldest_tweet_id: $oldestTweetId) {
     _id
+    createAt
     content
     child_tweet_number
     retweet_user_number

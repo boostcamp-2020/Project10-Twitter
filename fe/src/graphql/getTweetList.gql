@@ -4,6 +4,7 @@ query($oldestTweetId: String, $latestTweetId: String) {
     latest_tweet_id: $latestTweetId
   ) {
     _id
+    createAt
     content
     child_tweet_number
     retweet_user_number
