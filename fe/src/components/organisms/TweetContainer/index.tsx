@@ -1,19 +1,25 @@
 import React, { FunctionComponent, ReactElement, useState } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
+import { ApolloCache, useMutation } from '@apollo/client';
+import { DocumentNode, GraphQLType } from 'graphql';
 import MainContaier from '../MainContainer';
 import TitleSubText from '../../molecules/TitleSubText';
+import IconButton from '../../molecules/IconButton';
 import Button from '../../molecules/Button';
 import { Heart, Comment, Retweet } from '../../atoms/Icons';
-import { ButtonsBox, PinkButton } from './styled';
+import { ButtonsBox, PinkButton, TweetHeaderContainer } from './styled';
 import useHeartState from '../../../hooks/useHeartState';
 import { ReplyModal, RetweetModal } from '../TweetModal';
 import useDisplay from '../../../hooks/useDisplay';
 import ReTweetContainer from '../ReTweetContainer';
 import UploadImg from '../../molecules/UploadImg';
+import useUserState from '../../../hooks/useUserState';
+import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 
 interface Props {
   tweet: Tweet;
+  updateQuery: DocumentNode;
 }
 
 interface Tweet {
@@ -30,21 +36,49 @@ interface Author {
   user_id: string;
   name: string;
   profile_img_url: string;
+  following_id_list: string[];
 }
 
-const TweetContainer: FunctionComponent<Props> = ({ tweet }) => {
+const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
   const [isHeart, onClickHeart, onClickUnheart] = useHeartState(tweet);
+  const [userState] = useUserState(tweet.author);
   const [displayReplyModal, , onClickReplyBtn] = useDisplay(false);
   const [displayRetweetModal, , onClickRetweetBtn] = useDisplay(false);
+  const [deleteTweet] = useMutation(DELETE_TWEET);
+
+  const onClickDeleteBtn = async () => {
+    await deleteTweet({
+      variables: { tweetId: tweet._id },
+      update: (cache, { data }) => {
+        cacheUpdate(cache, data);
+      },
+    });
+  };
+
+  const cacheUpdate = (cache: ApolloCache<any>, data: any) => {
+    const { result } = data;
+    if (result.response) {
+      const tweetCache = cache.readQuery<{ tweetList: Tweet[] }>({ query: updateQuery });
+      if (tweetCache) {
+        cache.writeQuery({
+          query: updateQuery,
+          data: { tweetList: tweetCache.tweetList.filter((b) => b._id !== tweet._id) },
+        });
+      }
+    }
+  };
 
   return (
     <>
       <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
-        <Link href={`/${tweet.author.user_id}`}>
-          <a>
-            <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
-          </a>
-        </Link>
+        <TweetHeaderContainer>
+          <Link href={`/${tweet.author.user_id}`}>
+            <a>
+              <TitleSubText title={tweet.author.name} sub={tweet.author.user_id} />
+            </a>
+          </Link>
+          {userState === 'me' ? <IconButton icon={Retweet} onClick={onClickDeleteBtn} /> : <></>}
+        </TweetHeaderContainer>
         <Link href={`/status/${tweet._id}`}>
           <a>
             <Markdown allowDangerousHtml>{tweet.content}</Markdown>
