@@ -64,6 +64,8 @@ const apolloClient = new ApolloClient({
           search_user_list: userPolicies,
           following_list: userPolicies,
           follower_list: userPolicies,
+          notification_list: notificationPolicies,
+          notification_mention_list: notificationPolicies,
         },
       },
     },

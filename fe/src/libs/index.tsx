@@ -1,21 +1,5 @@
-import React, { FunctionComponent, ReactChild } from 'react';
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
-import GET_MYINFO from '../graphql/getMyInfo.gql';
+import { getJSXwithUserState, makeTimeText } from './utility';
+import apolloClient from './apolloClient';
+import AuthProvider from './authProvider';
 
-interface Props {
-  children: ReactChild;
-}
-
-const AuthProvider: FunctionComponent<Props> = ({ children }) => {
-  const router = useRouter();
-  if (router.pathname.includes('login') || router.pathname.includes('callback'))
-    return <>{children}</>;
-
-  const { data, error } = useQuery(GET_MYINFO);
-  if (data) return <>{children}</>;
-  if (error) router.push('/login');
-  return <div>loading</div>;
-};
-
-export default AuthProvider;
+export { getJSXwithUserState, makeTimeText, apolloClient, AuthProvider };

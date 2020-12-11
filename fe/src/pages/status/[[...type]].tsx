@@ -36,7 +36,8 @@ interface Author {
 
 const UserDetail: FunctionComponent = () => {
   const router = useRouter();
-  const { tweetId } = router.query;
+  const { type } = router.query;
+  const tweetId = type ? type[0] : '';
   const queryVariable: QueryVariable = { variables: { tweetId: tweetId as string } };
   const { loading, error, data, fetchMore } = useQuery(GET_CHILD_TWEETLIST, queryVariable);
   const { _id: bottomTweetId } = data?.tweetList[data?.tweetList.length - 1] || {};
@@ -65,7 +66,7 @@ const UserDetail: FunctionComponent = () => {
         <TweetDetailContainer tweetId={tweetId as string} />
         {data ? (
           data.tweetList?.map((tweet: Tweet, index: number) => (
-            <TweetContainer key={index} tweet={tweet} />
+            <TweetContainer key={index} tweet={tweet} updateQuery={GET_CHILD_TWEETLIST} />
           ))
         ) : (
           <>loading..</>

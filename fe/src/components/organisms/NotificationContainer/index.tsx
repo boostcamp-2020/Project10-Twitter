@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import UserInfo from '../../molecules/UserInfo';
 import TweetContainer from '../TweetContainer';
-import { BodyContainer, Container, UnderLine } from './styled';
+import HeartContainer from './HeartContainer';
+import { Container, UnderLine } from './styled';
 import useMyInfo from '../../../hooks/useMyInfo';
+import FollowContainer from './FollowContainer';
 
 interface Props {
   noti: Noti;
@@ -11,7 +12,7 @@ interface Props {
 
 interface Noti {
   curTabValue: string;
-  user: User;
+  giver: User;
   tweet: Tweet;
   type: string;
   _id: string;
@@ -44,7 +45,7 @@ interface Author {
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
-  noti: { user, tweet, type, _id, curTabValue },
+  noti: { giver, tweet, type, _id, curTabValue },
 }) => {
   const { myProfile } = useMyInfo();
   const isRead = myProfile.lastest_notification_id < _id;
@@ -60,16 +61,21 @@ const NotificationContainer: FunctionComponent<Props> = ({
     if (type === 'follow')
       return (
         <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-          <Link href={`/${user.user_id}/`}>
-            <UnderLine>
-              <UserInfo img={user.profile_img_url} title={user.name} sub={user.user_id} />
-              <BodyContainer>님이 follow 했습니다.</BodyContainer>
-            </UnderLine>
+          <Link href={`/${giver.user_id}/`}>
+            <FollowContainer user={giver} />
           </Link>
+          <UnderLine />
+        </Container>
+      );
+    if (type === 'heart')
+      return (
+        <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
+          <HeartContainer tweet={tweet} user={user} />
+          <UnderLine />
         </Container>
       );
     return (
-      <Container color={isRead ? '#rgba(29,161,242,0.1)' : undefined}>
+      <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
         <TweetContainer tweet={tweet} />
       </Container>
     );

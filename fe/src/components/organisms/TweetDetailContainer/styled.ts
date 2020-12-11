@@ -30,4 +30,20 @@ const PinkIconButton = styled(IconButton)`
   }
 `;
 
-export { DetailContainer, TweetDetailInfoContainer, ButtonsContainer, PinkIconButton };
+const TweetHeaderContainer = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const TimeContainer = styled(Box)`
+  margin-top: 5px;
+`;
+
+export {
+  DetailContainer,
+  TweetDetailInfoContainer,
+  ButtonsContainer,
+  PinkIconButton,
+  TweetHeaderContainer,
+  TimeContainer,
+};

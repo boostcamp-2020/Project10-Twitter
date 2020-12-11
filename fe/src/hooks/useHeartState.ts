@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import GET_MYINFO from '../graphql/getMyInfo.gql';
 import HEART_TWEET from '../graphql/heartTweet.gql';
 import UNHEART_TWEET from '../graphql/unheartTweet.gql';
+import GET_TWEETLIST from '../graphql/getTweetList.gql';
 
 interface Tweet {
   _id: string;
@@ -33,12 +34,69 @@ const useHeartState = (tweet: Tweet): [boolean, () => Promise<void>, () => Promi
   };
 
   const onClickHeart = async () => {
-    await heartTweet({ variables: { tweet_id: tweet._id } });
+    await heartTweet({
+      variables: { tweet_id: tweet._id },
+      update: (cache) => {
+        const userInfo = cache.readQuery({ query: GET_MYINFO });
+        cache.writeQuery({
+          query: GET_MYINFO,
+          data: {
+            myProfile: {
+              ...userInfo.myProfile,
+              heart_tweet_id_list: [...userInfo.myProfile.heart_tweet_id_list, tweet._id],
+            },
+          },
+        });
+        const res = cache.readQuery({ query: GET_TWEETLIST });
+        const source = [...res.tweetList];
+        const idx = source.findIndex((x: Tweet) => x._id === tweet._id);
+        if (idx === -1) return;
+        const number: number = source[idx].heart_user_number + 1;
+        source[idx] = {
+          ...source[idx],
+          heart_user_number: number,
+        };
+        cache.writeQuery({
+          query: GET_TWEETLIST,
+          data: { tweetList: source },
+        });
+      },
+    });
     setHeartTweet();
   };
 
   const onClickUnheart = async () => {
-    await unheartTweet({ variables: { tweet_id: tweet._id } });
+    await unheartTweet({
+      variables: { tweet_id: tweet._id },
+      update: (cache) => {
+        const userInfo = cache.readQuery({ query: GET_MYINFO });
+        const arr = [...userInfo.myProfile.heart_tweet_id_list];
+        const index = arr.indexOf(tweet._id);
+        arr.splice(index, 1);
+        cache.writeQuery({
+          query: GET_MYINFO,
+          data: {
+            myProfile: {
+              ...userInfo.myProfile,
+              heart_tweet_id_list: arr,
+            },
+          },
+        });
+        const res = cache.readQuery({ query: GET_TWEETLIST });
+        const source = [...res.tweetList];
+        const idx = source.findIndex((x: Tweet) => x._id === tweet._id);
+        if (idx === -1) return;
+        const number: number = source[idx].heart_user_number - 1;
+        source[idx] = {
+          ...source[idx],
+          heart_user_number: number,
+        };
+        cache.writeQuery({
+          query: GET_TWEETLIST,
+          data: { tweetList: source },
+        });
+      },
+    });
     setUnheartTweet();
   };
 

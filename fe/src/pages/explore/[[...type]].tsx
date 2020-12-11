@@ -113,7 +113,7 @@ const Explore: FunctionComponent = () => {
           {data ? (
             value === 'tweets' ? (
               data.searchList?.map((tweet: Tweet, index: number) => (
-                <TweetContainer key={index} tweet={tweet} />
+                <TweetContainer key={index} tweet={tweet} updateQuery={GET_SEARCH_TWEETLIST} />
               ))
             ) : (
               data.searchList?.map((user: User, index: number) => (
