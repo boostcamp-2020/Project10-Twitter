@@ -109,7 +109,10 @@ const Notification: FunctionComponent = () => {
           cache.writeQuery({
             query: GET_MYINFO,
             data: {
-              myProfile: { ...updateData, lastest_notification_id: lastestNotification._id },
+              myProfile: {
+                ...updateData.myProfile,
+                lastest_notification_id: lastestNotification._id,
+              },
             },
           });
         },
