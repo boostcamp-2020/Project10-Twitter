@@ -1,9 +1,0 @@
-query {
-  myProfile: my_info {
-    user_id
-    name
-    comment
-    profile_img_url
-    following_id_list
-  }
-}
