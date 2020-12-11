@@ -2,13 +2,13 @@ import React, { FunctionComponent } from 'react';
 import { InputProps, TextField } from '@material-ui/core';
 
 interface Props {
-  onChange?: (e: React.SyntheticEvent) => void;
+  onChange: (e: React.SyntheticEvent) => void;
   onKeyDown?: (e: React.SyntheticEvent) => void;
   placeholder?: string;
   type?: string;
-  value?: string;
+  value: string;
   variant?: 'filled' | 'outlined' | 'standard' | undefined;
-  disableUnderline? : boolean
+  disableUnderline?: boolean;
 }
 
 const Input: FunctionComponent<Props> = ({
@@ -18,7 +18,7 @@ const Input: FunctionComponent<Props> = ({
   onChange,
   onKeyDown,
   value = '',
-  disableUnderline = true
+  disableUnderline = true,
 }) => (
   <TextField
     placeholder={placeholder}
@@ -27,7 +27,7 @@ const Input: FunctionComponent<Props> = ({
     onChange={onChange}
     onKeyDown={onKeyDown}
     value={value}
-    InputProps={{ disableUnderline: disableUnderline }}
+    InputProps={{ disableUnderline }}
   />
 );
 
