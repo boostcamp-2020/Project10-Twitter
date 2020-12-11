@@ -31,9 +31,17 @@ const Text: FunctionComponent<Props> = ({
         </StyledText>
       );
     case 'title':
-      return <StyledTitleText className={className}>{value}</StyledTitleText>;
+      return (
+        <StyledTitleText className={className} theme={{ fontSize: size }}>
+          {value}
+        </StyledTitleText>
+      );
     case 'sub':
-      return <StyledSubText className={className}>{value}</StyledSubText>;
+      return (
+        <StyledSubText className={className} theme={{ fontSize: size }}>
+          {value}
+        </StyledSubText>
+      );
   }
 };
 

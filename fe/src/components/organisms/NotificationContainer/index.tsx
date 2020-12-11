@@ -12,7 +12,7 @@ interface Props {
 
 interface Noti {
   curTabValue: string;
-  user: User;
+  giver: User;
   tweet: Tweet;
   type: string;
   _id: string;
@@ -45,7 +45,7 @@ interface Author {
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
-  noti: { user, tweet, type, _id, curTabValue },
+  noti: { giver, tweet, type, _id, curTabValue },
 }) => {
   const { myProfile } = useMyInfo();
   const isRead = myProfile.lastest_notification_id < _id;
@@ -61,8 +61,8 @@ const NotificationContainer: FunctionComponent<Props> = ({
     if (type === 'follow')
       return (
         <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-          <Link href={`/${user.user_id}/`}>
-            <FollowContainer user={user} />
+          <Link href={`/${giver.user_id}/`}>
+            <FollowContainer user={giver} />
           </Link>
           <UnderLine />
         </Container>

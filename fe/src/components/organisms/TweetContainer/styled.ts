@@ -15,4 +15,17 @@ const PinkButton = styled(Button)`
   }
 `;
 
-export { ButtonsBox, PinkButton };
+const TweetHeaderContainer = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const HeaderInfoContainer = styled(Box)`
+  display: flex;
+
+  & span {
+    margin-right: 5px;
+  }
+`;
+
+export { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer };

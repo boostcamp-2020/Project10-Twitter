@@ -86,7 +86,7 @@ const UserDetail: FunctionComponent = () => {
       <div>
         {data ? (
           data.tweetList?.map((tweet: Tweet, index: number) => (
-            <TweetContainer key={index} tweet={tweet} />
+            <TweetContainer key={index} tweet={tweet} updateQuery={queryArr[value]} />
           ))
         ) : (
           <>loading..</>

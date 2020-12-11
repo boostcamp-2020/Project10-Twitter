@@ -1,7 +1,16 @@
+
 query($id: String) {
   notifications: notification_mention_list(oldest_notification_id: $id) {
+    giver {
+      _id
+      user_id
+      name
+      comment
+      profile_img_url
+    }
     tweet {
       _id
+      createAt
       content
       child_tweet_number
       retweet_user_number
@@ -10,6 +19,9 @@ query($id: String) {
       retweet {
         _id
         content
+        child_tweet_number
+        retweet_user_number
+        heart_user_number
         img_url_list
         author {
           user_id

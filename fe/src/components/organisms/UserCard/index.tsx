@@ -5,7 +5,7 @@ import UserInfo from '../../molecules/UserInfo';
 import Button from '../../molecules/Button';
 import Text from '../../atoms/Text';
 import Container from './styled';
-import getJSXwithUserState from '../../../utilitys';
+import { getJSXwithUserState } from '../../../libs';
 
 interface User {
   user_id: string;
