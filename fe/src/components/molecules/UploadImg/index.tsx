@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import IconButton from '../IconButton';
-import Heart from '../../atoms/Icons/Heart';
+import { X } from '../../atoms/Icons';
 
 interface Props {
   onClick?: () => void;
@@ -9,7 +9,7 @@ interface Props {
 
 const UploadImg: FunctionComponent<Props> = ({ onClick = undefined, img }) => (
   <>
-    {onClick ? <IconButton onClick={onClick} icon={Heart} /> : ''}
+    {onClick ? <IconButton onClick={onClick} icon={X} /> : ''}
     <img src={img} alt="img" />
   </>
 );
