@@ -10,23 +10,29 @@ const getNextnotificationsCondition = (oldest_notification_id: string): Object =
   return oldest_notification_id ? { _id: { $lt: stringToObjectId(oldest_notification_id) } } : {};
 };
 
-const getNotification = async (_: any, { oldest_notification_id }: any, { authUser }: Auth) => {
+const getNotification = async (
+  _: any,
+  { oldest_notification_id }: { oldest_notification_id: string },
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
 
   const nextNotificationcondition = getNextnotificationsCondition(oldest_notification_id);
 
-  const notifiactions: Document[] = await notificationModel.aggregate([
+  const notifications: Document[] = await notificationModel.aggregate([
     {
       $match: {
         $and: [{ user_id: userId }, nextNotificationcondition],
       },
     },
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
     {
       $project: {
         tweet_id: 1,
-        follower_id: 1,
+        giver_id: 1,
         type: 1,
         is_read: 1,
         createAt: 1,
@@ -53,35 +59,100 @@ const getNotification = async (_: any, { oldest_notification_id }: any, { authUs
     {
       $lookup: {
         from: 'users',
-        localField: 'follower_id',
+        localField: 'giver_id',
         foreignField: 'user_id',
-        as: 'user',
+        as: 'giver',
       },
     },
-    { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $sort: { createAt: -1 } },
-    { $limit: 20 },
+    { $unwind: { path: '$giver', preserveNullAndEmptyArrays: true } },
   ]);
 
-  return notifiactions;
+  return notifications;
 };
 
-const getNotificationCount = async (_: any, __: any, { authUser }: Auth) => {
+const getNotificationWithMention = async (
+  _: any,
+  { oldest_notification_id }: { oldest_notification_id: string },
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
+
+  const nextNotificationcondition = getNextnotificationsCondition(oldest_notification_id);
+
+  const notifications: Document[] = await notificationModel.aggregate([
+    {
+      $match: {
+        $and: [{ user_id: userId }, { type: 'mention' }, nextNotificationcondition],
+      },
+    },
+    { $sort: { createAt: -1 } },
+    { $limit: 20 },
+    {
+      $project: {
+        tweet_id: 1,
+        giver_id: 1,
+        type: 1,
+        is_read: 1,
+        createAt: 1,
+      },
+    },
+    {
+      $lookup: {
+        from: 'tweets',
+        localField: 'tweet_id',
+        foreignField: '_id',
+        as: 'tweet',
+      },
+    },
+    { $unwind: { path: '$tweet', preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'tweet.author_id',
+        foreignField: 'user_id',
+        as: 'tweet.author',
+      },
+    },
+    { $unwind: { path: '$tweet.author', preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'giver_id',
+        foreignField: 'user_id',
+        as: 'giver',
+      },
+    },
+    { $unwind: { path: '$giver', preserveNullAndEmptyArrays: true } },
+  ]);
+
+  return notifications;
+};
+
+const getNotificationCount = async (
+  _: any,
+  { lastest_notification_id }: { lastest_notification_id: string },
+  { authUser }: Auth,
+) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const userId = authUser.id;
+
+  const condition = lastest_notification_id
+    ? { _id: { $gt: stringToObjectId(lastest_notification_id) } }
+    : {};
   const [count]: Document[] = await notificationModel.aggregate([
     {
       $match: {
-        $and: [{ user_id: userId }, { is_read: false }],
+        $and: [{ user_id: userId }, condition],
       },
     },
     {
       $count: 'count',
     },
   ]);
-
   return count;
 };
 
-export { getNotificationCount, getNotification };
+export { getNotificationCount, getNotification, getNotificationWithMention };

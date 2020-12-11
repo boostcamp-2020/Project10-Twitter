@@ -6,9 +6,14 @@ type User {
   comment: String
   background_img_url: String
   following_id_list: [String]
+  heart_tweet_id_list: [String]
+  lastest_notification_id: String
 }
 type Auth {
   token: String
+}
+type Follower {
+  count: Int
 }
 type Query {
   following_list(user_id: String): [User]
@@ -16,6 +21,7 @@ type Query {
   search_user_list(search_word: String!, oldest_user_id: String): [User]
   my_info: User
   user_info(user_id: String): User
+  follower_count(user_id: String): Follower
 }
 
 type Mutation {

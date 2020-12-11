@@ -29,6 +29,7 @@ const getFollowingList = async (_: any, { user_id, oldest_user_id }: Args, { aut
         $and: [{ user_id: { $in: userInfo?.get('following_id_list') } }, nextUsersCondition],
       },
     },
+    { $sort: { _id: -1 } },
     { $limit: 20 },
   ]);
 
@@ -51,10 +52,67 @@ const getFollowerList = async (_: any, { user_id, oldest_user_id }: Args, { auth
         ],
       },
     },
+    { $sort: { _id: -1 } },
     { $limit: 20 },
   ]);
 
   return followerList;
+};
+
+const getFollowerCount = async (_: any, { user_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const [followerCount]: Document[] = await userModel.aggregate([
+    {
+      $match: {
+        following_id_list: user_id,
+      },
+    },
+    { $count: 'count' },
+  ]);
+  return followerCount;
+};
+
+const getHeartUserList = async (_: any, { tweet_id, oldest_user_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
+
+  const tweet = await tweetModel.findOne({ _id: tweet_id });
+
+  const heartUserList: Document[] = await userModel.aggregate([
+    {
+      $match: {
+        $and: [{ user_id: { $in: tweet?.get('heart_user_id_list') } }, nextUsersCondition],
+      },
+    },
+    { $limit: 20 },
+  ]);
+
+  return heartUserList;
+};
+
+const getRetweetUserList = async (
+  _: any,
+  { tweet_id, oldest_user_id }: Args,
+  { authUser }: Auth,
+) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const nextUsersCondition = getNextUsersCondition(oldest_user_id);
+
+  const tweet = await tweetModel.findOne({ _id: tweet_id });
+
+  const retweetUserList: Document[] = await userModel.aggregate([
+    {
+      $match: {
+        $and: [{ user_id: { $in: tweet?.get('retweet_user_id_list') } }, nextUsersCondition],
+      },
+    },
+    { $limit: 20 },
+  ]);
+
+  return retweetUserList;
 };
 
 const getSearchedUserList = async (
@@ -68,6 +126,7 @@ const getSearchedUserList = async (
 
   const userList = await userModel
     .find({ $and: [{ user_id: { $regex: search_word } }, nextUsersCondition] })
+    .sort({ _id: -1 })
     .limit(20);
   return userList;
 };
@@ -86,4 +145,13 @@ const getUserInfo = async (_: any, { user_id }: Args, { authUser }: Auth) => {
   return userInfo;
 };
 
-export { getFollowerList, getFollowingList, getSearchedUserList, getMyUserInfo, getUserInfo };
+export {
+  getFollowerList,
+  getFollowingList,
+  getHeartUserList,
+  getRetweetUserList,
+  getSearchedUserList,
+  getMyUserInfo,
+  getUserInfo,
+  getFollowerCount,
+};

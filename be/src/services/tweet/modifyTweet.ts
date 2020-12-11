@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { tweetModel, userModel } from '../../models';
-import { createNotifiaction } from '../notification/index';
+import { createNotification } from '../notification/index';
 
 interface Auth {
   authUser: { id: string };
@@ -20,13 +20,18 @@ const heartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
     { new: true },
   );
 
-  const user = await userModel.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     { user_id: userId },
     { $addToSet: { heart_tweet_id_list: tweet_id } },
     { new: true },
   );
 
-  await createNotifiaction({ userId: tweet?.get('author_id'), tweetId: tweet_id, type: 'heart' });
+  await createNotification({
+    userId: tweet?.get('author_id'),
+    tweetId: tweet_id,
+    type: 'heart',
+    giverId: userId,
+  });
   return tweet;
 };
 
@@ -40,7 +45,7 @@ const unheartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
     { $pull: { heart_user_id_list: userId } },
     { new: true },
   );
-  const user = await userModel.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     { user_id: userId },
     { $pull: { heart_tweet_id_list: tweet_id } },
     { new: true },

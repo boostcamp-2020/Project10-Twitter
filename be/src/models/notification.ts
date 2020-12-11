@@ -6,9 +6,8 @@ const notificationSchema = new Schema(
   {
     user_id: String,
     tweet_id: Schema.Types.ObjectId,
-    follower_id: String,
+    giver_id: String,
     type: String,
-    is_read: { type: Boolean, default: false },
     createAt: { type: Date, default: Date.now },
   },
   { versionKey: false },
