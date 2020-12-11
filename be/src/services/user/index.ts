@@ -6,6 +6,7 @@ import {
   getSearchedUserList,
   getUserInfo,
   getMyUserInfo,
+  getFollowerCount,
 } from './getUser';
 import {
   followUser,
@@ -26,6 +27,7 @@ export {
   getMyUserInfo,
   getUserInfo,
   followUser,
+  getFollowerCount,
   unfollowUser,
   createUser,
   updateUserName,
