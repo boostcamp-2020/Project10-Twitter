@@ -30,6 +30,7 @@ const getFollowingList = async (_: any, { user_id, oldest_user_id }: Args, { aut
         $and: [{ user_id: { $in: userInfo?.get('following_id_list') } }, nextUsersCondition],
       },
     },
+    { $sort: { _id: -1 } },
     { $limit: 20 },
   ]);
 
@@ -52,10 +53,25 @@ const getFollowerList = async (_: any, { user_id, oldest_user_id }: Args, { auth
         ],
       },
     },
+    { $sort: { _id: -1 } },
     { $limit: 20 },
   ]);
 
   return followerList;
+};
+
+const getFollowerCount = async (_: any, { user_id }: Args, { authUser }: Auth) => {
+  if (!authUser) throw new AuthenticationError('not authenticated');
+
+  const [followerCount]: Document[] = await userModel.aggregate([
+    {
+      $match: {
+        following_id_list: user_id,
+      },
+    },
+    { $count: 'count' },
+  ]);
+  return followerCount;
 };
 
 const getHeartUserList = async (_: any, { tweet_id, oldest_user_id }: Args, { authUser }: Auth) => {
@@ -111,6 +127,7 @@ const getSearchedUserList = async (
 
   const userList = await userModel
     .find({ $and: [{ user_id: { $regex: search_word } }, nextUsersCondition] })
+    .sort({ _id: -1 })
     .limit(20);
   return userList;
 };
@@ -137,4 +154,5 @@ export {
   getSearchedUserList,
   getMyUserInfo,
   getUserInfo,
+  getFollowerCount,
 };
