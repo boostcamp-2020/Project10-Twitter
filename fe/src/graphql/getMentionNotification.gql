@@ -1,5 +1,6 @@
-query {
-  notifications: notification_mention_list {
+
+query($id: String) {
+  notifications: notification_mention_list(oldest_notification_id: $id) {
     giver {
       _id
       user_id
