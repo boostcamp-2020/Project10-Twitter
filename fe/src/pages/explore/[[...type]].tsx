@@ -57,8 +57,7 @@ const Explore: FunctionComponent = () => {
   const { loading, error, data, fetchMore } = useQuery(queryArr[value], {
     variables: queryVariable,
   });
-  const { _id: bottomTweetId } = data?.tweetList?.[data?.tweetList?.length - 1] || {};
-  const { _id: bottomUserId } = data?.userList?.[data?.userList?.length - 1] || {};
+  const { _id: bottomId } = data?.searchList?.[data?.searchList?.length - 1] || {};
   const fetchMoreEl = useRef(null);
   const [intersecting] = useInfiniteScroll(fetchMoreEl);
 
@@ -87,9 +86,9 @@ const Explore: FunctionComponent = () => {
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || !bottomTweetId || !fetchMore) return;
+      if (!intersecting || !bottomId || !fetchMore) return;
       const newQueryVariable =
-        value === 'tweets' ? { oldestTweetId: bottomTweetId } : { oldestUserId: bottomUserId };
+        value === 'tweets' ? { oldestTweetId: bottomId } : { oldestUserId: bottomId };
       const mergeQueryVariable = { ...queryVariable, ...newQueryVariable };
       const { data: fetchMoreData } = await fetchMore({ variables: mergeQueryVariable });
     };
@@ -112,12 +111,12 @@ const Explore: FunctionComponent = () => {
         <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
         <div>
           {data ? (
-            data.tweetList ? (
-              data.tweetList?.map((tweet: Tweet, index: number) => (
+            value === 'tweets' ? (
+              data.searchList?.map((tweet: Tweet, index: number) => (
                 <TweetContainer key={index} tweet={tweet} updateQuery={GET_SEARCH_TWEETLIST} />
               ))
             ) : (
-              data.userList?.map((user: User, index: number) => (
+              data.searchList?.map((user: User, index: number) => (
                 <UserCard key={index} user={user} />
               ))
             )

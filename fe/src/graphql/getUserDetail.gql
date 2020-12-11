@@ -6,19 +6,9 @@ query($userId: String) {
     comment
     profile_img_url
     background_img_url
+    following_id_list
   }
-  followerList: follower_list(user_id: $userId) {
-    _id
-    user_id
-    name
-    comment
-    profile_img_url
-  }
-  followingList: following_list(user_id: $userId) {
-    _id
-    user_id
-    name
-    comment
-    profile_img_url
+  followerCount: follower_count(user_id: $userId) {
+    count
   }
 }

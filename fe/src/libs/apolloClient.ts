@@ -62,6 +62,8 @@ const apolloClient = new ApolloClient({
           user_tweet_list: tweetPolicies,
           user_all_tweet_list: tweetPolicies,
           search_user_list: userPolicies,
+          following_list: userPolicies,
+          follower_list: userPolicies,
           notification_list: notificationPolicies,
           notification_mention_list: notificationPolicies,
         },

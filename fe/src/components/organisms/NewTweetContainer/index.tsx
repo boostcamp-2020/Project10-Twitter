@@ -10,7 +10,6 @@ import useOnTextChange from '../../../hooks/useOnTextChange';
 import IMAGE_UPLOAD from '../../../graphql/imageUpload.gql';
 import UploadImg from '../../molecules/UploadImg';
 import UploadImage from './styled';
-import ADD_BASIC_TWEET from '../../../graphql/addBasicTweet.gql';
 
 interface Props {
   children?: ReactChild;
@@ -39,9 +38,6 @@ const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, pare
   const { myProfile } = useMyInfo();
   const [value, setValue, onTextChange] = useOnTextChange('');
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [addBasicTweet, { loading: mutationLoading, error: mutationError }] = useMutation(
-    ADD_BASIC_TWEET,
-  );
   const [ImageMutation] = useMutation(IMAGE_UPLOAD);
   const [image, setImage] = useState(undefined);
 

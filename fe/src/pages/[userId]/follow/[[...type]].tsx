@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactEventHandler, useEffect } from 'react';
+import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import TabBar from '../../../components/molecules/TabBar';
@@ -8,6 +8,7 @@ import GET_FOLLOWINGLIST from '../../../graphql/getFollowingList.gql';
 import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
 import { UserBox } from '../styled';
 import TitleSubText from '../../../components/molecules/TitleSubText';
+import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 
 interface QueryVariable {
   variables: Variable;
@@ -18,6 +19,7 @@ interface Variable {
 }
 
 interface User {
+  _id: string;
   user_id: string;
   following_id_list: string[];
   name: string;
@@ -32,7 +34,25 @@ const Follow: FunctionComponent = () => {
   const queryArr = { follower: GET_FOLLOWERLIST, following: GET_FOLLOWINGLIST };
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
   const value = type ? type[0] : 'follower';
-  const { loading, error, data } = useQuery(queryArr[value], queryVariable);
+  const [userList, setUserList] = useState<User[]>([]);
+  const { loading, error, data, fetchMore } = useQuery(queryArr[value], queryVariable);
+  const fetchMoreEl = useRef(null);
+  const [intersecting] = useInfiniteScroll(fetchMoreEl);
+  const { _id: bottomUserId } = userList[userList.length - 1] || {};
+
+  useEffect(() => {
+    if (data?.list) setUserList(data?.list);
+  }, [data?.list]);
+
+  useEffect(() => {
+    const asyncEffect = async () => {
+      if (intersecting || !bottomUserId || !fetchMore) return;
+      const { data: fetchMoreData } = await fetchMore({
+        variables: { userId: userId as string, oldestUserId: bottomUserId },
+      });
+    };
+    asyncEffect();
+  }, [intersecting]);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -51,17 +71,20 @@ const Follow: FunctionComponent = () => {
         <TitleSubText title={userId as string} sub={userId as string} />
       </UserBox>
       <TabBar value={value} handleChange={onClick} labels={['follower', 'following']} />
-      {data ? (
-        data.list?.map((user: User, index: number) =>
-          user.following_user ? (
-            <UserCard key={index} user={user.following_user} />
-          ) : (
-            <UserCard key={index} user={user} />
-          ),
-        )
-      ) : (
-        <>loading..</>
-      )}
+      <div>
+        {data ? (
+          data.list?.map((user: User, index: number) =>
+            user.following_user ? (
+              <UserCard key={index} user={user.following_user} />
+            ) : (
+              <UserCard key={index} user={user} />
+            ),
+          )
+        ) : (
+          <>loading..</>
+        )}
+      </div>
+      <div ref={fetchMoreEl} />
     </PageLayout>
   );
 };
