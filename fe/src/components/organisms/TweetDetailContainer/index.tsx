@@ -15,6 +15,7 @@ import {
   PinkIconButton,
 } from './styled';
 import { Heart, Comment, Retweet, X } from '../../atoms/Icons';
+import Loading from '../../molecules/Loading';
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
 import UserInfo from '../../molecules/UserInfo';
 import useDisplay from '../../../hooks/useDisplay';
@@ -58,7 +59,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
     router.push('/home');
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading message="Loading" />;
   if (error)
     return (
       <div>

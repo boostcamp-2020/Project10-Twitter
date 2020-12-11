@@ -13,6 +13,7 @@ import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
 import useOnTextChange from '../../hooks/useOnTextChange';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
+import Loading from '../../components/molecules/Loading';
 
 interface QueryVariable {
   variables: Variable;
@@ -121,7 +122,7 @@ const Explore: FunctionComponent = () => {
               ))
             )
           ) : (
-            <div> loading..</div>
+            <Loading message="Loading" />
           )}
         </div>
         <div ref={fetchMoreEl} />

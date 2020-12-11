@@ -19,6 +19,7 @@ import {
 import Text from '../../atoms/Text';
 import { getJSXwithUserState } from '../../../libs';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
+import Loading from '../../molecules/Loading';
 
 interface Props {
   userId: string;
@@ -39,7 +40,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
 
   const onClickEdit = () => {};
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading message="Loading" />;
   if (error)
     return (
       <div>
