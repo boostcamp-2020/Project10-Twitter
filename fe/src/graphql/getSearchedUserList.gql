@@ -1,8 +1,0 @@
-query($searchWord: String!, $oldestUserId: String) {
-  userList: search_user_list(search_word: $searchWord, oldest_user_id: $oldestUserId) {
-    user_id
-    name
-    comment
-    profile_img_url
-  }
-}

@@ -1,5 +1,0 @@
-mutation GITHUB_LOGIN($code: String!) {
-  auth: github_login(code: $code) {
-    token
-  }
-}
