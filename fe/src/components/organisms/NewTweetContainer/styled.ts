@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import { Box } from '@material-ui/core';
 
-const ButtonsBox = styled(Box)`
-  display: flex;
-  justify-content: space-between;
+const UploadImage = styled.input`
+  display: none;
 `;
 
-export default ButtonsBox;
+export default UploadImage;

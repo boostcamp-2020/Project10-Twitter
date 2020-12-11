@@ -13,15 +13,19 @@ body {
 }
 
 a {
-  color: #0070f3;
+  color:black;
   text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 img {
   max-width: 100%;
   display: block;
+}
+
+button {
+  cursor: pointer;
 }

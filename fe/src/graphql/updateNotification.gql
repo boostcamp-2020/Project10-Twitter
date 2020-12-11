@@ -1,0 +1,5 @@
+mutation($id: String) {
+  update_notification(id: $id) {
+    response
+  }
+}

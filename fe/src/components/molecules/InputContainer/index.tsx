@@ -1,27 +1,16 @@
 import React, { FunctionComponent } from 'react';
-import { makeStyles, fade, Theme } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
 import Label from '../../atoms/Label';
 import Input from '../../atoms/Input';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    display: 'inline-block',
-    borderRadius: '5px',
-    padding: '0.5rem 1rem 0',
-    marginRight: '1rem',
-    backgroundColor: fade(theme.palette.common.black, 0.05),
-    '& label': {
-      width: '100%',
-    },
-  },
-}));
+import Container from './styled';
 
 interface Props {
   labelValue: string;
   placeholder?: string;
-  type: string;
+  type?: string;
   variant?: 'filled' | 'outlined' | 'standard' | undefined;
+  inputValue: string;
+  onChange: (e: React.SyntheticEvent) => void;
+  className?: string;
 }
 
 const InputContainer: FunctionComponent<Props> = ({
@@ -29,14 +18,20 @@ const InputContainer: FunctionComponent<Props> = ({
   placeholder = '',
   type,
   variant,
-}) => {
-  const classes = useStyles();
-  return (
-    <Box component="div" className={classes.root}>
-      <Label value={labelValue} />
-      <Input placeholder={placeholder} type={type} variant={variant} />
-    </Box>
-  );
-};
+  inputValue,
+  onChange,
+  className,
+}) => (
+  <Container className={className}>
+    <Label value={labelValue} />
+    <Input
+      placeholder={placeholder}
+      type={type}
+      variant={variant}
+      value={inputValue}
+      onChange={onChange}
+    />
+  </Container>
+);
 
 export default InputContainer;

@@ -1,0 +1,15 @@
+query($tweetId: String!) {
+  tweet: detail_tweet(tweet_id: $tweetId) {
+    _id
+    createAt
+    content
+    child_tweet_number
+    retweet_user_number
+    heart_user_number
+    author {
+      user_id
+      name
+      profile_img_url
+    }
+  }
+}

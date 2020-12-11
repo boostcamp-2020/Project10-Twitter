@@ -8,6 +8,8 @@ import Picture from './Picture';
 import Heart from './Heart';
 import Comment from './Comment';
 import Retweet from './Retweet';
+import FullHeart from './FullHeart';
+import X from './X';
 
 export {
   Explore,
@@ -20,4 +22,6 @@ export {
   Heart,
   Comment,
   Retweet,
+  FullHeart,
+  X,
 };

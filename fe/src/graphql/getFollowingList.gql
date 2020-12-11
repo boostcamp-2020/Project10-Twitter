@@ -1,5 +1,6 @@
-query($userId: String) {
-  list: following_list(user_id: $userId) {
+query($userId: String, $oldestUserId: String) {
+  list: following_list(user_id: $userId, oldest_user_id: $oldestUserId) {
+    _id
     user_id
     name
     comment

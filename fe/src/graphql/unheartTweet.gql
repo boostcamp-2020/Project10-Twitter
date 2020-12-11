@@ -1,0 +1,5 @@
+mutation($tweet_id: String!) {
+  tweet: unheart_tweet(tweet_id: $tweet_id) {
+    content
+  }
+}
