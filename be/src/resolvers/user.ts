@@ -11,6 +11,7 @@ import {
   unfollowUser,
   createUser,
   updateUserName,
+  getFollowerCount,
 } from '../services/user';
 
 import { githubLogin, localLogin } from '../services/auth';
@@ -24,6 +25,7 @@ const userResolvers: IResolvers = {
     search_user_list: getSearchedUserList,
     my_info: getMyUserInfo,
     user_info: getUserInfo,
+    follower_count: getFollowerCount,
   },
   Mutation: {
     update_user_name: updateUserName,
