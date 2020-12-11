@@ -1,6 +1,6 @@
 type Notification {
+  giver: User
   user_id: String
-  user: User
   tweet: Tweet
   type: String
   _id: String

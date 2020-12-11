@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { userModel } from '../../models';
-import { createNotifiaction } from '../notification';
+import { createNotification } from '../notification';
 
 interface Auth {
   authUser: { id: string };
@@ -22,7 +22,11 @@ const followUser = async (
     { $addToSet: { following_id_list: follow_user_id } },
     { new: true },
   );
-  await createNotifiaction({ userId: follow_user_id, followerId: userId, type: 'follow' });
+  await createNotification({
+    userId: follow_user_id,
+    giverId: userId,
+    type: 'follow',
+  });
   return user;
 };
 

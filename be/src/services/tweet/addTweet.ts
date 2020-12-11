@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { tweetModel, userModel } from '../../models';
-import { createNotifiaction } from '../notification';
+import { createNotification } from '../notification';
 
 interface Auth {
   authUser: { id: string };
@@ -13,13 +13,13 @@ interface Args {
   retweet_id?: string;
 }
 
-const findMentionUser = async (content: string, tweetId: string) => {
+const findMentionUser = async (content: string, tweetId: string, giverId: string) => {
   const users = content.match(/@[a-zA-Z0-9]+/gi);
   if (users) {
     const test = users.map((user) => user.replace(/@/g, ''));
     const userInfo = await userModel.find({ user_id: { $in: test } });
     userInfo.map(async (user) => {
-      await createNotifiaction({ userId: user.get('user_id'), type: 'mention', tweetId });
+      await createNotification({ userId: user.get('user_id'), type: 'mention', tweetId, giverId });
     });
   }
 };
@@ -38,7 +38,7 @@ const addBasicTweet = async (_: any, { content, img_url_list }: Args, { authUser
     heart_list: [],
   });
 
-  await findMentionUser(content, newTweet.get('_id'));
+  await findMentionUser(content, newTweet.get('_id'), userId);
 
   return newTweet;
 };
@@ -68,13 +68,13 @@ const addReplyTweet = async (
     { new: true },
   );
 
-  await createNotifiaction({
+  await createNotification({
     userId: parentTweet?.get('author_id'),
     tweetId: childId,
     type: 'reply',
   });
 
-  await findMentionUser(content, replyTweet.get('_id'));
+  await findMentionUser(content, replyTweet.get('_id'), userId);
 
   return replyTweet;
 };
@@ -100,13 +100,13 @@ const addRetweet = async (_: any, { content, retweet_id }: Args, { authUser }: A
     { new: true },
   );
 
-  await createNotifiaction({
+  await createNotification({
     userId: parentTweet?.get('author_id'),
     tweetId: newRetweet?.get('_id'),
     type: 'retweet',
   });
 
-  await findMentionUser(content, newRetweet.get('_id'));
+  await findMentionUser(content, newRetweet.get('_id'), userId);
 
   return newRetweet;
 };

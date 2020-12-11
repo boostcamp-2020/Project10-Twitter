@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { tweetModel, userModel } from '../../models';
-import { createNotifiaction } from '../notification/index';
+import { createNotification } from '../notification/index';
 
 interface Auth {
   authUser: { id: string };
@@ -26,11 +26,11 @@ const heartTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
     { new: true },
   );
 
-  await createNotifiaction({
+  await createNotification({
     userId: tweet?.get('author_id'),
-    followerId: userId,
     tweetId: tweet_id,
     type: 'heart',
+    giverId: userId,
   });
   return tweet;
 };
