@@ -28,6 +28,7 @@ interface User {
 
 interface Tweet {
   _id: string;
+  createAt: string;
   content: string;
   child_tweet_number: number;
   retweet_user_number: number;
@@ -70,7 +71,7 @@ const NotificationContainer: FunctionComponent<Props> = ({
     if (type === 'heart')
       return (
         <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-          <HeartContainer tweet={tweet} user={user} />
+          <HeartContainer tweet={tweet} user={giver} />
           <UnderLine />
         </Container>
       );
