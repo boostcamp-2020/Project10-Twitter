@@ -106,15 +106,16 @@ const Notification: FunctionComponent = () => {
         variables: { id: lastestNotification._id },
         update: (cache: any) => {
           const updateData = cache.readQuery({ query: GET_MYINFO });
-          cache.writeQuery({
-            query: GET_MYINFO,
-            data: {
-              myProfile: {
-                ...updateData.myProfile,
-                lastest_notification_id: lastestNotification._id,
+          if (lastestNotification._id > updateData.myProfile.lastest_notification_id)
+            cache.writeQuery({
+              query: GET_MYINFO,
+              data: {
+                myProfile: {
+                  ...updateData.myProfile,
+                  lastest_notification_id: lastestNotification._id,
+                },
               },
-            },
-          });
+            });
         },
       });
   }, [data?.notifications]);
