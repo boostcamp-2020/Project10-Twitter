@@ -10,6 +10,7 @@ import GET_USER_ALL_TWEETLIST from '../../graphql/getUserAllTweetList.gql';
 import GET_HEART_TWEETLIST from '../../graphql/getHeartTweetList.gql';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
+import Loading from '../../components/molecules/Loading';
 
 interface QueryVariable {
   variables: Variable;
@@ -89,7 +90,7 @@ const UserDetail: FunctionComponent = () => {
             <TweetContainer key={index} tweet={tweet} updateQuery={queryArr[value]} />
           ))
         ) : (
-          <>loading..</>
+          <Loading message="Loading" />
         )}
       </div>
       <div ref={fetchMoreEl} />

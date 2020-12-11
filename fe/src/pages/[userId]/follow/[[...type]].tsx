@@ -9,6 +9,7 @@ import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
 import { UserBox } from '../styled';
 import TitleSubText from '../../../components/molecules/TitleSubText';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
+import Loading from '../../molecules/Loading';
 
 interface QueryVariable {
   variables: Variable;
@@ -81,7 +82,7 @@ const Follow: FunctionComponent = () => {
             ),
           )
         ) : (
-          <>loading..</>
+          <Loading message="Loading" />
         )}
       </div>
       <div ref={fetchMoreEl} />

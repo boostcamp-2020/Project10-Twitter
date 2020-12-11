@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import Modal from '../../molecules/Modal';
 import UserCard from '../UserCard';
 import GET_HEART_USER_LIST from '../../../graphql/getHeartUserList.gql';
+import Loading from '../../molecules/Loading';
 
 interface Props {
   displayModal: boolean;
@@ -25,7 +26,7 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
       {data ? (
         data.userList?.map((user: User, index: number) => <UserCard key={index} user={user} />)
       ) : (
-        <>loading..</>
+        <Loading message="Loading" />
       )}
     </Modal>
   );

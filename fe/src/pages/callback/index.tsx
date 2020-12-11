@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import GITHUB_LOGIN from '../../graphql/github.gql';
+import Loading from '../../components/molecules/Loading';
 
 interface Props {
   code: string | string[] | undefined;
@@ -20,7 +21,7 @@ const Callback: NextPage<Props> = ({ code }) => {
     localStorage.setItem('jwt_token', data.auth.token);
     router.push('/home');
   }
-  return <div>loading...</div>;
+  return <Loading message="Loading" />;
 };
 
 Callback.getInitialProps = ({ query: { code } }: NextPageContext) => {
