@@ -50,7 +50,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
 
   const PROFILE_IMG_SIZE = 150;
 
-  const { user, followingList, followerList } = data;
+  const { user, followerCount } = data;
 
   return (
     <DetailContainer>
@@ -82,12 +82,12 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           <UserFollowContainer>
             <Link href={`/${user.user_id}/follow/`}>
               <a>
-                <TitleSubText title="팔로워 수" sub={followerList.length} />
+                <TitleSubText title="팔로워 수" sub={followerCount.count || 0} />
               </a>
             </Link>
             <Link href={`/${user.user_id}/follow/following`}>
               <a>
-                <TitleSubText title="팔로잉 수" sub={followingList.length} />
+                <TitleSubText title="팔로잉 수" sub={user.following_id_list.length} />
               </a>
             </Link>
           </UserFollowContainer>
