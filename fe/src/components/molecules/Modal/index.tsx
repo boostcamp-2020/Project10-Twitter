@@ -2,7 +2,7 @@ import React, { FunctionComponent, ReactChild } from 'react';
 import { Dialog, DialogTitle } from '@material-ui/core';
 import Portal from './Portal';
 import IconButton from '../IconButton';
-import Heart from '../../atoms/Icons/Heart';
+import { X } from '../../atoms/Icons';
 import StyledDialogContent from './styled';
 
 interface Props {
@@ -16,7 +16,7 @@ const Modal: FunctionComponent<Props> = ({ children, displayModal, onClickCloseB
     <Portal>
       <Dialog open={displayModal} onClose={onClickCloseBtn} fullWidth maxWidth="sm">
         <DialogTitle>
-          <IconButton onClick={onClickCloseBtn} icon={Heart} />
+          <IconButton onClick={onClickCloseBtn} icon={X} />
         </DialogTitle>
         <StyledDialogContent>{children}</StyledDialogContent>
       </Dialog>

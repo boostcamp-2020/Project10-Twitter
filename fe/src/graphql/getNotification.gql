@@ -1,6 +1,6 @@
 query($id: String) {
   notifications: notification_list(old_notification_id: $id) {
-    user {
+    giver {
       _id
       user_id
       name
@@ -9,6 +9,7 @@ query($id: String) {
     }
     tweet {
       _id
+      createAt
       content
       child_tweet_number
       retweet_user_number
