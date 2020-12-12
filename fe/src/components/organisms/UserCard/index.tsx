@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { UserInfo, Button } from '@molecules';
 import { Text } from '@atoms';
-import useUserState from '../../../hooks/useUserState';
+import { useUserState } from '@hooks';
 import Container from './styled';
 import { getJSXwithUserState } from '../../../libs';
 

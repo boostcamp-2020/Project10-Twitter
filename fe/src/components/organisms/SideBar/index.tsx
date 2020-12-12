@@ -5,10 +5,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, UserPopover, UserInfo, SearchBar } from '@molecules';
 import { Home, Explore, Twitter, Notifications, Profiles } from '@atoms';
-import useMyInfo from '../../../hooks/useMyInfo';
+import { useMyInfo, useOnTextChange, useDisplay } from '@hooks';
 import Container from './styled';
-import useOnTextChange from '../../../hooks/useOnTextChange';
-import useDisplay from '../../../hooks/useDisplay';
 import { NewTweetModal } from '../TweetModal';
 import GET_NOTIFICATION_COUNT from '../../../graphql/getNotificationCount.gql';
 

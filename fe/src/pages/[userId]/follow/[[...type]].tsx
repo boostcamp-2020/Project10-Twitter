@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { TabBar, TitleSubText, Loading } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
+import { useInfiniteScroll } from '@hooks';
 import GET_FOLLOWINGLIST from '../../../graphql/getFollowingList.gql';
 import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
 import { UserBox } from '../styled';
-import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
 
 interface QueryVariable {
   variables: Variable;

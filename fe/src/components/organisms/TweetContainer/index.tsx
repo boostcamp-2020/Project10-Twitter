@@ -3,15 +3,13 @@ import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
 import { ApolloCache, useMutation } from '@apollo/client';
 import { IconButton, Button, UploadImg } from '@molecules';
+import { useHeartState, useDisplay, useUserState } from '@hooks';
 import { DocumentNode } from 'graphql';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import MainContaier from '../MainContainer';
 import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
-import useHeartState from '../../../hooks/useHeartState';
 import { ReplyModal, RetweetModal } from '../TweetModal';
-import useDisplay from '../../../hooks/useDisplay';
 import RetweetContainer from '../RetweetContainer';
-import useUserState from '../../../hooks/useUserState';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 import { makeTimeText } from '../../../libs/utility';
 

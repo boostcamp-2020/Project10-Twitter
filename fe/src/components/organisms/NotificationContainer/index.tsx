@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
+import { useMyInfo } from '@hooks';
 import TweetContainer from '../TweetContainer';
 import HeartContainer from './HeartContainer';
 import { Container, UnderLine } from './styled';
-import useMyInfo from '../../../hooks/useMyInfo';
 import FollowContainer from './FollowContainer';
 
 interface Props {

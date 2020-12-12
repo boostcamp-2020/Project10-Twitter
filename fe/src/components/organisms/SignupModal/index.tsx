@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
 import { Modal } from '@molecules';
+import { useOnTextChange } from '@hooks';
 import { StyledInputContainer, StyledButton } from './styled';
 import ADD_USER from '../../../graphql/addUser.gql';
-import useOnTextChange from '../../../hooks/useOnTextChange';
 
 interface Props {
   displayModal: boolean;

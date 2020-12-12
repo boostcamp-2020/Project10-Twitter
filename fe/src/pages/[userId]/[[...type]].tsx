@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { TabBar, Loading } from '@molecules';
 import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
+import { useInfiniteScroll } from '@hooks';
 import GET_USER_TWEETLIST from '../../graphql/getUserTweetList.gql';
 import GET_USER_ALL_TWEETLIST from '../../graphql/getUserAllTweetList.gql';
 import GET_HEART_TWEETLIST from '../../graphql/getHeartTweetList.gql';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
 
 interface QueryVariable {

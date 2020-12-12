@@ -2,12 +2,9 @@ import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } fro
 import { useMutation, MutationFunctionOptions, FetchResult } from '@apollo/client';
 import { TweetFooter, UploadImg } from '@molecules';
 import { TextArea, Picture } from '@atoms';
-
-import useMyInfo from '../../../hooks/useMyInfo';
+import { useMyInfo, useOnTextChange } from '@hooks';
 import MainContaier from '../MainContainer';
 import RetweetContaier from '../RetweetContainer';
-
-import useOnTextChange from '../../../hooks/useOnTextChange';
 import IMAGE_UPLOAD from '../../../graphql/imageUpload.gql';
 import UploadImage from './styled';
 

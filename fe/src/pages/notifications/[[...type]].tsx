@@ -3,11 +3,11 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { TabBar } from '@molecules';
 import { PageLayout, NotificationContainer } from '@organisms';
+import { useInfiniteScroll } from '@hooks';
 import GET_MYINFO from '../../graphql/getMyInfo.gql';
 import GET_NOTIFICATION from '../../graphql/getNotification.gql';
 import GET_MENTION_NOTIFICATION from '../../graphql/getMentionNotification.gql';
 import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
 
 interface QueryVariable {

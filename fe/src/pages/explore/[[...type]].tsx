@@ -4,11 +4,10 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { SearchBar, TabBar, Loading } from '@molecules';
 import { SideBar, TweetContainer, UserCard } from '@organisms';
+import { useOnTextChange, useInfiniteScroll } from '@hooks';
 import { Container, MainContainer } from './styled';
 import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
 import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
-import useOnTextChange from '../../hooks/useOnTextChange';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
 
 interface QueryVariable {

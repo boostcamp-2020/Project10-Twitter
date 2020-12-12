@@ -3,9 +3,9 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
 import { SideBar, TweetContainer, TweetDetailContainer } from '@organisms';
+import { useInfiniteScroll } from '@hooks';
 import { Container, MainContainer } from './styled';
 import GET_CHILD_TWEETLIST from '../../graphql/getChildTweetList.gql';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
 
 interface QueryVariable {

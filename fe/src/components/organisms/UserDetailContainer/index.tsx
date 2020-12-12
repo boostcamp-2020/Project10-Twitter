@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { TitleSubText, Button, Loading } from '@molecules';
 import { ProfileImg, Text } from '@atoms';
-import useUserState from '../../../hooks/useUserState';
+import { useUserState } from '@hooks';
 import {
   DetailContainer,
   UserBackgroundContainer,
