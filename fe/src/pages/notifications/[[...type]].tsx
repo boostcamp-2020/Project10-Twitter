@@ -6,52 +6,12 @@ import { PageLayout, NotificationContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
 import { GET_MYINFO } from '@graphql/user';
+import { NotificationType } from '@types';
 import {
   GET_NOTIFICATION_LIST,
   GET_MENTION_NOTIFICATION_LIST,
   CONFIRM_NOTIFICATION,
 } from '@graphql/notification';
-
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
-interface Noti {
-  _id: string;
-  giver: User;
-  tweet: Tweet;
-  type: string;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  img_url_list: [string];
-  author: Author;
-  retweet_id: string;
-  retweet: Tweet;
-}
-
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
 
 const getValue = (type: string | string[] | undefined) => {
   if (!type) return 'all';
@@ -67,7 +27,7 @@ const Notification: FunctionComponent = () => {
   const { data, fetchMore } = useQuery(queryArr[value]);
   const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
-  const [notificationList, setNotificationList] = useState<Noti[]>([]);
+  const [notificationList, setNotificationList] = useState<NotificationType[]>([]);
   const { _id: bottomNotificationId } = notificationList[notificationList.length - 1] || {};
   const fetchMoreEl = useRef(null);
   const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
@@ -125,7 +85,7 @@ const Notification: FunctionComponent = () => {
     <PageLayout>
       <TabBar value={value} handleChange={onClick} labels={['all', 'mention']} />
       <>
-        {notificationList?.map((noti: Noti, index: number) => (
+        {notificationList?.map((noti: NotificationType, index: number) => (
           <NotificationContainer key={index} noti={{ ...noti, curTabValue: value }} />
         ))}
       </>

@@ -4,18 +4,11 @@ import { UserInfo, Button } from '@molecules';
 import { Text } from '@atoms';
 import { useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
+import { UserType } from '@types';
 import Container from './styled';
 
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_id_list: string[];
-}
-
 interface Props {
-  user: User;
+  user: UserType;
 }
 
 const UserCard: FunctionComponent<Props> = ({ user }) => {

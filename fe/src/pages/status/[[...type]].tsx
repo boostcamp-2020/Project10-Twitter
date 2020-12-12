@@ -5,36 +5,15 @@ import { Loading } from '@molecules';
 import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
+import { TweetType, QueryVariableType } from '@types';
+
 import { GET_CHILD_TWEETLIST } from '@graphql/tweet';
-
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  tweetId: string;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  author: Author;
-  img_url_list: [string];
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
 
 const UserDetail: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
   const tweetId = type ? type[0] : '';
-  const queryVariable: QueryVariable = { variables: { tweetId: tweetId as string } };
+  const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
   const { loading, error, data, fetchMore } = useQuery(GET_CHILD_TWEETLIST, queryVariable);
   const { _id: bottomTweetId } = data?.tweetList[data?.tweetList.length - 1] || {};
   const fetchMoreEl = useRef(null);
@@ -59,7 +38,7 @@ const UserDetail: FunctionComponent = () => {
     <PageLayout>
       <TweetDetailContainer tweetId={tweetId as string} />
       {data ? (
-        data.tweetList?.map((tweet: Tweet, index: number) => (
+        data.tweetList?.map((tweet: TweetType, index: number) => (
           <TweetContainer key={index} tweet={tweet} updateQuery={GET_CHILD_TWEETLIST} />
         ))
       ) : (

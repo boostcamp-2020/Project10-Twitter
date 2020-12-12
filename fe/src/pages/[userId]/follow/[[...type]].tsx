@@ -5,33 +5,16 @@ import { TabBar, TitleSubText, Loading } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
+import { UserType, QueryVariableType } from '@types';
 import UserBox from './styled';
-
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
-interface User {
-  _id: string;
-  user_id: string;
-  following_id_list: string[];
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
 
 const Follow: FunctionComponent = () => {
   const router = useRouter();
   const { userId, type } = router.query;
   const queryArr = { follower: GET_FOLLOWER_LIST, following: GET_FOLLOWING_LIST };
-  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
+  const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const value = type ? type[0] : 'follower';
-  const [userList, setUserList] = useState<User[]>([]);
+  const [userList, setUserList] = useState<UserType[]>([]);
   const { loading, error, data, fetchMore } = useQuery(queryArr[value], queryVariable);
   const fetchMoreEl = useRef(null);
   const [intersecting] = useInfiniteScroll(fetchMoreEl);
@@ -70,7 +53,7 @@ const Follow: FunctionComponent = () => {
       <TabBar value={value} handleChange={onClick} labels={['follower', 'following']} />
       <div>
         {data ? (
-          data.list?.map((user: User, index: number) =>
+          data.list?.map((user: UserType, index: number) =>
             user.following_user ? (
               <UserCard key={index} user={user.following_user} />
             ) : (

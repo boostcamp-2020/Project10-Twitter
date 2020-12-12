@@ -6,6 +6,7 @@ import { ProfileImg, Text } from '@atoms';
 import { useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
 import { GET_USER_DETAIL } from '@graphql/user';
+import { QueryVariableType } from '@types';
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -21,16 +22,8 @@ interface Props {
   userId: string;
 }
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
-  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
+  const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const { loading, error, data } = useQuery(GET_USER_DETAIL, queryVariable);
   const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
 

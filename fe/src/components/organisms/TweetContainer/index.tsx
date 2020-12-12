@@ -9,29 +9,12 @@ import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { makeTimeText } from '@libs';
 import { RetweetContainer, ReplyModal, RetweetModal, MainContainer } from '@organisms';
 import { DELETE_TWEET } from '@graphql/tweet';
+import { TweetType } from '@types';
 import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
 
 interface Props {
-  tweet: Tweet;
+  tweet: TweetType;
   updateQuery: DocumentNode;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  img_url_list: [string];
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  author: Author;
-  retweet: Tweet;
-  createAt: string;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-  following_id_list: string[];
 }
 
 const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
@@ -53,7 +36,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
   const cacheUpdate = (cache: ApolloCache<any>, data: any) => {
     const { result } = data;
     if (result.response) {
-      const tweetCache = cache.readQuery<{ tweetList: Tweet[] }>({ query: updateQuery });
+      const tweetCache = cache.readQuery<{ tweetList: TweetType[] }>({ query: updateQuery });
       if (tweetCache) {
         cache.writeQuery({
           query: updateQuery,

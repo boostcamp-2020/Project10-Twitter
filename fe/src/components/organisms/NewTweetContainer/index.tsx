@@ -5,29 +5,16 @@ import { TextArea, Picture } from '@atoms';
 import { useMyInfo, useOnTextChange } from '@hooks';
 import { MainContainer, RetweetContainer } from '@organisms';
 import UPLOAD_IMAGE from '@graphql/image';
+import { TweetType } from '@types';
 import UploadImage from './styled';
 
 interface Props {
   children?: ReactChild;
-  tweet?: Tweet;
+  tweet?: TweetType;
   onClickQuery: (
     options?: MutationFunctionOptions<any, Record<string, any>> | undefined,
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   parentId?: string;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  author: Author;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
 }
 
 const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, parentId }) => {

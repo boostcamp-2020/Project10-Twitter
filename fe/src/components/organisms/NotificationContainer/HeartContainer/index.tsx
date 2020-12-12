@@ -1,23 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { UserInfo } from '@molecules';
 import { FullHeart } from '@atoms';
+import { TweetType, UserType } from '@types';
 import { Container, SubContainer, Span, Content } from './styled';
 
 interface Props {
-  user: User;
-  tweet: Tweet;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
+  user: UserType;
+  tweet: TweetType;
 }
 
 const HeartContainer: FunctionComponent<Props> = ({ tweet, user }) => {

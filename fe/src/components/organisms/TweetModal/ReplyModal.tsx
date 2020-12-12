@@ -5,25 +5,12 @@ import Markdown from 'react-markdown/with-html';
 import { Modal, TitleSubText } from '@molecules';
 import { NewTweetContainer, MainContainer } from '@organisms';
 import { ADD_REPLY_TWEET } from '@graphql/tweet';
+import { TweetType } from '@types';
 
 interface Props {
   displayModal: boolean;
   onClickCloseBtn: () => void;
-  tweet: Tweet;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  author: Author;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
+  tweet: TweetType;
 }
 
 const TweetReplyModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweet }) => {

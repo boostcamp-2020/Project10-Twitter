@@ -6,30 +6,7 @@ import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
 import { GET_USER_TWEETLIST, GET_USER_ALL_TWEETLIST, GET_HEART_TWEETLIST } from '@graphql/tweet';
-
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  author: Author;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  img_url_list: [string];
-  retweet: Tweet;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
+import { TweetType, QueryVariableType } from '@types';
 
 const UserDetail: FunctionComponent = () => {
   const router = useRouter();
@@ -39,7 +16,7 @@ const UserDetail: FunctionComponent = () => {
     'tweets & replies': GET_USER_ALL_TWEETLIST,
     likes: GET_HEART_TWEETLIST,
   };
-  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
+  const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const value = type ? type[0] : 'tweets';
   const { loading, error, data, fetchMore } = useQuery(queryArr[value], queryVariable);
   const { _id: bottomTweetId } = data?.tweetList[data?.tweetList.length - 1] || {};
@@ -81,7 +58,7 @@ const UserDetail: FunctionComponent = () => {
       />
       <div>
         {data ? (
-          data.tweetList?.map((tweet: Tweet, index: number) => (
+          data.tweetList?.map((tweet: TweetType, index: number) => (
             <TweetContainer key={index} tweet={tweet} updateQuery={queryArr[value]} />
           ))
         ) : (

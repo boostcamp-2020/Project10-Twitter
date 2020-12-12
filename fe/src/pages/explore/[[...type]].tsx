@@ -7,38 +7,7 @@ import { useOnTextChange, useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
 import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
 import { GET_SEARCH_USERLIST } from '@graphql/user';
-
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  searchWord: string;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  img_url_list: [string];
-  author: Author;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  retweet: Tweet;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  following_id_list: string[];
-  comment?: string;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
+import { TweetType, VariableType } from '@types';
 
 const Explore: FunctionComponent = () => {
   const router = useRouter();
@@ -47,9 +16,9 @@ const Explore: FunctionComponent = () => {
   const [searchWord, setSearchWord] = useState(textValue);
   const value = type ? type[0] : 'tweets';
   const queryArr = { tweets: GET_SEARCH_TWEETLIST, people: GET_SEARCH_USERLIST };
-  const queryVariable: Variable = { searchWord };
+  const variable: VariableType = { searchWord };
   const { loading, error, data, fetchMore } = useQuery(queryArr[value], {
-    variables: queryVariable,
+    variables: variable,
   });
   const { _id: bottomId } = data?.searchList?.[data?.searchList?.length - 1] || {};
   const fetchMoreEl = useRef(null);
@@ -81,10 +50,10 @@ const Explore: FunctionComponent = () => {
   useEffect(() => {
     const asyncEffect = async () => {
       if (!intersecting || !bottomId || !fetchMore) return;
-      const newQueryVariable =
+      const newVariable =
         value === 'tweets' ? { oldestTweetId: bottomId } : { oldestUserId: bottomId };
-      const mergeQueryVariable = { ...queryVariable, ...newQueryVariable };
-      const { data: fetchMoreData } = await fetchMore({ variables: mergeQueryVariable });
+      const mergeVariable = { ...variable, ...newVariable };
+      const { data: fetchMoreData } = await fetchMore({ variables: mergeVariable });
     };
     asyncEffect();
   }, [intersecting]);

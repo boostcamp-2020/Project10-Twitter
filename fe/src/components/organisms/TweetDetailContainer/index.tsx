@@ -9,6 +9,7 @@ import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '
 import { makeTimeText } from '@libs';
 import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '@organisms';
 import { DELETE_TWEET, GET_TWEET_DETAIL } from '@graphql/tweet';
+import { QueryVariableType } from '@types';
 import {
   DetailContainer,
   TweetHeaderContainer,
@@ -22,17 +23,9 @@ interface Props {
   tweetId: string;
 }
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  tweetId: string;
-}
-
 const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) => {
   const router = useRouter();
-  const queryVariable: QueryVariable = { variables: { tweetId: tweetId as string } };
+  const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
   const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweet);
   const [userState] = useUserState(data?.tweet.author);
