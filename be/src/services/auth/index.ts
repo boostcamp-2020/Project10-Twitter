@@ -61,7 +61,7 @@ const getOurUser = async (userInfo: UserInfo) => {
   return user;
 };
 
-const githubLogin = async (_: any, { code }: { code: string }) => {
+const githubLogin = async (_: any, { code }: { code: string }, { res }: any) => {
   const githubToken = await getGithubToken(code);
   const githubUserInfo = await getGithubUserInfo(githubToken);
   const user = await getOurUser({
@@ -71,10 +71,15 @@ const githubLogin = async (_: any, { code }: { code: string }) => {
     profile_img_url: githubUserInfo.avatar_url,
   });
   const signedToken = signToken({ id: user.get('user_id') });
+  res.cookie('jwt', signedToken);
   return { token: signedToken };
 };
 
-const localLogin = async (_: any, { user_id, password }: { user_id: string; password: string }) => {
+const localLogin = async (
+  _: any,
+  { user_id, password }: { user_id: string; password: string },
+  { res }: any,
+) => {
   const userInfo = await userModel.findOne({ user_id });
 
   if (!userInfo) throw new Error('Not Found User');
@@ -85,6 +90,7 @@ const localLogin = async (_: any, { user_id, password }: { user_id: string; pass
   if (!isLogined) throw new Error('Wrong Password');
 
   const signedToken = signToken({ id: userInfo?.get('user_id') });
+  res.cookie('jwt', signedToken);
   return { token: signedToken };
 };
 
