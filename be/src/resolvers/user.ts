@@ -12,9 +12,9 @@ import {
   createUser,
   updateUserName,
   getFollowerCount,
-} from '../services/user';
+} from '@services/user';
 
-import { githubLogin, localLogin } from '../services/auth';
+import { githubLogin, localLogin } from '@services/auth';
 
 const userResolvers: IResolvers = {
   Query: {

@@ -5,11 +5,11 @@ import logger from 'morgan';
 import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import dbStarter from './providers/dbProvider';
 
-import typeDefs from './schema';
-import resolvers from './resolvers';
-import { verifyToken } from './lib/jwt-token';
+import typeDefs from '@schema';
+import resolvers from '@resolvers';
+import { verifyToken } from '@libs/jwt-token';
+import dbStarter from '@providers/dbProvider';
 
 dotenv.config();
 

@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import axios from 'axios';
-import { signToken } from '../../lib/jwt-token';
-import { userModel } from '../../models';
-import { registerUser } from '../../services/user/addUser';
+import { signToken } from '@libs/jwt-token';
+import { userModel } from '@models';
+import { registerUser } from '@services/user/addUser';
 
 interface UserInfo {
   user_id: string;

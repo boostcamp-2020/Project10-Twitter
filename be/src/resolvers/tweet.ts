@@ -14,7 +14,7 @@ import {
   getHeartTweetList,
   getSearchedTweetList,
   getLatestTweetList,
-} from '../services/tweet';
+} from '@services/tweet';
 
 const tweetResolvers: IResolvers = {
   Query: {
