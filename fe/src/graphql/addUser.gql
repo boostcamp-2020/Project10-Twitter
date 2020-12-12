@@ -1,5 +1,0 @@
-mutation($userId: String!, $name: String!, $password: String!) {
-  response: create_user(user_id: $userId, name: $name, password: $password) {
-    response
-  }
-}

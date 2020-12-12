@@ -1,5 +1,0 @@
-mutation($tweet_id: String!) {
-  tweet: heart_tweet(tweet_id: $tweet_id) {
-    content
-  }
-}

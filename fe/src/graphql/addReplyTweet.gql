@@ -1,6 +1,0 @@
-mutation($content: String!, $imgUrlList: [String], $parentId: String!) {
-  tweet: add_reply_tweet(content: $content, img_url_list: $imgUrlList, parent_id: $parentId) {
-    content
-    author_id
-  }
-}
