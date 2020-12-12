@@ -2,9 +2,9 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import SearchBar from '../../components/molecules/SearchBar';
+import { SearchBar, TabBar, Loading } from '@molecules';
+
 import SideBar from '../../components/organisms/SideBar';
-import TabBar from '../../components/molecules/TabBar';
 import { Container, MainContainer } from './styled';
 import TweetContainer from '../../components/organisms/TweetContainer';
 import UserCard from '../../components/organisms/UserCard';
@@ -13,7 +13,6 @@ import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
 import useOnTextChange from '../../hooks/useOnTextChange';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
-import Loading from '../../components/molecules/Loading';
 
 interface QueryVariable {
   variables: Variable;

@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
+import { TitleSubText, Button, Loading } from '@molecules';
+
 import useUserState from '../../../hooks/useUserState';
-import TitleSubText from '../../molecules/TitleSubText';
 import ProfileImg from '../../atoms/ProfileImg';
-import Button from '../../molecules/Button';
 
 import {
   DetailContainer,
@@ -19,7 +19,6 @@ import {
 import Text from '../../atoms/Text';
 import { getJSXwithUserState } from '../../../libs';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
-import Loading from '../../molecules/Loading';
 
 interface Props {
   userId: string;

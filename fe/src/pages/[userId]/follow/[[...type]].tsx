@@ -1,15 +1,13 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import TabBar from '../../../components/molecules/TabBar';
+import { TabBar, TitleSubText, Loading } from '@molecules';
 import PageLayout from '../../../components/organisms/PageLayout';
 import UserCard from '../../../components/organisms/UserCard';
 import GET_FOLLOWINGLIST from '../../../graphql/getFollowingList.gql';
 import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
 import { UserBox } from '../styled';
-import TitleSubText from '../../../components/molecules/TitleSubText';
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
-import Loading from '../../molecules/Loading';
 
 interface QueryVariable {
   variables: Variable;

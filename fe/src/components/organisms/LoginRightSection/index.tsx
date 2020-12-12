@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from 'react';
+import { LoginForm, InputContainer, Button } from '@molecules';
 import { Twitter } from '../../atoms/Icons';
-import LoginForm from '../../molecules/LoginForm';
-import InputContainer from '../../molecules/InputContainer';
-import Button from '../../molecules/Button';
+
 import SignupModal from '../SignupModal';
 import useDisplay from '../../../hooks/useDisplay';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';

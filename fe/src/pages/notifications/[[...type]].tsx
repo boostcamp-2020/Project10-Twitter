@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import TabBar from '../../components/molecules/TabBar';
+import { TabBar } from '@molecules';
 import NotificationContainer from '../../components/organisms/NotificationContainer';
 import PageLayout from '../../components/organisms/PageLayout';
 import GET_MYINFO from '../../graphql/getMyInfo.gql';

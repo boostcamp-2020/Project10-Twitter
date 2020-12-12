@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
 import { useMutation, MutationFunctionOptions, FetchResult } from '@apollo/client';
+import { TweetFooter, UploadImg } from '@molecules';
 import useMyInfo from '../../../hooks/useMyInfo';
 import MainContaier from '../MainContainer';
-import ReTweetContaier from '../ReTweetContainer';
+import ReTweetContaier from '../RetweetContainer';
 import TextArea from '../../atoms/TextArea';
 import { Picture } from '../../atoms/Icons';
-import TweetFooter from '../../molecules/TweetFooter';
+
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import IMAGE_UPLOAD from '../../../graphql/imageUpload.gql';
-import UploadImg from '../../molecules/UploadImg';
 import UploadImage from './styled';
 
 interface Props {

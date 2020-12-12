@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import InputContainer from '../../molecules/InputContainer';
-import Button from '../../molecules/Button';
+import { InputContainer, Button } from '@molecules';
 
 const StyledInputContainer = styled(InputContainer)`
   && {

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
-import Modal from '../../molecules/Modal';
+import { Modal } from '@molecules';
 import NewTweetContainer from '../NewTweetContainer';
 import ADD_BASIC_TWEET from '../../../graphql/addBasicTweet.gql';
 

@@ -1,6 +1,5 @@
-import React, { FunctionComponent, useState, useEffect, ReactElement } from 'react';
-import IconButton from '../../molecules/IconButton';
-import Button from '../../molecules/Button';
+import React, { FunctionComponent } from 'react';
+import { IconButton, Button } from '@molecules';
 import ButtonsBox from './styled';
 
 interface Props {

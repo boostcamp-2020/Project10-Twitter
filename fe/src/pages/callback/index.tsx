@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { Loading } from '@molecules';
 import GITHUB_LOGIN from '../../graphql/github.gql';
-import Loading from '../../components/molecules/Loading';
 
 interface Props {
   code: string | string[] | undefined;

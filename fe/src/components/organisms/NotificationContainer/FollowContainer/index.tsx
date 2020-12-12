@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import UserInfo from '../../../molecules/UserInfo';
+import { UserInfo } from '@molecules';
 import { BodyContainer, Container } from './styled';
 
 interface Props {

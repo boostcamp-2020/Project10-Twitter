@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import UserInfo from '../../../molecules/UserInfo';
+import { UserInfo } from '@molecules';
 import { FullHeart } from '../../../atoms/Icons';
 import { Container, SubContainer, Span, Content } from './styled';
 

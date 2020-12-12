@@ -3,6 +3,7 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
+import { Loading } from '@molecules';
 import SideBar from '../../components/organisms/SideBar';
 import { Container, MainContainer } from './styled';
 import TweetContainer from '../../components/organisms/TweetContainer';
@@ -10,7 +11,6 @@ import TweetDetailContainer from '../../components/organisms/TweetDetailContaine
 import GET_CHILD_TWEETLIST from '../../graphql/getChildTweetList.gql';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';
-import Loading from '../../components/molecules/Loading';
 
 interface QueryVariable {
   variables: Variable;

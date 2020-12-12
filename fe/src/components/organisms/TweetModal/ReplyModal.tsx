@@ -2,9 +2,8 @@
 import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
 import Markdown from 'react-markdown/with-html';
-import Modal from '../../molecules/Modal';
+import { Modal, TitleSubText } from '@molecules';
 import NewTweetContainer from '../NewTweetContainer';
-import TitleSubText from '../../molecules/TitleSubText';
 import MainContainer from '../MainContainer';
 import ADD_REPLY_TWEET from '../../../graphql/addReplyTweet.gql';
 

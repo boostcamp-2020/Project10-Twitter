@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
-import Button from '../../molecules/Button';
+import { Button } from '@molecules';
 import Text from '../../atoms/Text';
 
 const LoginFormContainer = styled(Box)`
