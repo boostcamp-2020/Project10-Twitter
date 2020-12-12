@@ -5,7 +5,7 @@ import { TabBar, TitleSubText, Loading } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
-import { UserBox } from '../styled';
+import UserBox from './styled';
 
 interface QueryVariable {
   variables: Variable;
