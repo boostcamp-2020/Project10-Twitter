@@ -2,7 +2,7 @@ import React, { FunctionComponent, ReactElement } from 'react';
 import { Box } from '@material-ui/core';
 import styled from 'styled-components';
 import Link from 'next/link';
-import ProfileImg from '../../atoms/ProfileImg';
+import { ProfileImg } from '@atoms';
 import { BodyContainer, MainBox } from './styled';
 
 interface Props {

@@ -1,8 +1,8 @@
-import React, { FunctionComponent, ReactElement, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
 import { TitleSubText } from '@molecules';
-import ProfileImg from '../../atoms/ProfileImg';
+import { ProfileImg } from '@atoms';
 import { RetweetBox, BodyContainer, HeaderContainer } from './styled';
 
 interface Props {

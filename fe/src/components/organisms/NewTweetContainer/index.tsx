@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
 import { useMutation, MutationFunctionOptions, FetchResult } from '@apollo/client';
 import { TweetFooter, UploadImg } from '@molecules';
+import { TextArea, Picture } from '@atoms';
+
 import useMyInfo from '../../../hooks/useMyInfo';
 import MainContaier from '../MainContainer';
-import ReTweetContaier from '../RetweetContainer';
-import TextArea from '../../atoms/TextArea';
-import { Picture } from '../../atoms/Icons';
+import RetweetContaier from '../RetweetContainer';
 
 import useOnTextChange from '../../../hooks/useOnTextChange';
 import IMAGE_UPLOAD from '../../../graphql/imageUpload.gql';
@@ -85,7 +85,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, pare
   return (
     <MainContaier userId={myProfile.user_id} ProfileImgUrl={myProfile.profile_img_url}>
       <TextArea placeholder={placeholder} value={value} onChange={onTextChange} />
-      {tweet ? <ReTweetContaier tweet={tweet} /> : <></>}
+      {tweet ? <RetweetContaier tweet={tweet} /> : <></>}
       {image ? <UploadImg img={image} onClick={imgCloseBtnClick} /> : ''}
       <UploadImage type="file" ref={fileUpload} onChange={onChange} accept=".gif, .jpg, .png" />
       <TweetFooter

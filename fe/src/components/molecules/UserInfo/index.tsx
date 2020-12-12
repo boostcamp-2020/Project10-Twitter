@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
+import { ProfileImg } from '@atoms';
 import { Container, StyledTitleSub } from './styled';
-import ProfileImg from '../../atoms/ProfileImg';
 
 interface Props {
   onClick?: () => void;

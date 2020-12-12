@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import Label from '../../atoms/Label';
-import Input from '../../atoms/Input';
+import { Label, Input } from '@atoms';
 import Container from './styled';
 
 interface Props {

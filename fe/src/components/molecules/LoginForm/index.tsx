@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import Form from '../../atoms/Form';
+import { Form } from '@atoms';
 
 interface Props {
   children: React.ReactChild[];

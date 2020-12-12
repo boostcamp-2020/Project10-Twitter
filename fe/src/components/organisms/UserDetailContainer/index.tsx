@@ -1,11 +1,9 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { TitleSubText, Button, Loading } from '@molecules';
-
+import { ProfileImg, Text } from '@atoms';
 import useUserState from '../../../hooks/useUserState';
-import ProfileImg from '../../atoms/ProfileImg';
-
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -16,7 +14,6 @@ import {
   UserImgContainer,
   ImgCircleContainer,
 } from './styled';
-import Text from '../../atoms/Text';
 import { getJSXwithUserState } from '../../../libs';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
 

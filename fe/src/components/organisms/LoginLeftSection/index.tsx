@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Search, Home, Twitter } from '../../atoms/Icons';
-import Text from '../../atoms/Text';
+import { Search, Home, Twitter, Text } from '@atoms';
 import { SvgContainer, Container, IconLabelContainer, StyledIconLabel } from './styled';
 
 const LoginLeftSection: FunctionComponent = () => {

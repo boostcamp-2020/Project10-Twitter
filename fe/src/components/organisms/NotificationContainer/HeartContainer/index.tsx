@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { UserInfo } from '@molecules';
-import { FullHeart } from '../../../atoms/Icons';
+import { FullHeart } from '@atoms';
 import { Container, SubContainer, Span, Content } from './styled';
 
 interface Props {

@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Box } from '@material-ui/core';
-import { Search } from '../../atoms/Icons';
-import Input from '../../atoms/Input/index';
+import { Search, Input } from '@atoms';
 import { SearchBox, SearchIconBox } from './styled';
 
 interface Props {

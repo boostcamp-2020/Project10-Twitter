@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
 import { useQuery, useMutation } from '@apollo/client';
 import { TitleSubText, IconButton, Loading, UserInfo } from '@molecules';
+import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import useHeartState from '../../../hooks/useHeartState';
-
 import {
   DetailContainer,
   TweetHeaderContainer,
@@ -14,13 +14,11 @@ import {
   ButtonsContainer,
   PinkIconButton,
 } from './styled';
-import { Heart, Comment, Retweet, X } from '../../atoms/Icons';
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
 import useDisplay from '../../../hooks/useDisplay';
 import useDisplayWithShallow from '../../../hooks/useDisplayWithShallow';
 import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '../TweetModal';
 import useUserState from '../../../hooks/useUserState';
-import Text from '../../atoms/Text';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 import { makeTimeText } from '../../../libs/utility';
 

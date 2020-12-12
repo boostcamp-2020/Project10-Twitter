@@ -25,7 +25,7 @@ interface Author {
   profile_img_url: string;
 }
 
-const ReTweetModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweet }) => {
+const RetweetModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweet }) => {
   const [addRetweet, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_RETWEET);
   return (
     <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
@@ -34,4 +34,4 @@ const ReTweetModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn,
   );
 };
 
-export default ReTweetModal;
+export default RetweetModal;

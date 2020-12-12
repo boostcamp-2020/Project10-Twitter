@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
 import { Button } from '@molecules';
-import Text from '../../atoms/Text';
+import { Text } from '@atoms';
 
 const LoginFormContainer = styled(Box)`
   position: absolute;

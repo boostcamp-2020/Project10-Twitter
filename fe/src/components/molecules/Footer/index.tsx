@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import Text from '../../atoms/Text';
+import { Text } from '@atoms';
 
 const Container = styled.div`
   z-index: 1;

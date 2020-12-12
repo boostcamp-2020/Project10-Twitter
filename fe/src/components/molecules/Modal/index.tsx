@@ -1,8 +1,8 @@
 import React, { FunctionComponent, ReactChild } from 'react';
 import { Dialog, DialogTitle } from '@material-ui/core';
+import { X } from '@atoms';
+import { IconButton } from '@molecules';
 import Portal from './Portal';
-import IconButton from '../IconButton';
-import { X } from '../../atoms/Icons';
 import StyledDialogContent from './styled';
 
 interface Props {
