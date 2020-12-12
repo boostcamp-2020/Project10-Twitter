@@ -1,13 +1,9 @@
-/* eslint-disable camelcase */
-/* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
-import SideBar from '../../components/organisms/SideBar';
+import { SideBar, TweetContainer, TweetDetailContainer } from '@organisms';
 import { Container, MainContainer } from './styled';
-import TweetContainer from '../../components/organisms/TweetContainer';
-import TweetDetailContainer from '../../components/organisms/TweetDetailContainer';
 import GET_CHILD_TWEETLIST from '../../graphql/getChildTweetList.gql';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import apolloClient from '../../libs/apolloClient';

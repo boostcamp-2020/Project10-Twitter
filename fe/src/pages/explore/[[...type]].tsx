@@ -3,11 +3,8 @@ import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { SearchBar, TabBar, Loading } from '@molecules';
-
-import SideBar from '../../components/organisms/SideBar';
+import { SideBar, TweetContainer, UserCard } from '@organisms';
 import { Container, MainContainer } from './styled';
-import TweetContainer from '../../components/organisms/TweetContainer';
-import UserCard from '../../components/organisms/UserCard';
 import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
 import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
 import useOnTextChange from '../../hooks/useOnTextChange';

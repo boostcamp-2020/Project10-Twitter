@@ -2,10 +2,7 @@ import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { TabBar, Loading } from '@molecules';
-
-import PageLayout from '../../components/organisms/PageLayout';
-import TweetContainer from '../../components/organisms/TweetContainer';
-import UserDetailContainer from '../../components/organisms/UserDetailContainer';
+import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
 import GET_USER_TWEETLIST from '../../graphql/getUserTweetList.gql';
 import GET_USER_ALL_TWEETLIST from '../../graphql/getUserAllTweetList.gql';
 import GET_HEART_TWEETLIST from '../../graphql/getHeartTweetList.gql';
