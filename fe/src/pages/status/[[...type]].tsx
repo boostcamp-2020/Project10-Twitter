@@ -2,11 +2,10 @@ import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
-import { SideBar, TweetContainer, TweetDetailContainer } from '@organisms';
+import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
 import { GET_CHILD_TWEETLIST } from '@graphql/tweet';
-import { Container, MainContainer } from './styled';
 
 interface QueryVariable {
   variables: Variable;
@@ -57,20 +56,17 @@ const UserDetail: FunctionComponent = () => {
   }, [intersecting]);
 
   return (
-    <Container>
-      <SideBar />
-      <MainContainer>
-        <TweetDetailContainer tweetId={tweetId as string} />
-        {data ? (
-          data.tweetList?.map((tweet: Tweet, index: number) => (
-            <TweetContainer key={index} tweet={tweet} updateQuery={GET_CHILD_TWEETLIST} />
-          ))
-        ) : (
-          <Loading message="Loading" />
-        )}
-        <div ref={fetchMoreEl} />
-      </MainContainer>
-    </Container>
+    <PageLayout>
+      <TweetDetailContainer tweetId={tweetId as string} />
+      {data ? (
+        data.tweetList?.map((tweet: Tweet, index: number) => (
+          <TweetContainer key={index} tweet={tweet} updateQuery={GET_CHILD_TWEETLIST} />
+        ))
+      ) : (
+        <Loading message="Loading" />
+      )}
+      <div ref={fetchMoreEl} />
+    </PageLayout>
   );
 };
 

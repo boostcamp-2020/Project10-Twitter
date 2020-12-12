@@ -1,14 +1,12 @@
-/* eslint-disable no-nested-ternary */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { SearchBar, TabBar, Loading } from '@molecules';
-import { SideBar, TweetContainer, UserCard } from '@organisms';
+import { PageLayout, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
 import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
 import { GET_SEARCH_USERLIST } from '@graphql/user';
-import { Container, MainContainer } from './styled';
 
 interface QueryVariable {
   variables: Variable;
@@ -92,37 +90,34 @@ const Explore: FunctionComponent = () => {
   }, [intersecting]);
 
   return (
-    <Container>
-      <SideBar />
-      <MainContainer>
-        <SearchBar
-          placeholder="Search Twitter"
-          type="text"
-          variant="standard"
-          width="90%"
-          value={textValue}
-          onChange={onTextChange}
-          onKeyDown={onKeyDown}
-        />
-        <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
-        <div>
-          {data ? (
-            value === 'tweets' ? (
-              data.searchList?.map((tweet: Tweet, index: number) => (
-                <TweetContainer key={index} tweet={tweet} updateQuery={GET_SEARCH_TWEETLIST} />
-              ))
-            ) : (
-              data.searchList?.map((user: User, index: number) => (
-                <UserCard key={index} user={user} />
-              ))
-            )
+    <PageLayout>
+      <SearchBar
+        placeholder="Search Twitter"
+        type="text"
+        variant="standard"
+        width="90%"
+        value={textValue}
+        onChange={onTextChange}
+        onKeyDown={onKeyDown}
+      />
+      <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
+      <div>
+        {data ? (
+          value === 'tweets' ? (
+            data.searchList?.map((tweet: Tweet, index: number) => (
+              <TweetContainer key={index} tweet={tweet} updateQuery={GET_SEARCH_TWEETLIST} />
+            ))
           ) : (
-            <Loading message="Loading" />
-          )}
-        </div>
-        <div ref={fetchMoreEl} />
-      </MainContainer>
-    </Container>
+            data.searchList?.map((user: User, index: number) => (
+              <UserCard key={index} user={user} />
+            ))
+          )
+        ) : (
+          <Loading message="Loading" />
+        )}
+      </div>
+      <div ref={fetchMoreEl} />
+    </PageLayout>
   );
 };
 
