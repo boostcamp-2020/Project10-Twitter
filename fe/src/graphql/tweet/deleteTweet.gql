@@ -1,0 +1,5 @@
+mutation DELETE_TWEET($tweetId: String!) {
+  result: delete_tweet(tweet_id: $tweetId) {
+    response
+  }
+}

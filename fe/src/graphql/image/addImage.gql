@@ -1,0 +1,5 @@
+mutation UPLOAD_IMAGE($file: Upload!) {
+  img: single_upload(file: $file) {
+    img_url
+  }
+}
