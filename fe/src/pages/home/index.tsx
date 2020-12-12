@@ -2,9 +2,8 @@ import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { PageLayout, TweetContainer, NewTweetContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
+import { GET_TWEETLIST, ADD_BASIC_TWEET } from '@graphql/tweet';
 import HomeBox from './styled';
-import GET_TWEETLIST from '../../graphql/getTweetList.gql';
-import ADD_BASIC_TWEET from '../../graphql/addBasicTweet.gql';
 
 interface Tweet {
   _id: string;

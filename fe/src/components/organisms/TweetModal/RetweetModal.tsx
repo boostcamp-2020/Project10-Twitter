@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
 import { Modal } from '@molecules';
 import { NewTweetContainer } from '@organisms';
-import ADD_RETWEET from '../../../graphql/addRetweet.gql';
+import { ADD_RETWEET } from '@graphql/tweet';
 
 interface Props {
   displayModal: boolean;

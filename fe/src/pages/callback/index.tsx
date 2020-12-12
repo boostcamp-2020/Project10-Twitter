@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
-import GITHUB_LOGIN from '../../graphql/github.gql';
+import GITHUB_LOGIN from '@graphql/auth';
 
 interface Props {
   code: string | string[] | undefined;

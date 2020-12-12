@@ -5,6 +5,7 @@ import { TitleSubText, Button, Loading } from '@molecules';
 import { ProfileImg, Text } from '@atoms';
 import { useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
+import { GET_USER_DETAIL } from '@graphql/user';
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -15,7 +16,6 @@ import {
   UserImgContainer,
   ImgCircleContainer,
 } from './styled';
-import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
 
 interface Props {
   userId: string;
@@ -31,7 +31,7 @@ interface Variable {
 
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const { loading, error, data } = useQuery(GET_USERDETAIL, queryVariable);
+  const { loading, error, data } = useQuery(GET_USER_DETAIL, queryVariable);
   const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
 
   const onClickEdit = () => {};

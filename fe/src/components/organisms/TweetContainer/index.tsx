@@ -8,9 +8,8 @@ import { DocumentNode } from 'graphql';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { makeTimeText } from '@libs';
 import { RetweetContainer, ReplyModal, RetweetModal, MainContainer } from '@organisms';
+import { DELETE_TWEET } from '@graphql/tweet';
 import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
-
-import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 
 interface Props {
   tweet: Tweet;

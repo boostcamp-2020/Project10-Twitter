@@ -1,9 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import GET_MYINFO from '../graphql/getMyInfo.gql';
-import HEART_TWEET from '../graphql/heartTweet.gql';
-import UNHEART_TWEET from '../graphql/unheartTweet.gql';
-import GET_TWEETLIST from '../graphql/getTweetList.gql';
+import { GET_MYINFO } from '@graphql/user';
+import { HEART_TWEET, UNHEART_TWEET, GET_TWEETLIST } from '@graphql/tweet';
 
 interface Tweet {
   _id: string;

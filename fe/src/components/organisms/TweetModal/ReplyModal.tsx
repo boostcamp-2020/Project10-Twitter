@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import Markdown from 'react-markdown/with-html';
 import { Modal, TitleSubText } from '@molecules';
 import { NewTweetContainer, MainContainer } from '@organisms';
-import ADD_REPLY_TWEET from '../../../graphql/addReplyTweet.gql';
+import { ADD_REPLY_TWEET } from '@graphql/tweet';
 
 interface Props {
   displayModal: boolean;

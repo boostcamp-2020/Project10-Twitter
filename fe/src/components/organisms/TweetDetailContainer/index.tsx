@@ -8,6 +8,7 @@ import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
 import { makeTimeText } from '@libs';
 import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '@organisms';
+import { DELETE_TWEET, GET_TWEET_DETAIL } from '@graphql/tweet';
 import {
   DetailContainer,
   TweetHeaderContainer,
@@ -16,8 +17,6 @@ import {
   ButtonsContainer,
   PinkIconButton,
 } from './styled';
-import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
-import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 
 interface Props {
   tweetId: string;

@@ -4,7 +4,7 @@ import { TweetFooter, UploadImg } from '@molecules';
 import { TextArea, Picture } from '@atoms';
 import { useMyInfo, useOnTextChange } from '@hooks';
 import { MainContainer, RetweetContainer } from '@organisms';
-import IMAGE_UPLOAD from '../../../graphql/imageUpload.gql';
+import UPLOAD_IMAGE from '@graphql/image';
 import UploadImage from './styled';
 
 interface Props {
@@ -34,7 +34,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, pare
   const { myProfile } = useMyInfo();
   const [value, setValue, onTextChange] = useOnTextChange('');
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [ImageMutation] = useMutation(IMAGE_UPLOAD);
+  const [ImageMutation] = useMutation(UPLOAD_IMAGE);
   const [image, setImage] = useState(undefined);
 
   const fileUpload = useRef(null);

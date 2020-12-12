@@ -1,8 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import GET_MYINFO from '../graphql/getMyInfo.gql';
-import FOLLOW_USER from '../graphql/followUser.gql';
-import UNFOLLOW_USER from '../graphql/unfollowUser.gql';
+import { GET_MYINFO, FOLLOW_USER, UNFOLLOW_USER } from '@graphql/user';
 
 interface User {
   user_id: string;

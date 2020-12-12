@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 import { TabBar, TitleSubText, Loading } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
-import GET_FOLLOWINGLIST from '../../../graphql/getFollowingList.gql';
-import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
+import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
 import { UserBox } from '../styled';
 
 interface QueryVariable {
@@ -29,7 +28,7 @@ interface User {
 const Follow: FunctionComponent = () => {
   const router = useRouter();
   const { userId, type } = router.query;
-  const queryArr = { follower: GET_FOLLOWERLIST, following: GET_FOLLOWINGLIST };
+  const queryArr = { follower: GET_FOLLOWER_LIST, following: GET_FOLLOWING_LIST };
   const queryVariable: QueryVariable = { variables: { userId: userId as string } };
   const value = type ? type[0] : 'follower';
   const [userList, setUserList] = useState<User[]>([]);

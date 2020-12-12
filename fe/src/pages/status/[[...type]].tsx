@@ -5,8 +5,8 @@ import { Loading } from '@molecules';
 import { SideBar, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
+import { GET_CHILD_TWEETLIST } from '@graphql/tweet';
 import { Container, MainContainer } from './styled';
-import GET_CHILD_TWEETLIST from '../../graphql/getChildTweetList.gql';
 
 interface QueryVariable {
   variables: Variable;

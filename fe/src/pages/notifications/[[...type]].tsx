@@ -5,10 +5,12 @@ import { TabBar } from '@molecules';
 import { PageLayout, NotificationContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
-import GET_MYINFO from '../../graphql/getMyInfo.gql';
-import GET_NOTIFICATION from '../../graphql/getNotification.gql';
-import GET_MENTION_NOTIFICATION from '../../graphql/getMentionNotification.gql';
-import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
+import { GET_MYINFO } from '@graphql/user';
+import {
+  GET_NOTIFICATION_LIST,
+  GET_MENTION_NOTIFICATION_LIST,
+  CONFIRM_NOTIFICATION,
+} from '@graphql/notification';
 
 interface QueryVariable {
   variables: Variable;
@@ -59,11 +61,11 @@ const getValue = (type: string | string[] | undefined) => {
 const Notification: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
-  const queryArr = { all: GET_NOTIFICATION, mention: GET_MENTION_NOTIFICATION };
+  const queryArr = { all: GET_NOTIFICATION_LIST, mention: GET_MENTION_NOTIFICATION_LIST };
   const value = getValue(type);
   // type ? type[0] : 'all';
   const { data, fetchMore } = useQuery(queryArr[value]);
-  const [mutate] = useMutation(UPDATE_NOTIFICATION);
+  const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
   const [notificationList, setNotificationList] = useState<Noti[]>([]);
   const { _id: bottomNotificationId } = notificationList[notificationList.length - 1] || {};

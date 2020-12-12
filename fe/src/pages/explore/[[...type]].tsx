@@ -6,9 +6,9 @@ import { SearchBar, TabBar, Loading } from '@molecules';
 import { SideBar, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
+import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
+import { GET_SEARCH_USERLIST } from '@graphql/user';
 import { Container, MainContainer } from './styled';
-import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
-import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
 
 interface QueryVariable {
   variables: Variable;

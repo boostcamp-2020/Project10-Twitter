@@ -7,8 +7,8 @@ import { Button, UserPopover, UserInfo, SearchBar } from '@molecules';
 import { Home, Explore, Twitter, Notifications, Profiles } from '@atoms';
 import { useMyInfo, useOnTextChange, useDisplay } from '@hooks';
 import { NewTweetModal } from '@organisms';
+import { GET_NOTIFICATION_COUNT } from '@graphql/notification';
 import Container from './styled';
-import GET_NOTIFICATION_COUNT from '../../../graphql/getNotificationCount.gql';
 
 interface ButtonProps {
   id: number;

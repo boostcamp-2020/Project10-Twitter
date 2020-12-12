@@ -2,7 +2,7 @@ import React, { FunctionComponent, ReactChild } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
-import GET_MYINFO from '@graphql/getMyInfo.gql';
+import { GET_MYINFO } from '@graphql/user';
 
 interface Props {
   children: ReactChild;

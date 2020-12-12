@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useQuery } from '@apollo/client';
 import { Modal, Loading } from '@molecules';
 import { UserCard } from '@organisms';
-import GET_HEART_USER_LIST from '../../../graphql/getHeartUserList.gql';
+import { GET_HEART_USERLIST } from '@graphql/user';
 
 interface Props {
   displayModal: boolean;

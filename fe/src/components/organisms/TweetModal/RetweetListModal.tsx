@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useQuery } from '@apollo/client';
 import { Modal, Loading } from '@molecules';
 import { UserCard } from '@organisms';
-import GET_RETWEET_USER_LIST from '../../../graphql/getRetweetUserList.gql';
+import { GET_RETWEET_USERLIST } from '@graphql/user';
 
 interface Props {
   displayModal: boolean;
@@ -19,7 +19,7 @@ interface User {
 }
 
 const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweetId }) => {
-  const { loading, error, data } = useQuery(GET_RETWEET_USER_LIST, { variables: { tweetId } });
+  const { loading, error, data } = useQuery(GET_RETWEET_USERLIST, { variables: { tweetId } });
 
   return (
     <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
