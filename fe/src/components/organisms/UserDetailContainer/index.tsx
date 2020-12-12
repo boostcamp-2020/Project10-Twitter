@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import { TitleSubText, Button, Loading } from '@molecules';
 import { ProfileImg, Text } from '@atoms';
 import { useUserState } from '@hooks';
+import { getJSXwithUserState } from '@libs';
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -14,7 +15,6 @@ import {
   UserImgContainer,
   ImgCircleContainer,
 } from './styled';
-import { getJSXwithUserState } from '../../../libs';
 import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
 
 interface Props {

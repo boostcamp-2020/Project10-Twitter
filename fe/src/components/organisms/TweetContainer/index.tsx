@@ -6,12 +6,12 @@ import { IconButton, Button, UploadImg } from '@molecules';
 import { useHeartState, useDisplay, useUserState } from '@hooks';
 import { DocumentNode } from 'graphql';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
+import { makeTimeText } from '@libs';
 import MainContaier from '../MainContainer';
 import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
 import { ReplyModal, RetweetModal } from '../TweetModal';
 import RetweetContainer from '../RetweetContainer';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
-import { makeTimeText } from '../../../libs/utility';
 
 interface Props {
   tweet: Tweet;

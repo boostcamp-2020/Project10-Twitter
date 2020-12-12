@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { UserInfo, Button } from '@molecules';
 import { Text } from '@atoms';
 import { useUserState } from '@hooks';
+import { getJSXwithUserState } from '@libs';
 import Container from './styled';
-import { getJSXwithUserState } from '../../../libs';
 
 interface User {
   user_id: string;

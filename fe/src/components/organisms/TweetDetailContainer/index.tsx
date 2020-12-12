@@ -6,6 +6,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { TitleSubText, IconButton, Loading, UserInfo } from '@molecules';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
+import { makeTimeText } from '@libs';
 import {
   DetailContainer,
   TweetHeaderContainer,
@@ -17,7 +18,6 @@ import {
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
 import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '../TweetModal';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
-import { makeTimeText } from '../../../libs/utility';
 
 interface Props {
   tweetId: string;
