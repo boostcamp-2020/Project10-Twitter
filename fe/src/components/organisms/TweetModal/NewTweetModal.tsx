@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
 import { Modal } from '@molecules';
-import NewTweetContainer from '../NewTweetContainer';
+import { NewTweetContainer } from '@organisms';
 import ADD_BASIC_TWEET from '../../../graphql/addBasicTweet.gql';
 
 interface Props {

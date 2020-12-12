@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { LoginForm, InputContainer, Button } from '@molecules';
 import { Twitter } from '@atoms';
 import { useDisplay } from '@hooks';
-import SignupModal from '../SignupModal';
+import { SignupModal } from '@organisms';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';
 
 const LoginRightSection: FunctionComponent = () => {

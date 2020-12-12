@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ReactElement } from 'react';
 import { ListItem } from '@material-ui/core';
+import { Button } from '@molecules';
 import { Container, StyledList } from './styled';
-import Button from '../Button';
 
 interface ButtonProps {
   id: number;

@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { Button, UserPopover, UserInfo, SearchBar } from '@molecules';
 import { Home, Explore, Twitter, Notifications, Profiles } from '@atoms';
 import { useMyInfo, useOnTextChange, useDisplay } from '@hooks';
+import { NewTweetModal } from '@organisms';
 import Container from './styled';
-import { NewTweetModal } from '../TweetModal';
 import GET_NOTIFICATION_COUNT from '../../../graphql/getNotificationCount.gql';
 
 interface ButtonProps {

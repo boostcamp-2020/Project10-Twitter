@@ -7,6 +7,7 @@ import { TitleSubText, IconButton, Loading, UserInfo } from '@molecules';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
 import { makeTimeText } from '@libs';
+import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '@organisms';
 import {
   DetailContainer,
   TweetHeaderContainer,
@@ -16,7 +17,6 @@ import {
   PinkIconButton,
 } from './styled';
 import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
-import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '../TweetModal';
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 
 interface Props {

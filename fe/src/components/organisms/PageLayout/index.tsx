@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactChild } from 'react';
-import SideBar from '../SideBar';
+import { SideBar } from '@organisms';
 import { Container, MainContainer } from './styled';
 
 interface Props {

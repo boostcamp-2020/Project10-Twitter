@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useMyInfo } from '@hooks';
-import TweetContainer from '../TweetContainer';
+import { TweetContainer } from '@organisms';
 import HeartContainer from './HeartContainer';
 import { Container, UnderLine } from './styled';
 import FollowContainer from './FollowContainer';

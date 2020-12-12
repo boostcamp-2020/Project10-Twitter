@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useQuery } from '@apollo/client';
 import { Modal, Loading } from '@molecules';
-import UserCard from '../UserCard';
+import { UserCard } from '@organisms';
 import GET_HEART_USER_LIST from '../../../graphql/getHeartUserList.gql';
 
 interface Props {

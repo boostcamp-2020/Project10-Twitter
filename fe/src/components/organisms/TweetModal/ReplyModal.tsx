@@ -3,8 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
 import Markdown from 'react-markdown/with-html';
 import { Modal, TitleSubText } from '@molecules';
-import NewTweetContainer from '../NewTweetContainer';
-import MainContainer from '../MainContainer';
+import { NewTweetContainer, MainContainer } from '@organisms';
 import ADD_REPLY_TWEET from '../../../graphql/addReplyTweet.gql';
 
 interface Props {

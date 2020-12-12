@@ -7,10 +7,9 @@ import { useHeartState, useDisplay, useUserState } from '@hooks';
 import { DocumentNode } from 'graphql';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { makeTimeText } from '@libs';
-import MainContaier from '../MainContainer';
+import { RetweetContainer, ReplyModal, RetweetModal, MainContainer } from '@organisms';
 import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
-import { ReplyModal, RetweetModal } from '../TweetModal';
-import RetweetContainer from '../RetweetContainer';
+
 import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
 
 interface Props {
@@ -67,7 +66,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
 
   return (
     <>
-      <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
+      <MainContainer userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
         <TweetHeaderContainer>
           <HeaderInfoContainer>
             <Link href={`/${tweet.author.user_id}`}>
@@ -100,7 +99,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
             <Button icon={Heart({})} text={tweet.heart_user_number} onClick={onClickHeart} />
           )}
         </ButtonsBox>
-      </MainContaier>
+      </MainContainer>
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}
