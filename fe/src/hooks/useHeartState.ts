@@ -17,6 +17,7 @@ const useHeartState = (
 ): [boolean, () => Promise<void>, () => Promise<void>] => {
   const { data } = useQuery(GET_MYINFO);
   const [isHeart, setIsHeart] = useState(getIsHeart(tweet, data?.myProfile));
+  const [state, setState] = useState(false);
 
   const [heartTweet] = useMutation(HEART_TWEET);
   const [unheartTweet] = useMutation(UNHEART_TWEET);
@@ -30,70 +31,78 @@ const useHeartState = (
   };
 
   const onClickHeart = async () => {
-    await heartTweet({
-      variables: { tweet_id: tweet._id },
-      update: (cache) => {
-        const userInfo = cache.readQuery({ query: GET_MYINFO });
-        cache.writeQuery({
-          query: GET_MYINFO,
-          data: {
-            myProfile: {
-              ...userInfo.myProfile,
-              heart_tweet_id_list: [...userInfo.myProfile.heart_tweet_id_list, tweet._id],
+    if (!state) {
+      setState(true);
+      await heartTweet({
+        variables: { tweet_id: tweet._id },
+        update: (cache) => {
+          const userInfo = cache.readQuery({ query: GET_MYINFO });
+          cache.writeQuery({
+            query: GET_MYINFO,
+            data: {
+              myProfile: {
+                ...userInfo.myProfile,
+                heart_tweet_id_list: [...userInfo.myProfile.heart_tweet_id_list, tweet._id],
+              },
             },
-          },
-        });
-        const res = cache.readQuery({ query: updateQuery });
-        const source = [...res.tweetList];
-        const idx = binarySearch(source, tweet._id);
-        if (idx === -1) return;
-        const number: number = source[idx].heart_user_number + 1;
-        source[idx] = {
-          ...source[idx],
-          heart_user_number: number,
-        };
-        cache.writeQuery({
-          query: updateQuery,
-          data: { tweetList: source },
-        });
-      },
-    });
-    setHeartTweet();
+          });
+          const res = cache.readQuery({ query: updateQuery });
+          const source = [...res.tweetList];
+          const idx = binarySearch(source, tweet._id);
+          if (idx === -1) return;
+          const number: number = source[idx].heart_user_number + 1;
+          source[idx] = {
+            ...source[idx],
+            heart_user_number: number,
+          };
+          cache.writeQuery({
+            query: updateQuery,
+            data: { tweetList: source },
+          });
+        },
+      });
+      setHeartTweet();
+      setState(false);
+    }
   };
 
   const onClickUnheart = async () => {
-    await unheartTweet({
-      variables: { tweet_id: tweet._id },
-      update: (cache) => {
-        const userInfo = cache.readQuery({ query: GET_MYINFO });
-        const arr = [...userInfo.myProfile.heart_tweet_id_list];
-        const index = arr.indexOf(tweet._id);
-        arr.splice(index, 1);
-        cache.writeQuery({
-          query: GET_MYINFO,
-          data: {
-            myProfile: {
-              ...userInfo.myProfile,
-              heart_tweet_id_list: arr,
+    if (!state) {
+      setState(true);
+      await unheartTweet({
+        variables: { tweet_id: tweet._id },
+        update: (cache) => {
+          const userInfo = cache.readQuery({ query: GET_MYINFO });
+          const arr = [...userInfo.myProfile.heart_tweet_id_list];
+          const index = arr.indexOf(tweet._id);
+          arr.splice(index, 1);
+          cache.writeQuery({
+            query: GET_MYINFO,
+            data: {
+              myProfile: {
+                ...userInfo.myProfile,
+                heart_tweet_id_list: arr,
+              },
             },
-          },
-        });
-        const res = cache.readQuery({ query: updateQuery });
-        const source = [...res.tweetList];
-        const idx = binarySearch(source, tweet._id);
-        if (idx === -1) return;
-        const number: number = source[idx].heart_user_number - 1;
-        source[idx] = {
-          ...source[idx],
-          heart_user_number: number,
-        };
-        cache.writeQuery({
-          query: updateQuery,
-          data: { tweetList: source },
-        });
-      },
-    });
-    setUnheartTweet();
+          });
+          const res = cache.readQuery({ query: updateQuery });
+          const source = [...res.tweetList];
+          const idx = binarySearch(source, tweet._id);
+          if (idx === -1) return;
+          const number: number = source[idx].heart_user_number - 1;
+          source[idx] = {
+            ...source[idx],
+            heart_user_number: number,
+          };
+          cache.writeQuery({
+            query: updateQuery,
+            data: { tweetList: source },
+          });
+        },
+      });
+      setUnheartTweet();
+      setState(false);
+    }
   };
 
   useEffect(() => {
