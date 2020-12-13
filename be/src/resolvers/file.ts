@@ -1,5 +1,5 @@
 import { IResolvers } from 'apollo-server-express';
-import { imgUpload } from '../services/upload';
+import { imgUpload } from '@services/upload';
 
 const fileResolvers: IResolvers = {
   Query: {

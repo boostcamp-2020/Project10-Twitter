@@ -1,6 +1,6 @@
-import { userModel } from '../../models';
-import getHashedPassword from '../../lib/hash-password';
-import { makeRandomName } from '../../lib/utilty';
+import { userModel } from '@models';
+import getHashedPassword from '@libs/hash-password';
+import { makeRandomName } from '@libs/utiltys';
 
 interface UserInfo {
   user_id: string;

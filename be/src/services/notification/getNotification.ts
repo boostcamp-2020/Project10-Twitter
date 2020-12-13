@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { notificationModel } from '../../models';
-import { stringToObjectId } from '../../lib/utilty';
+import { notificationModel } from '@models';
+import { stringToObjectId } from '@libs/utiltys';
 
 interface Auth {
   authUser: { id: string };

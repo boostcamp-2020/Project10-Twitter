@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { notificationModel, tweetModel, userModel } from '../../models';
+import { notificationModel, tweetModel, userModel } from '@models';
 
 interface Auth {
   authUser: { id: string };

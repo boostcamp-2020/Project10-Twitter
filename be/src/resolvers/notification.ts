@@ -4,7 +4,7 @@ import {
   getNotificationCount,
   updateNotification,
   getNotificationWithMention,
-} from '../services/notification';
+} from '@services/notification';
 
 const notificationResolvers: IResolvers = {
   Query: {

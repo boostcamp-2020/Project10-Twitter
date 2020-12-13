@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { userModel } from '../../models';
-import { stringToObjectId } from '../../lib/utilty';
+import { userModel, tweetModel } from '@models';
+import { stringToObjectId } from '@libs/utiltys';
 
 interface Auth {
   authUser: { id: string };
@@ -10,6 +10,7 @@ interface Args {
   oldest_user_id: string;
   search_word: string;
   user_id: string;
+  tweet_id: string;
 }
 
 const getNextUsersCondition = (oldest_user_id: string): Object => {

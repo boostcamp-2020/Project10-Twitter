@@ -5,35 +5,36 @@ import logger from 'morgan';
 import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import dbStarter from './providers/dbProvider';
+import cookieParser from 'cookie-parser';
 
-import typeDefs from './schema';
-import resolvers from './resolvers';
-import { verifyToken } from './lib/jwt-token';
+import typeDefs from '@schema';
+import resolvers from '@resolvers';
+import { verifyToken } from '@libs/jwt-token';
+import dbStarter from '@providers/dbProvider';
 
 dotenv.config();
 
 const app = express();
+
+app.use(cookieParser());
+app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, '../uploads')));
+
 const port: number = Number(process.env.PORT) || 3000;
+const corsOptions = { origin: 'http://localhost:3000', credentials: true };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
-    if (!req.headers.authorization) return { authUser: undefined };
+  context: ({ req, res }) => {
+    if (!req.cookies.jwt) return { authUser: undefined };
 
-    const bearerHeader = req.headers.authorization;
-    const token = bearerHeader.split(' ')[1];
-    const authUser = verifyToken(token);
-    return { authUser };
+    const authUser = verifyToken(req.cookies.jwt);
+    return { authUser, res };
   },
   formatError: (err) => ({ message: err.message }),
 });
-
-app.use(logger('dev'));
-app.use(cors());
-app.use(express.static(path.join(__dirname, '../uploads')));
-server.applyMiddleware({ app, path: '/graphql' });
+server.applyMiddleware({ app, cors: corsOptions, path: '/graphql' });
 
 const booting = async () => {
   await dbStarter();
