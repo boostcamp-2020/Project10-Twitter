@@ -21,4 +21,16 @@ const makeTimeText = (pastTime: string) => {
   return timeString;
 };
 
-export { getJSXwithUserState, makeTimeText };
+const binarySearch = (arr: any, id: string) => {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid]._id < id) right = mid - 1;
+    else if (arr[mid]._id > id) left = mid + 1;
+    else return mid;
+  }
+  return -1;
+};
+
+export { getJSXwithUserState, makeTimeText, binarySearch };
