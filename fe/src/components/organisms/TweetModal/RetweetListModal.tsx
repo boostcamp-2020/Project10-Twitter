@@ -11,7 +11,7 @@ interface Props {
   tweetId: string;
 }
 
-const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweetId }) => {
+const RetweetListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweetId }) => {
   const { loading, error, data } = useQuery(GET_RETWEET_USERLIST, { variables: { tweetId } });
 
   return (
@@ -25,4 +25,4 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
   );
 };
 
-export default HeartListModal;
+export default RetweetListModal;
