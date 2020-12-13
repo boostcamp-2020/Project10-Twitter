@@ -18,7 +18,7 @@ interface Props {
 }
 
 const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
-  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(tweet);
+  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(tweet, updateQuery);
   const [userState] = useUserState(tweet.author);
   const [displayReplyModal, , onClickReplyBtn] = useDisplay(false);
   const [displayRetweetModal, , onClickRetweetBtn] = useDisplay(false);
@@ -85,11 +85,13 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}
+        updateQuery={updateQuery}
         tweet={tweet}
       />
       <RetweetModal
         displayModal={displayRetweetModal}
         onClickCloseBtn={onClickRetweetBtn}
+        updateQuery={updateQuery}
         tweet={tweet}
       />
     </>

@@ -23,7 +23,6 @@ const Notification: FunctionComponent = () => {
   const { type } = router.query;
   const queryArr = { all: GET_NOTIFICATION_LIST, mention: GET_MENTION_NOTIFICATION_LIST };
   const value = getValue(type);
-  // type ? type[0] : 'all';
   const { data, fetchMore } = useQuery(queryArr[value]);
   const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
@@ -86,7 +85,12 @@ const Notification: FunctionComponent = () => {
       <TabBar value={value} handleChange={onClick} labels={['all', 'mention']} />
       <>
         {notificationList?.map((noti: NotificationType, index: number) => (
-          <NotificationContainer key={index} noti={{ ...noti, curTabValue: value }} />
+          <NotificationContainer
+            key={index}
+            noti={noti}
+            curTabValue={value}
+            updateQuery={queryArr[value]}
+          />
         ))}
       </>
       <div ref={fetchMoreEl} />

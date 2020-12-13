@@ -1,15 +1,20 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { DocumentNode } from 'graphql';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_MYINFO } from '@graphql/user';
 import { HEART_TWEET, UNHEART_TWEET, GET_TWEETLIST } from '@graphql/tweet';
 import { TweetType, UserType } from '@types';
+import { binarySearch } from '@libs';
 
 const getIsHeart = (tweet: TweetType, myProfile: UserType) => {
   if (myProfile?.heart_tweet_id_list.includes(tweet?._id)) return true;
   return false;
 };
 
-const useHeartState = (tweet: TweetType): [boolean, () => Promise<void>, () => Promise<void>] => {
+const useHeartState = (
+  tweet: TweetType,
+  updateQuery: DocumentNode,
+): [boolean, () => Promise<void>, () => Promise<void>] => {
   const { data } = useQuery(GET_MYINFO);
   const [isHeart, setIsHeart] = useState(getIsHeart(tweet, data?.myProfile));
 
@@ -38,9 +43,9 @@ const useHeartState = (tweet: TweetType): [boolean, () => Promise<void>, () => P
             },
           },
         });
-        const res = cache.readQuery({ query: GET_TWEETLIST });
+        const res = cache.readQuery({ query: updateQuery });
         const source = [...res.tweetList];
-        const idx = source.findIndex((x: TweetType) => x._id === tweet._id);
+        const idx = binarySearch(source, tweet._id);
         if (idx === -1) return;
         const number: number = source[idx].heart_user_number + 1;
         source[idx] = {
@@ -48,7 +53,7 @@ const useHeartState = (tweet: TweetType): [boolean, () => Promise<void>, () => P
           heart_user_number: number,
         };
         cache.writeQuery({
-          query: GET_TWEETLIST,
+          query: updateQuery,
           data: { tweetList: source },
         });
       },
@@ -73,9 +78,9 @@ const useHeartState = (tweet: TweetType): [boolean, () => Promise<void>, () => P
             },
           },
         });
-        const res = cache.readQuery({ query: GET_TWEETLIST });
+        const res = cache.readQuery({ query: updateQuery });
         const source = [...res.tweetList];
-        const idx = source.findIndex((x: TweetType) => x._id === tweet._id);
+        const idx = binarySearch(source, tweet._id);
         if (idx === -1) return;
         const number: number = source[idx].heart_user_number - 1;
         source[idx] = {
@@ -83,7 +88,7 @@ const useHeartState = (tweet: TweetType): [boolean, () => Promise<void>, () => P
           heart_user_number: number,
         };
         cache.writeQuery({
-          query: GET_TWEETLIST,
+          query: updateQuery,
           data: { tweetList: source },
         });
       },
