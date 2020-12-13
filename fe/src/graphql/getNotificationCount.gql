@@ -1,5 +1,0 @@
-query($id: String) {
-  count: notification_count(lastest_notification_id: $id) {
-    count
-  }
-}

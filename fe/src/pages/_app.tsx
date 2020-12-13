@@ -3,8 +3,8 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { AuthProvider, apolloClient } from '../libs';
-import '../styles/global.css';
+import { AuthProvider, apolloClient } from '@libs';
+import '@styles/global.css';
 
 const theme = createMuiTheme({
   palette: {

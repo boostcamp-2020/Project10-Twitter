@@ -1,44 +1,20 @@
-import React, { FunctionComponent, ReactElement, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
 import { ApolloCache, useMutation } from '@apollo/client';
+import { IconButton, Button, UploadImg } from '@molecules';
+import { useHeartState, useDisplay, useUserState } from '@hooks';
 import { DocumentNode } from 'graphql';
-import MainContaier from '../MainContainer';
-import Text from '../../atoms/Text';
-import IconButton from '../../molecules/IconButton';
-import Button from '../../molecules/Button';
-import { Heart, Comment, Retweet, X } from '../../atoms/Icons';
+import { Text, Heart, Comment, Retweet, X } from '@atoms';
+import { makeTimeText } from '@libs';
+import { RetweetContainer, ReplyModal, RetweetModal, MainContainer } from '@organisms';
+import { DELETE_TWEET } from '@graphql/tweet';
+import { TweetType } from '@types';
 import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } from './styled';
-import useHeartState from '../../../hooks/useHeartState';
-import { ReplyModal, RetweetModal } from '../TweetModal';
-import useDisplay from '../../../hooks/useDisplay';
-import ReTweetContainer from '../ReTweetContainer';
-import UploadImg from '../../molecules/UploadImg';
-import useUserState from '../../../hooks/useUserState';
-import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
-import { makeTimeText } from '../../../libs/utility';
 
 interface Props {
-  tweet: Tweet;
+  tweet: TweetType;
   updateQuery: DocumentNode;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  img_url_list: [string];
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  author: Author;
-  retweet: Tweet;
-  createAt: string;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-  following_id_list: string[];
 }
 
 const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
@@ -60,7 +36,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
   const cacheUpdate = (cache: ApolloCache<any>, data: any) => {
     const { result } = data;
     if (result.response) {
-      const tweetCache = cache.readQuery<{ tweetList: Tweet[] }>({ query: updateQuery });
+      const tweetCache = cache.readQuery<{ tweetList: TweetType[] }>({ query: updateQuery });
       if (tweetCache) {
         cache.writeQuery({
           query: updateQuery,
@@ -72,7 +48,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
 
   return (
     <>
-      <MainContaier userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
+      <MainContainer userId={tweet.author.user_id} ProfileImgUrl={tweet.author.profile_img_url}>
         <TweetHeaderContainer>
           <HeaderInfoContainer>
             <Link href={`/${tweet.author.user_id}`}>
@@ -90,7 +66,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
             <Markdown allowDangerousHtml>{tweet.content}</Markdown>
           </a>
         </Link>
-        {tweet.retweet?._id ? <ReTweetContainer tweet={tweet.retweet} /> : <></>}
+        {tweet.retweet?._id ? <RetweetContainer tweet={tweet.retweet} /> : <></>}
         {tweet.img_url_list && tweet.img_url_list[0] ? (
           <UploadImg img={tweet.img_url_list[0]} />
         ) : (
@@ -105,7 +81,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
             <Button icon={Heart({})} text={tweet.heart_user_number} onClick={onClickHeart} />
           )}
         </ButtonsBox>
-      </MainContaier>
+      </MainContainer>
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}

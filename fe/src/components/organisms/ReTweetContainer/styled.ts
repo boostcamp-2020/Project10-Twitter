@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
-import Button from '../../molecules/Button';
+import { Button } from '@molecules';
 
 const ButtonsBox = styled(Box)`
   display: flex;

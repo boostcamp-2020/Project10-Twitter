@@ -1,22 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import useUserState from '../../../hooks/useUserState';
-import UserInfo from '../../molecules/UserInfo';
-import Button from '../../molecules/Button';
-import Text from '../../atoms/Text';
+import { UserInfo, Button } from '@molecules';
+import { Text } from '@atoms';
+import { useUserState } from '@hooks';
+import { getJSXwithUserState } from '@libs';
+import { UserType } from '@types';
 import Container from './styled';
-import { getJSXwithUserState } from '../../../libs';
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_id_list: string[];
-}
 
 interface Props {
-  user: User;
+  user: UserType;
 }
 
 const UserCard: FunctionComponent<Props> = ({ user }) => {

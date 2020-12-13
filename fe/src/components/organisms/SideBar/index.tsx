@@ -3,17 +3,12 @@ import { useQuery } from '@apollo/client';
 import { ListItem } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useMyInfo from '../../../hooks/useMyInfo';
-import Button from '../../molecules/Button';
-import UserPopover from '../../molecules/UserPopover';
-import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
-import UserInfo from '../../molecules/UserInfo';
-import SearchBar from '../../molecules/SearchBar';
+import { Button, UserPopover, UserInfo, SearchBar } from '@molecules';
+import { Home, Explore, Twitter, Notifications, Profiles } from '@atoms';
+import { useMyInfo, useOnTextChange, useDisplay } from '@hooks';
+import { NewTweetModal } from '@organisms';
+import { GET_NOTIFICATION_COUNT } from '@graphql/notification';
 import Container from './styled';
-import useOnTextChange from '../../../hooks/useOnTextChange';
-import useDisplay from '../../../hooks/useDisplay';
-import { NewTweetModal } from '../TweetModal';
-import GET_NOTIFICATION_COUNT from '../../../graphql/getNotificationCount.gql';
 
 interface ButtonProps {
   id: number;

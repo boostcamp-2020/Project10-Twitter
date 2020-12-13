@@ -1,29 +1,16 @@
-import React, { FunctionComponent, ReactElement, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown/with-html';
-import TitleSubText from '../../molecules/TitleSubText';
-import ProfileImg from '../../atoms/ProfileImg';
+import { TitleSubText } from '@molecules';
+import { ProfileImg } from '@atoms';
+import { TweetType } from '@types';
 import { RetweetBox, BodyContainer, HeaderContainer } from './styled';
 
 interface Props {
-  tweet: Tweet;
+  tweet: TweetType;
 }
 
-interface Tweet {
-  _id: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  author: Author;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
-
-const ReTweetContainer: FunctionComponent<Props> = ({ tweet }) => (
+const RetweetContainer: FunctionComponent<Props> = ({ tweet }) => (
   <RetweetBox>
     <Link href={`/status/${tweet._id}`}>
       <a>
@@ -39,4 +26,4 @@ const ReTweetContainer: FunctionComponent<Props> = ({ tweet }) => (
   </RetweetBox>
 );
 
-export default ReTweetContainer;
+export default RetweetContainer;

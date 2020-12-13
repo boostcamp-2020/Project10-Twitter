@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { useQuery } from '@apollo/client';
-import Modal from '../../molecules/Modal';
-import UserCard from '../UserCard';
-import GET_RETWEET_USER_LIST from '../../../graphql/getRetweetUserList.gql';
-import Loading from '../../molecules/Loading';
+import { Modal, Loading } from '@molecules';
+import { UserCard } from '@organisms';
+import { GET_RETWEET_USERLIST } from '@graphql/user';
+import { UserType } from '@types';
 
 interface Props {
   displayModal: boolean;
@@ -11,21 +11,13 @@ interface Props {
   tweetId: string;
 }
 
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
-
 const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweetId }) => {
-  const { loading, error, data } = useQuery(GET_RETWEET_USER_LIST, { variables: { tweetId } });
+  const { loading, error, data } = useQuery(GET_RETWEET_USERLIST, { variables: { tweetId } });
 
   return (
     <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
       {data ? (
-        data.userList?.map((user: User, index: number) => <UserCard key={index} user={user} />)
+        data.userList?.map((user: UserType, index: number) => <UserCard key={index} user={user} />)
       ) : (
         <Loading message="Loading" />
       )}

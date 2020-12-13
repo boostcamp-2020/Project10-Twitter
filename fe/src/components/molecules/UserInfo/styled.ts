@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import styled from 'styled-components';
-import TitleSubText from '../TitleSubText';
+import { TitleSubText } from '@molecules';
 
 const Container = styled(Box)`
   border-radius: 15px;

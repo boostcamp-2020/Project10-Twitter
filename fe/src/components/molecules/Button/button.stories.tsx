@@ -1,7 +1,7 @@
 import React from 'react';
 import { text } from '@storybook/addon-knobs';
+import { Home, Explore, Twitter, Notifications, Profiles } from '@atoms';
 import Button from './index';
-import { Home, Explore, Twitter, Notifications, Profiles } from '../../atoms/Icons';
 
 export default {
   title: 'Molecules/Button',

@@ -1,0 +1,72 @@
+query GET_MYINFO {
+  myProfile: my_info {
+    user_id
+    name
+    comment
+    profile_img_url
+    following_id_list
+    heart_tweet_id_list
+    lastest_notification_id
+  }
+}
+
+query GET_USER_DETAIL($userId: String) {
+  user: user_info(user_id: $userId) {
+    _id
+    user_id
+    name
+    comment
+    profile_img_url
+    background_img_url
+    following_id_list
+  }
+  followerCount: follower_count(user_id: $userId) {
+    count
+  }
+}
+
+query GET_FOLLOWER_LIST($userId: String, $oldestUserId: String) {
+  list: follower_list(user_id: $userId, oldest_user_id: $oldestUserId) {
+    _id
+    user_id
+    name
+    comment
+    profile_img_url
+  }
+}
+
+query GET_FOLLOWING_LIST($userId: String, $oldestUserId: String) {
+  list: following_list(user_id: $userId, oldest_user_id: $oldestUserId) {
+    _id
+    user_id
+    name
+    comment
+    profile_img_url
+  }
+}
+
+query GET_SEARCH_USERLIST($searchWord: String!, $oldestUserId: String) {
+  searchList: search_user_list(search_word: $searchWord, oldest_user_id: $oldestUserId) {
+    _id
+    user_id
+    name
+    comment
+    profile_img_url
+  }
+}
+
+query GET_HEART_USERLIST($tweetId: String, $oldestUserId: String) {
+  userList: heart_user_list(tweet_id: $tweetId, oldest_user_id: $oldestUserId) {
+    user_id
+    name
+    profile_img_url
+  }
+}
+
+query GET_RETWEET_USERLIST($tweetId: String, $oldestUserId: String) {
+  userList: retweet_user_list(tweet_id: $tweetId, oldest_user_id: $oldestUserId) {
+    user_id
+    name
+    profile_img_url
+  }
+}

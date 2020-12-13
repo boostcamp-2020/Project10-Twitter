@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import LoginLeftSection from '../../components/organisms/LoginLeftSection';
-import LoginRightSection from '../../components/organisms/LoginRightSection';
-import Footer from '../../components/molecules/Footer';
+import { Footer } from '@molecules';
+import { LoginLeftSection, LoginRightSection } from '@organisms';
 import Container from './styled';
 
 const Login: FunctionComponent = () => {

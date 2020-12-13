@@ -1,11 +1,12 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import useUserState from '../../../hooks/useUserState';
-import TitleSubText from '../../molecules/TitleSubText';
-import ProfileImg from '../../atoms/ProfileImg';
-import Button from '../../molecules/Button';
-
+import { TitleSubText, Button, Loading } from '@molecules';
+import { ProfileImg, Text } from '@atoms';
+import { useUserState } from '@hooks';
+import { getJSXwithUserState } from '@libs';
+import { GET_USER_DETAIL } from '@graphql/user';
+import { QueryVariableType } from '@types';
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -16,26 +17,14 @@ import {
   UserImgContainer,
   ImgCircleContainer,
 } from './styled';
-import Text from '../../atoms/Text';
-import { getJSXwithUserState } from '../../../libs';
-import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
-import Loading from '../../molecules/Loading';
 
 interface Props {
   userId: string;
 }
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
-  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const { loading, error, data } = useQuery(GET_USERDETAIL, queryVariable);
+  const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
+  const { loading, error, data } = useQuery(GET_USER_DETAIL, queryVariable);
   const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
 
   const onClickEdit = () => {};

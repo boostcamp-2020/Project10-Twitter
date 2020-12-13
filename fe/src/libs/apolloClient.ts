@@ -13,7 +13,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = createUploadLink({
-  uri: 'http://127.0.0.1:3001/graphql',
+  uri: 'http://localhost:3001/graphql',
+  credentials: 'include',
 });
 
 const mergeItems = (a = [], b = []) => {
@@ -50,7 +51,7 @@ const notificationPolicies = {
 };
 
 const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink), // api 서버 url
+  link: httpLink, // api 서버 url
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

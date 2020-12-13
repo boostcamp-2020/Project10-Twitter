@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import GITHUB_LOGIN from '../../graphql/github.gql';
-import Loading from '../../components/molecules/Loading';
+import { Loading } from '@molecules';
+import GITHUB_LOGIN from '@graphql/auth';
 
 interface Props {
   code: string | string[] | undefined;
@@ -18,7 +18,6 @@ const Callback: NextPage<Props> = ({ code }) => {
 
   if (error) router.push('/login');
   if (data) {
-    localStorage.setItem('jwt_token', data.auth.token);
     router.push('/home');
   }
   return <Loading message="Loading" />;

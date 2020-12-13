@@ -1,21 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { useMutation } from '@apollo/client';
-import Modal from '../../molecules/Modal';
+import { Modal } from '@molecules';
+import { useOnTextChange } from '@hooks';
+import { ADD_USER } from '@graphql/user';
 import { StyledInputContainer, StyledButton } from './styled';
-import ADD_USER from '../../../graphql/addUser.gql';
-import useOnTextChange from '../../../hooks/useOnTextChange';
 
 interface Props {
   displayModal: boolean;
   onClickCloseBtn: () => void;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
 }
 
 const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {

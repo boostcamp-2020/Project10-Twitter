@@ -1,48 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import TweetContainer from '../TweetContainer';
+import { useMyInfo } from '@hooks';
+import { TweetContainer } from '@organisms';
+import { NotificationType } from '@types';
 import HeartContainer from './HeartContainer';
 import { Container, UnderLine } from './styled';
-import useMyInfo from '../../../hooks/useMyInfo';
 import FollowContainer from './FollowContainer';
 
 interface Props {
-  noti: Noti;
-}
-
-interface Noti {
-  curTabValue: string;
-  giver: User;
-  tweet: Tweet;
-  type: string;
-  _id: string;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
-
-interface Tweet {
-  _id: string;
-  createAt: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  img_url_list: [string];
-  author: Author;
-  retweet_id: string;
-  retweet: Tweet;
-}
-
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
+  noti: NotificationType;
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({

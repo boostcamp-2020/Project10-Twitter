@@ -1,0 +1,20 @@
+mutation ADD_BASIC_TWEET($content: String!, $imgUrlList: [String]) {
+  tweet: add_basic_tweet(content: $content, img_url_list: $imgUrlList) {
+    content
+    author_id
+  }
+}
+
+mutation ADD_REPLY_TWEET($content: String!, $imgUrlList: [String], $parentId: String!) {
+  tweet: add_reply_tweet(content: $content, img_url_list: $imgUrlList, parent_id: $parentId) {
+    content
+    author_id
+  }
+}
+
+mutation ADD_RETWEET($content: String, $retweetId: String!) {
+  tweet: add_retweet(content: $content, retweet_id: $retweetId) {
+    content
+    author_id
+  }
+}

@@ -1,7 +1,6 @@
 import React from 'react';
+import { Search, Text } from '@atoms';
 import IconLabel from './index';
-import { Search } from '../../atoms/Icons';
-import Text from '../../atoms/Text';
 
 export default {
   title: 'Molecules/IconLabel',

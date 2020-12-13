@@ -1,56 +1,17 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import TabBar from '../../components/molecules/TabBar';
-import NotificationContainer from '../../components/organisms/NotificationContainer';
-import PageLayout from '../../components/organisms/PageLayout';
-import GET_MYINFO from '../../graphql/getMyInfo.gql';
-import GET_NOTIFICATION from '../../graphql/getNotification.gql';
-import GET_MENTION_NOTIFICATION from '../../graphql/getMentionNotification.gql';
-import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import apolloClient from '../../libs/apolloClient';
-
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
-interface Noti {
-  _id: string;
-  giver: User;
-  tweet: Tweet;
-  type: string;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  img_url_list: [string];
-  author: Author;
-  retweet_id: string;
-  retweet: Tweet;
-}
-
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
+import { TabBar } from '@molecules';
+import { PageLayout, NotificationContainer } from '@organisms';
+import { useInfiniteScroll } from '@hooks';
+import { apolloClient } from '@libs';
+import { GET_MYINFO } from '@graphql/user';
+import { NotificationType } from '@types';
+import {
+  GET_NOTIFICATION_LIST,
+  GET_MENTION_NOTIFICATION_LIST,
+  CONFIRM_NOTIFICATION,
+} from '@graphql/notification';
 
 const getValue = (type: string | string[] | undefined) => {
   if (!type) return 'all';
@@ -60,13 +21,13 @@ const getValue = (type: string | string[] | undefined) => {
 const Notification: FunctionComponent = () => {
   const router = useRouter();
   const { type } = router.query;
-  const queryArr = { all: GET_NOTIFICATION, mention: GET_MENTION_NOTIFICATION };
+  const queryArr = { all: GET_NOTIFICATION_LIST, mention: GET_MENTION_NOTIFICATION_LIST };
   const value = getValue(type);
   // type ? type[0] : 'all';
   const { data, fetchMore } = useQuery(queryArr[value]);
-  const [mutate] = useMutation(UPDATE_NOTIFICATION);
+  const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
-  const [notificationList, setNotificationList] = useState<Noti[]>([]);
+  const [notificationList, setNotificationList] = useState<NotificationType[]>([]);
   const { _id: bottomNotificationId } = notificationList[notificationList.length - 1] || {};
   const fetchMoreEl = useRef(null);
   const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
@@ -124,7 +85,7 @@ const Notification: FunctionComponent = () => {
     <PageLayout>
       <TabBar value={value} handleChange={onClick} labels={['all', 'mention']} />
       <>
-        {notificationList?.map((noti: Noti, index: number) => (
+        {notificationList?.map((noti: NotificationType, index: number) => (
           <NotificationContainer key={index} noti={{ ...noti, curTabValue: value }} />
         ))}
       </>

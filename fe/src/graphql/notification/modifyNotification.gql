@@ -1,4 +1,4 @@
-mutation($id: String) {
+mutation CONFIRM_NOTIFICATION($id: String) {
   update_notification(id: $id) {
     response
   }

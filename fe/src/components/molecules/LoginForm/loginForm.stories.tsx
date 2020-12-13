@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { text } from '@storybook/addon-knobs';
+import { InputContainer, Button } from '@molecules';
 import LoginForm from './index';
-import InputContainer from '../InputContainer';
-import Button from '../Button';
 
 export default {
   title: 'Molecules/LoginForm',

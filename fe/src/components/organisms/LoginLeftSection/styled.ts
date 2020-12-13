@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box, SvgIcon } from '@material-ui/core';
-import IconLabel from '../../molecules/IconLabel';
+import { IconLabel } from '@molecules';
 
 const Container = styled(Box)`
   display: flex;

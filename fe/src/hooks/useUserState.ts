@@ -1,21 +1,15 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import GET_MYINFO from '../graphql/getMyInfo.gql';
-import FOLLOW_USER from '../graphql/followUser.gql';
-import UNFOLLOW_USER from '../graphql/unfollowUser.gql';
+import { GET_MYINFO, FOLLOW_USER, UNFOLLOW_USER } from '@graphql/user';
+import { UserType, QueryVariableType } from '@types';
 
-interface User {
-  user_id: string;
-  following_id_list: string[];
-}
-
-const getUserType = (user: User, myProfile: User) => {
+const getUserType = (user: UserType, myProfile: UserType) => {
   if (myProfile?.user_id === user?.user_id) return 'me';
   if (myProfile?.following_id_list.includes(user?.user_id)) return 'followUser';
   return 'unfollowUser';
 };
 
-const useUserState = (user: User): [string, () => Promise<void>, () => Promise<void>] => {
+const useUserState = (user: UserType): [string, () => Promise<void>, () => Promise<void>] => {
   const { data } = useQuery(GET_MYINFO);
   const [userState, setUserState] = useState(getUserType(user, data?.myProfile));
 

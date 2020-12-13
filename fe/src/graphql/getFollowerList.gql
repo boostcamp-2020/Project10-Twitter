@@ -1,9 +1,0 @@
-query($userId: String, $oldestUserId: String) {
-  list: follower_list(user_id: $userId, oldest_user_id: $oldestUserId) {
-    _id
-    user_id
-    name
-    comment
-    profile_img_url
-  }
-}
