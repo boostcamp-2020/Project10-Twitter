@@ -1,5 +1,12 @@
 import { getJSXwithUserState, makeTimeText, binarySearch } from './utility';
-import apolloClient from './apolloClient';
+import { initializeApollo, useApollo } from './apolloClient';
 import AuthProvider from './authProvider';
 
-export { getJSXwithUserState, makeTimeText, apolloClient, AuthProvider, binarySearch };
+export {
+  getJSXwithUserState,
+  makeTimeText,
+  initializeApollo,
+  useApollo,
+  AuthProvider,
+  binarySearch,
+};
