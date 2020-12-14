@@ -1,3 +1,3 @@
-import { GITHUB_LOGIN } from './login.gql';
+import { GITHUB_LOGIN, LOCAL_LOGIN } from './login.gql';
 
-export default GITHUB_LOGIN;
+export { GITHUB_LOGIN, LOCAL_LOGIN };
