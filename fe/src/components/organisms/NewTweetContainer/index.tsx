@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
-import { useMutation, MutationFunctionOptions, FetchResult } from '@apollo/client';
+import { useMutation, useLazyQuery, MutationFunctionOptions, FetchResult } from '@apollo/client';
 import { DocumentNode } from 'graphql';
 import { TweetFooter, UploadImg } from '@molecules';
 import { TextArea, Picture } from '@atoms';
@@ -8,6 +8,7 @@ import { MainContainer, RetweetContainer } from '@organisms';
 import UPLOAD_IMAGE from '@graphql/image';
 import { TweetType } from '@types';
 import { binarySearch } from '@libs';
+import { GET_TWEETLIST } from '@graphql/tweet';
 import UploadImage from './styled';
 
 interface Props {
@@ -33,14 +34,17 @@ const NewTweetContainer: FunctionComponent<Props> = ({
   const [image, setImage] = useState(undefined);
 
   const fileUpload = useRef(null);
+  const [getTweetList, { loading, data, fetchMore }] = useLazyQuery(GET_TWEETLIST);
 
   useEffect(() => {
     setBtnDisabled(!value && !image);
   }, [value, image]);
 
-  const onTweetBtnClick = () => {
+  const onTweetBtnClick = async () => {
+    getTweetList();
+    console.log(data.tweetList);
     if (parentId && updateQuery)
-      onClickQuery({
+      await onClickQuery({
         variables: { content: value, parentId, imgUrlList: [image] },
         update: (cache) => {
           const res = cache.readQuery({ query: updateQuery });
@@ -59,7 +63,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
         },
       });
     else if (tweet && updateQuery)
-      onClickQuery({
+      await onClickQuery({
         variables: { content: value, retweetId: tweet._id },
         update: (cache) => {
           const res = cache.readQuery({ query: updateQuery });
@@ -77,7 +81,8 @@ const NewTweetContainer: FunctionComponent<Props> = ({
           });
         },
       });
-    else onClickQuery({ variables: { content: value, imgUrlList: [image] } });
+    else await onClickQuery({ variables: { content: value, imgUrlList: [image] } });
+    fetchMore({ variables: { latestTweetId: data.tweetList[0]._id } });
     setValue('');
     imgCloseBtnClick();
   };
