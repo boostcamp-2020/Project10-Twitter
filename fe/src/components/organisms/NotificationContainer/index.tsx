@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
+import { DocumentNode } from 'graphql';
 import { useMyInfo } from '@hooks';
 import { TweetContainer } from '@organisms';
 import { NotificationType } from '@types';
@@ -9,10 +10,14 @@ import FollowContainer from './FollowContainer';
 
 interface Props {
   noti: NotificationType;
+  curTabValue: String;
+  updateQuery: DocumentNode;
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
-  noti: { giver, tweet, type, _id, curTabValue },
+  noti: { giver, tweet, type, _id },
+  curTabValue,
+  updateQuery,
 }) => {
   const { myProfile } = useMyInfo();
   const isRead = myProfile.lastest_notification_id < _id;
@@ -20,7 +25,7 @@ const NotificationContainer: FunctionComponent<Props> = ({
   if (type === 'mention')
     return (
       <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-        <TweetContainer tweet={tweet} />
+        <TweetContainer tweet={tweet} updateQuery={updateQuery} />
       </Container>
     );
 
@@ -43,7 +48,7 @@ const NotificationContainer: FunctionComponent<Props> = ({
       );
     return (
       <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-        <TweetContainer tweet={tweet} />
+        <TweetContainer tweet={tweet} updateQuery={updateQuery} />
       </Container>
     );
   }

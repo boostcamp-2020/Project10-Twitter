@@ -4,7 +4,7 @@ import MainContainer from './MainContainer';
 import NewTweetContainer from './NewTweetContainer';
 import NotificationContainer from './NotificationContainer';
 import PageLayout from './PageLayout';
-import RetweetContainer from './RetweetContainer';
+import RetweetContainer from './ReTweetContainer';
 import SideBar from './SideBar';
 import SignupModal from './SignupModal';
 import TweetContainer from './TweetContainer';

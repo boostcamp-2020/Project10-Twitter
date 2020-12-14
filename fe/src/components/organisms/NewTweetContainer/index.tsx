@@ -1,11 +1,13 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
 import { useMutation, MutationFunctionOptions, FetchResult } from '@apollo/client';
+import { DocumentNode } from 'graphql';
 import { TweetFooter, UploadImg } from '@molecules';
 import { TextArea, Picture } from '@atoms';
 import { useMyInfo, useOnTextChange } from '@hooks';
 import { MainContainer, RetweetContainer } from '@organisms';
 import UPLOAD_IMAGE from '@graphql/image';
 import { TweetType } from '@types';
+import { binarySearch } from '@libs';
 import UploadImage from './styled';
 
 interface Props {
@@ -15,9 +17,15 @@ interface Props {
     options?: MutationFunctionOptions<any, Record<string, any>> | undefined,
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   parentId?: string;
+  updateQuery?: DocumentNode;
 }
 
-const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, parentId }) => {
+const NewTweetContainer: FunctionComponent<Props> = ({
+  tweet,
+  onClickQuery,
+  parentId,
+  updateQuery,
+}) => {
   const { myProfile } = useMyInfo();
   const [value, setValue, onTextChange] = useOnTextChange('');
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -31,8 +39,44 @@ const NewTweetContainer: FunctionComponent<Props> = ({ tweet, onClickQuery, pare
   }, [value, image]);
 
   const onTweetBtnClick = () => {
-    if (parentId) onClickQuery({ variables: { content: value, parentId, imgUrlList: [image] } });
-    else if (tweet) onClickQuery({ variables: { content: value, retweetId: tweet._id } });
+    if (parentId && updateQuery)
+      onClickQuery({
+        variables: { content: value, parentId, imgUrlList: [image] },
+        update: (cache) => {
+          const res = cache.readQuery({ query: updateQuery });
+          const source = [...res.tweetList];
+          const idx = binarySearch(source, parentId);
+          if (idx === -1) return;
+          const number: number = source[idx].child_tweet_number + 1;
+          source[idx] = {
+            ...source[idx],
+            child_tweet_number: number,
+          };
+          cache.writeQuery({
+            query: updateQuery,
+            data: { tweetList: source },
+          });
+        },
+      });
+    else if (tweet && updateQuery)
+      onClickQuery({
+        variables: { content: value, retweetId: tweet._id },
+        update: (cache) => {
+          const res = cache.readQuery({ query: updateQuery });
+          const source = [...res.tweetList];
+          const idx = binarySearch(source, tweet._id);
+          if (idx === -1) return;
+          const number: number = source[idx].retweet_user_number + 1;
+          source[idx] = {
+            ...source[idx],
+            retweet_user_number: number,
+          };
+          cache.writeQuery({
+            query: updateQuery,
+            data: { tweetList: source },
+          });
+        },
+      });
     else onClickQuery({ variables: { content: value, imgUrlList: [image] } });
     setValue('');
     imgCloseBtnClick();
