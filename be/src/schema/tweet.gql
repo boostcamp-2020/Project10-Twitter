@@ -8,7 +8,6 @@ type Tweet {
   retweet_id: String
   retweet: Tweet
   child_tweet_number: Int
-  child_tweet_list: [Tweet]
   retweet_user_number: Int
   heart_user_number: Int
   createAt: Date
