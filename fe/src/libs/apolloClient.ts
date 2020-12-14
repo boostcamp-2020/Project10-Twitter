@@ -1,16 +1,5 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
-import { setContext } from '@apollo/client/link/context';
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('jwt_token');
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
 
 const httpLink = createUploadLink({
   uri: 'http://localhost:3001/graphql',
