@@ -72,6 +72,7 @@ const addReplyTweet = async (
     userId: parentTweet?.get('author_id'),
     tweetId: childId,
     type: 'reply',
+    giverId: userId,
   });
 
   await findMentionUser(content, replyTweet.get('_id'), userId);
@@ -104,6 +105,7 @@ const addRetweet = async (_: any, { content, retweet_id }: Args, { authUser }: A
     userId: parentTweet?.get('author_id'),
     tweetId: newRetweet?.get('_id'),
     type: 'retweet',
+    giverId: userId,
   });
 
   await findMentionUser(content, newRetweet.get('_id'), userId);
