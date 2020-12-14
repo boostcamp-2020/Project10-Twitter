@@ -15,13 +15,15 @@ const deleteTweet = async (_: any, { tweet_id }: Args, { authUser }: Auth) => {
 
   const willDeletedTweet = await tweetModel.findOne({ author_id: userId, _id: tweet_id });
 
-  const retweetId = willDeletedTweet?.get('reweet_id');
+  const retweetId = willDeletedTweet?.get('retweet_id');
 
-  if (retweetId) await willDeletedTweet?.updateOne({ $pull: { retweet_user_id_list: retweetId } });
+  if (retweetId)
+    await tweetModel.updateOne({ _id: retweetId }, { $pull: { retweet_user_id_list: userId } });
 
   const parentId = willDeletedTweet?.get('parent_id');
 
-  if (parentId) await willDeletedTweet?.updateOne({ parent_id: parentId });
+  if (parentId)
+    await tweetModel.updateOne({ _id: parentId }, { $pull: { child_tweet_id_list: tweet_id } });
 
   const heart_user_id_list = willDeletedTweet?.get('heart_user_id_list');
 

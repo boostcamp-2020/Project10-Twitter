@@ -1,7 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { userModel, tweetModel } from '@models';
-import commonReadCondition from './common';
 import { stringToObjectId } from '@libs/utiltys';
+import commonReadCondition from './common';
 
 interface Auth {
   authUser: { id: string };
