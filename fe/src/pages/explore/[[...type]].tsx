@@ -4,12 +4,13 @@ import { useRouter } from 'next/router';
 import { SearchBar, TabBar, Loading } from '@molecules';
 import { PageLayout, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useInfiniteScroll } from '@hooks';
-import { apolloClient } from '@libs';
+import { initializeApollo } from '@libs';
 import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
 import { GET_SEARCH_USERLIST } from '@graphql/user';
 import { TweetType, VariableType } from '@types';
 
 const Explore: FunctionComponent = () => {
+  const apolloClient = initializeApollo();
   const router = useRouter();
   const { type } = router.query;
   const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');

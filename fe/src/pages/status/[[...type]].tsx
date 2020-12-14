@@ -4,12 +4,13 @@ import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
 import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
-import { apolloClient } from '@libs';
+import { initializeApollo } from '@libs';
 import { TweetType, QueryVariableType } from '@types';
 
 import { GET_CHILD_TWEETLIST } from '@graphql/tweet';
 
 const UserDetail: FunctionComponent = () => {
+  const apolloClient = initializeApollo();
   const router = useRouter();
   const { type } = router.query;
   const tweetId = type ? type[0] : '';

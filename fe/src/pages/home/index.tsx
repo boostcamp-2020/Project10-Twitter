@@ -1,15 +1,16 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import Cookies from 'cookies';
+import { GetServerSideProps } from 'next';
 import { useQuery, useMutation } from '@apollo/client';
 import { PageLayout, TweetContainer, NewTweetContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { GET_TWEETLIST, ADD_BASIC_TWEET } from '@graphql/tweet';
 import { TweetType } from '@types';
-import { apolloClient } from '@libs';
+import { initializeApollo } from '@libs';
 import HomeBox from './styled';
 
-const Home: FunctionComponent = ({ stweetList }) => {
-  const [tweetList, setTweetList] = useState<TweetType[]>(stweetList || []);
+const Home: FunctionComponent = () => {
+  const [tweetList, setTweetList] = useState<TweetType[]>([]);
   const { _id: bottomTweetId } = tweetList[tweetList.length - 1] || {};
   const { _id: topTweetId } = tweetList[0] || {};
   const [addBasicTweet] = useMutation(ADD_BASIC_TWEET);
@@ -19,7 +20,7 @@ const Home: FunctionComponent = ({ stweetList }) => {
     pollInterval: 60000,
   });
   const fetchMoreEl = useRef(null);
-  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl, stweetList);
+  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
 
   useEffect(() => {
     if (data?.tweetList) setTweetList(data?.tweetList);
@@ -52,10 +53,10 @@ const Home: FunctionComponent = ({ stweetList }) => {
 
 export default Home;
 
-export async function getServerSideProps({ req, res }) {
-  const cookies = new Cookies(req, res);
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const cookies = new Cookies(ctx.req, ctx.res);
   const reqCookie = cookies.get('jwt');
-
+  const apolloClient = initializeApollo();
   const result = await apolloClient.query({
     query: GET_TWEETLIST,
     context: {
@@ -70,4 +71,4 @@ export async function getServerSideProps({ req, res }) {
       stweetList: result.data?.tweetList,
     },
   };
-}
+};
