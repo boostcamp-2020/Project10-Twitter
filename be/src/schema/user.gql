@@ -30,7 +30,7 @@ type Mutation {
   github_login(code: String!): Auth
   create_user(user_id: String!, name: String!, password: String!): Response
   local_login(user_id: String!, password: String!): Auth
-  update_user_name(name: String!): Response
+  update_user_info(name: String!, comment: String): Response
   follow_user(follow_user_id: String!): User
   unfollow_user(unfollow_user_id: String!): User
 }

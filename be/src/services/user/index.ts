@@ -11,7 +11,7 @@ import {
 import {
   followUser,
   unfollowUser,
-  updateUserName,
+  updateUserInfo,
   updateUserComment,
   updateUserProfileImg,
   updateUserBackgroundImg,
@@ -30,7 +30,7 @@ export {
   followUser,
   unfollowUser,
   createUser,
-  updateUserName,
+  updateUserInfo,
   updateUserComment,
   updateUserProfileImg,
   updateUserBackgroundImg,
