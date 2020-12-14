@@ -18,11 +18,13 @@ interface Props {
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   parentId?: string;
   updateQuery?: DocumentNode;
+  onClickCloseBtn?: () => void;
 }
 
 const NewTweetContainer: FunctionComponent<Props> = ({
   tweet,
   onClickQuery,
+  onClickCloseBtn = () => {},
   parentId,
   updateQuery,
 }) => {
@@ -78,6 +80,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
         },
       });
     else onClickQuery({ variables: { content: value, imgUrlList: [image] } });
+    onClickCloseBtn();
     setValue('');
     imgCloseBtnClick();
   };
