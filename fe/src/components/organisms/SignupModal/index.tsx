@@ -10,7 +10,7 @@ interface Props {
   onClickCloseBtn: () => void;
 }
 
-const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
+const SignupModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
   const [createUser, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_USER);
   const [userId, setUserId, onUserIdChange] = useOnTextChange('');
   const [name, setName, onNameChange] = useOnTextChange('');
@@ -22,9 +22,14 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
     setName('');
     setPassword('');
   };
-
+  const onCloseBtnClick = () => {
+    setUserId('');
+    setName('');
+    setPassword('');
+    onClickCloseBtn();
+  };
   return (
-    <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
+    <Modal displayModal={displayModal} onClickCloseBtn={onCloseBtnClick}>
       <StyledInputContainer labelValue="아이디" inputValue={userId} onChange={onUserIdChange} />
       <StyledInputContainer labelValue="이름" inputValue={name} onChange={onNameChange} />
       <StyledInputContainer
@@ -33,9 +38,15 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
         inputValue={password}
         onChange={onPasswordChange}
       />
-      <StyledButton text="가입" color="primary" variant="contained" onClick={onSignupBtnClick} />
+      <StyledButton
+        text="가입"
+        color="primary"
+        variant="contained"
+        onClick={onSignupBtnClick}
+        disabled={userId !== '' && name !== '' && password !== ''}
+      />
     </Modal>
   );
 };
 
-export default HeartListModal;
+export default SignupModal;
