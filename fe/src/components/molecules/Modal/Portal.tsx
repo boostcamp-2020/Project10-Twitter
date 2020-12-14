@@ -11,7 +11,7 @@ const Portal: FunctionComponent<Props> = ({ children }) => {
     setEl(document.getElementById('modal'));
   }, []);
   if (el) return ReactDOM.createPortal(children, el as Element);
-  return <div />;
+  return null;
 };
 
 export default Portal;
