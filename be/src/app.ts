@@ -16,18 +16,19 @@ dotenv.config();
 
 const app = express();
 
+const corsOptions = { origin: 'http://localhost:3000', credentials: true };
+
 app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, '../uploads')));
-
+app.use(cors(corsOptions));
 const port: number = Number(process.env.PORT) || 3000;
-const corsOptions = { origin: 'http://localhost:3000', credentials: true };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req, res }) => {
-    if (!req.cookies.jwt) return { authUser: undefined };
+    if (!req.cookies.jwt) return { authUser: undefined, res };
 
     const authUser = verifyToken(req.cookies.jwt);
     return { authUser, res };
