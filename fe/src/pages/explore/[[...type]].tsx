@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { SearchBar, TabBar, Loading } from '@molecules';
+import { SearchBar, TabBar, ComponentLoading } from '@molecules';
 import { PageLayout, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
@@ -82,7 +82,7 @@ const Explore: FunctionComponent = () => {
             ))
           )
         ) : (
-          <Loading message="Loading" />
+          <ComponentLoading />
         )}
       </div>
       <div ref={fetchMoreEl} />

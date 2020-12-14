@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import { TitleSubText, Button, Loading } from '@molecules';
+import { TitleSubText, Button, Loading, ComponentLoading } from '@molecules';
 import { ProfileImg, Text } from '@atoms';
 import { useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
@@ -29,7 +29,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
 
   const onClickEdit = () => {};
 
-  if (loading) return <Loading message="Loading" />;
+  if (loading) return <ComponentLoading />;
   if (error)
     return (
       <div>

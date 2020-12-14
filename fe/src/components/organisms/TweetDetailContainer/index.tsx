@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
 import { useQuery, useMutation } from '@apollo/client';
-import { TitleSubText, IconButton, Loading, UserInfo } from '@molecules';
+import { TitleSubText, IconButton, ComponentLoading, UserInfo } from '@molecules';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
 import { makeTimeText } from '@libs';
@@ -44,7 +44,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
     router.push('/home');
   };
 
-  if (loading) return <Loading message="Loading" />;
+  if (loading) return <ComponentLoading />;
   if (error)
     return (
       <div>

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useQuery } from '@apollo/client';
-import { Modal, Loading } from '@molecules';
+import { Modal, ComponentLoading } from '@molecules';
 import { UserCard } from '@organisms';
 import { GET_HEART_USERLIST } from '@graphql/user';
 import { UserType } from '@types';
@@ -18,7 +18,7 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
       {data ? (
         data.userList?.map((user: UserType, index: number) => <UserCard key={index} user={user} />)
       ) : (
-        <Loading message="Loading" />
+        <ComponentLoading />
       )}
     </Modal>
   );
