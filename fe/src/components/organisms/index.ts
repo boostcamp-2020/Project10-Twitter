@@ -18,6 +18,7 @@ import {
 } from './TweetModal';
 import UserCard from './UserCard';
 import UserDetailContainer from './UserDetailContainer';
+import UserEditModal from './UserEditModal';
 
 export {
   LoginLeftSection,
@@ -36,6 +37,7 @@ export {
   ReplyModal,
   RetweetListModal,
   RetweetModal,
+  UserEditModal,
   UserCard,
   UserDetailContainer,
 };
