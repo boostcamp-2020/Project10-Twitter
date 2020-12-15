@@ -27,7 +27,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
   const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const { data } = useQuery(GET_USER_DETAIL, queryVariable);
   const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
-                                                                   
+
   const [displayModal, , onClickEditModal] = useDisplay(false);
 
   const PROFILE_IMG_SIZE = 150;
@@ -64,7 +64,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           <UserFollowContainer>
             <Link href={`/${user.user_id}/follow/`}>
               <a>
-                <TitleSubText title="팔로워 수" sub={followerCount.count || 0} />
+                <TitleSubText title="팔로워 수" sub={followerCount ? followerCount.count : 0} />
               </a>
             </Link>
             <Link href={`/${user.user_id}/follow/following`}>
