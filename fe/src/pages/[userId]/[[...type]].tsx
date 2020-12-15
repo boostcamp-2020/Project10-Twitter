@@ -72,17 +72,16 @@ export default UserDetail;
 export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
   const jwt = getJWTFromBrowser(ctx.req, ctx.res);
   const apolloClient = initializeApollo();
-
   const { userId } = ctx.query || {};
 
-  const result = await apolloClient.query({
+  const { data } = await apolloClient.query({
     query: DETAIL_PAGE,
     variables: { userId },
     context: {
       headers: { cookie: `jwt=${jwt}` },
     },
   });
-  if (!result) {
+  if (!data.user) {
     return {
       notFound: true,
     };

@@ -41,11 +41,6 @@ const Notification: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'notification_list' });
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'notification_mention_list' });
-  }, []);
-
-  useEffect(() => {
     const lastestNotification = data?.notifications[0];
     if (lastestNotification)
       mutate({

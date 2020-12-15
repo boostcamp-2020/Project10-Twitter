@@ -22,10 +22,6 @@ const TweetDetail: FunctionComponent = () => {
     fetchMoreEl,
   );
 
-  useEffect(() => {
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'child_tweet_list' });
-  }, [tweetId]);
-
   return (
     <PageLayout>
       <TweetDetailContainer tweetId={tweetId as string} />
@@ -45,14 +41,12 @@ export default TweetDetail;
 
 export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
   const apolloClient = initializeApollo();
-  const {
-    type: [tweetId],
-  } = ctx.query;
+  const { type } = ctx.query;
   const jwt = getJWTFromBrowser(ctx.req, ctx.res);
 
   await apolloClient.query({
     query: GET_TWEET_DETAIL,
-    variables: { tweetId },
+    variables: { tweetId: type?.length ? type[0] : '' },
     context: {
       headers: { cookie: `jwt=${jwt}` },
     },
@@ -60,7 +54,7 @@ export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
 
   await apolloClient.query({
     query: GET_CHILD_TWEETLIST,
-    variables: { tweetId },
+    variables: { tweetId: type?.length ? type[0] : '' },
     context: {
       headers: { cookie: `jwt=${jwt}` },
     },

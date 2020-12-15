@@ -14,7 +14,7 @@ import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } fro
 
 interface Props {
   tweet: TweetType;
-  updateQuery: DocumentNode;
+  updateQuery: { query: DocumentNode; variables: {} };
 }
 
 const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
@@ -36,10 +36,10 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
   const cacheUpdate = (cache: ApolloCache<any>, data: any) => {
     const { result } = data;
     if (result.response) {
-      const tweetCache = cache.readQuery<{ tweetList: TweetType[] }>({ query: updateQuery });
+      const tweetCache = cache.readQuery<{ tweetList: TweetType[] }>({ query: updateQuery.query });
       if (tweetCache) {
         cache.writeQuery({
-          query: updateQuery,
+          query: updateQuery.query,
           data: { tweetList: tweetCache.tweetList.filter((b) => b._id !== tweet._id) },
         });
       }
@@ -85,13 +85,13 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}
-        updateQuery={updateQuery}
+        updateQuery={updateQuery.query}
         tweet={tweet}
       />
       <RetweetModal
         displayModal={displayRetweetModal}
         onClickCloseBtn={onClickRetweetBtn}
-        updateQuery={updateQuery}
+        updateQuery={updateQuery.query}
         tweet={tweet}
       />
     </>

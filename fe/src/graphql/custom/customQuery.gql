@@ -22,6 +22,7 @@ query DETAIL_PAGE($userId: String, $oldestTweetId: String) {
       }
     }
     author {
+      _id
       user_id
       name
       profile_img_url
