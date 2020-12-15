@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
 import { useQuery, useMutation } from '@apollo/client';
-import { TitleSubText, IconButton, ComponentLoading, UserInfo, UploadImg } from '@molecules'
+import { TitleSubText, IconButton, ComponentLoading, UserInfo, UploadImg } from '@molecules';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
 import { makeTimeText } from '@libs';
@@ -29,12 +29,16 @@ interface Props {
   tweetId: string;
 }
 
-const TweetDetailContainer: FunctionComponent<Props> = ({ children, stweet, tweetId }) => {
+const TweetDetailContainer: FunctionComponent<Props> = ({ tweetId }) => {
   const router = useRouter();
   const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
-  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweet);
-  const [userState] = useUserState(data?.tweet.author);
+  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweetList, {
+    query: GET_TWEET_DETAIL,
+    variables: { tweetId },
+    object: true,
+  });
+  const [userState] = useUserState(data?.tweetList.author);
   const [displayReplyModal, , onClickReplyBtn] = useDisplay(false);
   const [displayRetweetModal, , onClickRetweetBtn] = useDisplay(false);
   const [displayHeartListModal, onOpenHeartList, onCloseHeartList] = useDisplayWithShallow('likes');
@@ -59,7 +63,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, stweet, twee
       </div>
     );
 
-  const { tweet } = data;
+  const { tweetList: tweet } = data;
 
   return (
     <>

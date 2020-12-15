@@ -48,11 +48,6 @@ const Notification: FunctionComponent = () => {
   }, [intersecting]);
 
   useEffect(() => {
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'notification_list' });
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'notification_mention_list' });
-  }, []);
-
-  useEffect(() => {
     if (data?.notifications) {
       setNotificationList(data?.notifications);
     }

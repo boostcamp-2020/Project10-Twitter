@@ -99,7 +99,7 @@ query GET_USER_ALL_TWEETLIST($userId: String, $oldestTweetId: String) {
 }
 
 query GET_TWEET_DETAIL($tweetId: String!) {
-  tweet: detail_tweet(tweet_id: $tweetId) {
+  tweetList: detail_tweet(tweet_id: $tweetId) {
     _id
     createAt
     content
@@ -164,7 +164,7 @@ query GET_CHILD_TWEETLIST($tweetId: String!, $oldestTweetId: String) {
 }
 
 query GET_SEARCH_TWEETLIST($searchWord: String!, $oldestTweetId: String) {
-  searchList: search_tweet_list(search_word: $searchWord, oldest_tweet_id: $oldestTweetId) {
+  tweetList: search_tweet_list(search_word: $searchWord, oldest_tweet_id: $oldestTweetId) {
     _id
     createAt
     content
