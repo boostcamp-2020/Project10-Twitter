@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
 import { SearchBar, TabBar, ComponentLoading } from '@molecules';
@@ -12,7 +13,7 @@ const Explore: FunctionComponent = () => {
   const apolloClient = initializeApollo();
   const { type, router } = useTypeRouter();
   const value = type ? type[0] : 'tweets';
-  const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
+  const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] : '');
   const [searchWord, setSearchWord] = useState(textValue);
   const fetchMoreEl = useRef(null);
 
@@ -21,7 +22,7 @@ const Explore: FunctionComponent = () => {
       'searchWord',
       searchWord,
       'oldestTweetId',
-      'searchList',
+      'tweetList',
       GET_SEARCH_TWEETLIST,
       fetchMoreEl,
     ],
@@ -53,10 +54,11 @@ const Explore: FunctionComponent = () => {
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
-    let newValue = target.textContent;
+    const newValue = target.textContent;
     if (newValue !== value) {
-      if (newValue === 'tweets') newValue = '';
-      router.replace('/explore/[[...type]]', `/explore/${newValue}`, { shallow: true });
+      router.replace('/explore/[[...type]]', `/explore/${newValue}/${textValue}`, {
+        shallow: true,
+      });
     }
   };
 
@@ -75,8 +77,12 @@ const Explore: FunctionComponent = () => {
       <div>
         {data ? (
           value === 'tweets' ? (
-            data.searchList?.map((tweet: TweetType, index: number) => (
-              <TweetContainer key={index} tweet={tweet} updateQuery={GET_SEARCH_TWEETLIST} />
+            data.tweetList?.map((tweet: TweetType, index: number) => (
+              <TweetContainer
+                key={index}
+                tweet={tweet}
+                updateQuery={{ query: GET_SEARCH_TWEETLIST, variables: { searchWord } }}
+              />
             ))
           ) : (
             data.searchList?.map((user: UserType, index: number) => (

@@ -24,7 +24,12 @@ interface ButtonProps {
 const TITLE: Array<ButtonProps> = [
   { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px' }), link: '/home' },
   { id: 1, text: '홈', icon: Home({ width: '30px', height: '30px' }), link: '/home' },
-  { id: 2, text: '탐색하기', icon: Explore({ width: '30px', height: '30px' }), link: '/explore' },
+  {
+    id: 2,
+    text: '탐색하기',
+    icon: Explore({ width: '30px', height: '30px' }),
+    link: '/explore/tweets',
+  },
   {
     id: 3,
     text: '알림',
