@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
-import { useMutation, useLazyQuery, MutationFunctionOptions, FetchResult } from '@apollo/client';
+import { useMutation, MutationFunctionOptions, FetchResult, useQuery } from '@apollo/client';
 import { DocumentNode } from 'graphql';
 import { TweetFooter, UploadImg } from '@molecules';
 import { TextArea, Picture } from '@atoms';
@@ -36,15 +36,13 @@ const NewTweetContainer: FunctionComponent<Props> = ({
   const [image, setImage] = useState(undefined);
 
   const fileUpload = useRef(null);
-  const [getTweetList, { loading, data, fetchMore }] = useLazyQuery(GET_TWEETLIST);
+  const { data, fetchMore } = useQuery(GET_TWEETLIST);
 
   useEffect(() => {
     setBtnDisabled(!value && !image);
   }, [value, image]);
 
   const onTweetBtnClick = async () => {
-    getTweetList();
-    console.log(data.tweetList);
     if (parentId && updateQuery)
       await onClickQuery({
         variables: { content: value, parentId, imgUrlList: [image] },
@@ -84,7 +82,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
         },
       });
     else await onClickQuery({ variables: { content: value, imgUrlList: [image] } });
-    fetchMore({ variables: { latestTweetId: data.tweetList[0]._id } });
+    fetchMore({ variables: { latestTweetId: data?.tweetList[0]._id } });
     onClickCloseBtn();
     setValue('');
     imgCloseBtnClick();
