@@ -1,39 +1,29 @@
-import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { Loading } from '@molecules';
 import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
-import { useInfiniteScroll } from '@hooks';
-import { initializeApollo } from '@libs';
-import { TweetType, QueryVariableType } from '@types';
+import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
+import { TweetType } from '@types';
+import { GET_CHILD_TWEETLIST, GET_TWEET_DETAIL } from '@graphql/tweet';
 
-import { GET_CHILD_TWEETLIST } from '@graphql/tweet';
-
-const UserDetail: FunctionComponent = () => {
+const TweetDetail: FunctionComponent = () => {
   const apolloClient = initializeApollo();
-  const router = useRouter();
-  const { type } = router.query;
+  const [type] = useTypeRouter();
   const tweetId = type ? type[0] : '';
-  const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
-  const { loading, error, data, fetchMore } = useQuery(GET_CHILD_TWEETLIST, queryVariable);
-  const { _id: bottomTweetId } = data?.tweetList[data?.tweetList.length - 1] || {};
+
   const fetchMoreEl = useRef(null);
-  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
+  const [data] = useDataWithInfiniteScroll(
+    'tweetId',
+    tweetId,
+    'oldestTweetId',
+    'tweetList',
+    GET_CHILD_TWEETLIST,
+    fetchMoreEl,
+  );
 
   useEffect(() => {
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'child_tweet_list' });
   }, [tweetId]);
-
-  useEffect(() => {
-    const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !bottomTweetId || !fetchMore) return;
-      const { data: fetchMoreData } = await fetchMore({
-        variables: { oldestTweetId: bottomTweetId },
-      });
-      if (fetchMoreData.tweetList.length < 20) setLoadFinished(true);
-    };
-    asyncEffect();
-  }, [intersecting]);
 
   return (
     <PageLayout>
@@ -50,4 +40,32 @@ const UserDetail: FunctionComponent = () => {
   );
 };
 
-export default UserDetail;
+export default TweetDetail;
+
+export async function getServerSideProps({ req, res, query }) {
+  const tweetId = query.type[0];
+  const jwt = getJWTFromBrowser(req, res);
+
+  await apolloClient.query({
+    query: GET_TWEET_DETAIL,
+    variables: { tweetId },
+    context: {
+      headers: { cookie: `jwt=${jwt}` },
+    },
+  });
+
+  await apolloClient.query({
+    query: GET_CHILD_TWEETLIST,
+    variables: { tweetId },
+    context: {
+      headers: { cookie: `jwt=${jwt}` },
+    },
+  });
+  const initialState = apolloClient.cache.extract();
+
+  return {
+    props: {
+      initialState,
+    },
+  };
+}

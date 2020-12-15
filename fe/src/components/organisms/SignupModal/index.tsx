@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { Modal } from '@molecules';
 import { useOnTextChange } from '@hooks';
@@ -10,17 +10,23 @@ interface Props {
   onClickCloseBtn: () => void;
 }
 
-const SignupModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
-  const [createUser, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_USER);
+const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
+  const [createUser] = useMutation(ADD_USER);
   const [userId, setUserId, onUserIdChange] = useOnTextChange('');
   const [name, setName, onNameChange] = useOnTextChange('');
   const [password, setPassword, onPasswordChange] = useOnTextChange('');
+  const [btnDisabled, setBtnDisabled] = useState(true);
+
+  useEffect(() => {
+    setBtnDisabled(!userId || !name || !password);
+  }, [userId, name, password]);
 
   const onSignupBtnClick = () => {
     createUser({ variables: { userId, name, password } });
     setUserId('');
     setName('');
     setPassword('');
+    onClickCloseBtn();
   };
   const onCloseBtnClick = () => {
     setUserId('');
@@ -43,7 +49,7 @@ const SignupModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }
         color="primary"
         variant="contained"
         onClick={onSignupBtnClick}
-        disabled={userId !== '' && name !== '' && password !== ''}
+        disabled={btnDisabled}
       />
     </Modal>
   );

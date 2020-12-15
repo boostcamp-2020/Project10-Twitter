@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { TabBar, TitleSubText, Loading } from '@molecules';
+import { TabBar, TitleSubText, ComponentLoading } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
@@ -61,7 +61,7 @@ const Follow: FunctionComponent = () => {
             ),
           )
         ) : (
-          <Loading message="Loading" />
+          <ComponentLoading />
         )}
       </div>
       <div ref={fetchMoreEl} />

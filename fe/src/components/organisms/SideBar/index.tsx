@@ -50,7 +50,7 @@ const SideBar: FunctionComponent = () => {
   const variables = { id: myProfile ? myProfile.lastest_notification_id : undefined };
   const { data } = useQuery(GET_NOTIFICATION_COUNT, {
     variables,
-    pollInterval: 1000,
+    pollInterval: 60 * 1000,
   });
 
   const onKeyDown = (e: any) => {

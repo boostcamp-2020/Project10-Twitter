@@ -7,6 +7,9 @@ import useOnTabChange from './useOnTabChange';
 import useOnTextChange from './useOnTextChange';
 import useUserState from './useUserState';
 import useApollo from './useApollo';
+import useTypeRouter from './useTypeRouter';
+import useDataWithInfiniteScroll from './useDataWithInfiniteScroll';
+import useHomeTweetListInfiniteScroll from './useHomeTweetListInfiniteScroll';
 
 export {
   useDisplay,
@@ -18,4 +21,7 @@ export {
   useOnTextChange,
   useUserState,
   useApollo,
+  useTypeRouter,
+  useDataWithInfiniteScroll,
+  useHomeTweetListInfiniteScroll,
 };
