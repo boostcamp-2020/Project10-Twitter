@@ -10,7 +10,7 @@ interface Props {
   displayModal: boolean;
   onClickCloseBtn: () => void;
   tweet: TweetType;
-  updateQuery?: DocumentNode;
+  updateQuery: { query: DocumentNode; variables?: {}; object?: boolean };
 }
 
 const RetweetModal: FunctionComponent<Props> = ({
