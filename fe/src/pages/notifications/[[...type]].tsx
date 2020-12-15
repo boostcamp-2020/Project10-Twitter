@@ -70,7 +70,7 @@ const Notification: FunctionComponent = () => {
             key={index}
             noti={noti}
             curTabValue={value}
-            updateQuery={keyValue[value][4]}
+            updateQuery={{ query: keyValue[value][4] }}
           />
         ))}
       </>

@@ -8,7 +8,6 @@ import { TweetType } from '@types';
 import { GET_CHILD_TWEETLIST, GET_TWEET_DETAIL } from '@graphql/tweet';
 
 const TweetDetail: FunctionComponent = () => {
-  const apolloClient = initializeApollo();
   const { type } = useTypeRouter();
   const tweetId = type ? type[0] : '';
 
@@ -27,7 +26,11 @@ const TweetDetail: FunctionComponent = () => {
       <TweetDetailContainer tweetId={tweetId as string} />
       {data ? (
         data.tweetList?.map((tweet: TweetType, index: number) => (
-          <TweetContainer key={index} tweet={tweet} updateQuery={GET_CHILD_TWEETLIST} />
+          <TweetContainer
+            key={index}
+            tweet={tweet}
+            updateQuery={{ query: GET_CHILD_TWEETLIST, variables: { tweetId } }}
+          />
         ))
       ) : (
         <Loading message="Loading" />

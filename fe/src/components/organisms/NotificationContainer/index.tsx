@@ -12,7 +12,7 @@ import RetweetContainer from './RetweetContainer';
 interface Props {
   noti: NotificationType;
   curTabValue: String;
-  updateQuery: DocumentNode;
+  updateQuery: { query: DocumentNode; variables?: {} };
 }
 
 const NotificationContainer: FunctionComponent<Props> = ({
