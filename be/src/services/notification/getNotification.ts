@@ -1,6 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { notificationModel } from '@models';
 import { stringToObjectId } from '@libs/utiltys';
+import commonNotificationCondition from './common';
 
 interface Auth {
   authUser: { id: string };
@@ -29,42 +30,7 @@ const getNotification = async (
     },
     { $sort: { createAt: -1 } },
     { $limit: 20 },
-    {
-      $project: {
-        tweet_id: 1,
-        giver_id: 1,
-        type: 1,
-        is_read: 1,
-        createAt: 1,
-      },
-    },
-    {
-      $lookup: {
-        from: 'tweets',
-        localField: 'tweet_id',
-        foreignField: '_id',
-        as: 'tweet',
-      },
-    },
-    { $unwind: { path: '$tweet', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'tweet.author_id',
-        foreignField: 'user_id',
-        as: 'tweet.author',
-      },
-    },
-    { $unwind: { path: '$tweet.author', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'giver_id',
-        foreignField: 'user_id',
-        as: 'giver',
-      },
-    },
-    { $unwind: { path: '$giver', preserveNullAndEmptyArrays: true } },
+    ...commonNotificationCondition,
   ]);
 
   return notifications;
@@ -89,42 +55,7 @@ const getNotificationWithMention = async (
     },
     { $sort: { createAt: -1 } },
     { $limit: 20 },
-    {
-      $project: {
-        tweet_id: 1,
-        giver_id: 1,
-        type: 1,
-        is_read: 1,
-        createAt: 1,
-      },
-    },
-    {
-      $lookup: {
-        from: 'tweets',
-        localField: 'tweet_id',
-        foreignField: '_id',
-        as: 'tweet',
-      },
-    },
-    { $unwind: { path: '$tweet', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'tweet.author_id',
-        foreignField: 'user_id',
-        as: 'tweet.author',
-      },
-    },
-    { $unwind: { path: '$tweet.author', preserveNullAndEmptyArrays: true } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'giver_id',
-        foreignField: 'user_id',
-        as: 'giver',
-      },
-    },
-    { $unwind: { path: '$giver', preserveNullAndEmptyArrays: true } },
+    ...commonNotificationCondition,
   ]);
 
   return notifications;
