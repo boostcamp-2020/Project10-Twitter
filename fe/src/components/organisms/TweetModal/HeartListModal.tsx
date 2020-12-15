@@ -12,7 +12,8 @@ interface Props {
 }
 
 const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn, tweetId }) => {
-  const { loading, error, data } = useQuery(GET_HEART_USERLIST, { variables: { tweetId } });
+  const { data } = useQuery(GET_HEART_USERLIST, { variables: { tweetId } });
+
   return (
     <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
       {data ? (
