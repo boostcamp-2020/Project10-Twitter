@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useTypeRouter } from '@hooks';
 
 const useDisplayWithShallow = (routeName: string): [boolean, () => void, () => void] => {
-  const router = useRouter();
-  const { type } = router.query;
+  const [type, router] = useTypeRouter();
   const tweetId = type ? type[0] : '';
   const currentRoute = type ? type[1] : '';
   const [display, setDisplay] = useState(currentRoute === routeName);
