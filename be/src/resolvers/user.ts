@@ -10,7 +10,7 @@ import {
   followUser,
   unfollowUser,
   createUser,
-  updateUserName,
+  updateUserInfo,
   getFollowerCount,
 } from '@services/user';
 
@@ -28,7 +28,7 @@ const userResolvers: IResolvers = {
     follower_count: getFollowerCount,
   },
   Mutation: {
-    update_user_name: updateUserName,
+    update_user_info: updateUserInfo,
     create_user: createUser,
     github_login: githubLogin,
     local_login: localLogin,
