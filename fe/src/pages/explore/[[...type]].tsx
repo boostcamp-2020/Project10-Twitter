@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
-import { SearchBar, TabBar, ComponentLoading } from '@molecules';
+import { SearchBar, TabBar, ComponentLoading, LoadingCircle } from '@molecules';
 import { PageLayout, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
@@ -36,7 +36,9 @@ const Explore: FunctionComponent = () => {
     ],
   };
 
-  const [data] = useDataWithInfiniteScroll(...keyValue[value]);
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    ...keyValue[value],
+  );
 
   const onKeyDown = (e: any) => {
     if (e.key === 'Enter') {
@@ -50,6 +52,8 @@ const Explore: FunctionComponent = () => {
   useEffect(() => {
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'search_tweet_list' });
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'search_user_list' });
+    setLoadFinished(false);
+    setIntersecting(false);
   }, [searchWord]);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
@@ -58,6 +62,8 @@ const Explore: FunctionComponent = () => {
     if (newValue !== value) {
       router.replace('/explore/[[...type]]', `/explore/${newValue}/${textValue}`, {
         shallow: true,
+        setLoadFinished(false);
+        setIntersecting(false);
       });
     }
   };
@@ -93,7 +99,7 @@ const Explore: FunctionComponent = () => {
           <ComponentLoading />
         )}
       </div>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };

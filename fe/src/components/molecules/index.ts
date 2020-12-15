@@ -4,6 +4,7 @@ import IconButton from './IconButton';
 import IconLabel from './IconLabel';
 import InputContainer from './InputContainer';
 import Loading from './Loading';
+import LoadingCircle from './LoadingCircle';
 import LoginForm from './LoginForm';
 import Modal from './Modal';
 import SearchBar from './SearchBar';
@@ -22,6 +23,7 @@ export {
   IconLabel,
   InputContainer,
   Loading,
+  LoadingCircle,
   LoginForm,
   Modal,
   SearchBar,

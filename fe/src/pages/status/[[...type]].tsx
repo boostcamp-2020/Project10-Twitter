@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
-import { Loading } from '@molecules';
+import { Loading, LoadingCircle } from '@molecules';
 import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
@@ -13,7 +13,7 @@ const TweetDetail: FunctionComponent = () => {
   const tweetId = type ? type[0] : '';
 
   const fetchMoreEl = useRef(null);
-  const [data] = useDataWithInfiniteScroll(
+  const [data, , loadFinished] = useDataWithInfiniteScroll(
     'tweetId',
     tweetId,
     'oldestTweetId',
@@ -32,7 +32,7 @@ const TweetDetail: FunctionComponent = () => {
       ) : (
         <Loading message="Loading" />
       )}
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };

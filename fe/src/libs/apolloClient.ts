@@ -16,9 +16,10 @@ const tweetPolicies = {
   read(existing: any) {
     return existing;
   },
-  merge(existing = [], incoming = [], { args: { oldest_tweet_id } }: any) {
-    if (!oldest_tweet_id) return mergeItems(incoming, existing);
-    return mergeItems(existing, incoming);
+  merge(existing = [], incoming = [], { args: { oldest_tweet_id, latest_tweet_id } }: any) {
+    if (oldest_tweet_id) return mergeItems(existing, incoming);
+    if (latest_tweet_id) return mergeItems(incoming, existing);
+    return incoming;
   },
 };
 
