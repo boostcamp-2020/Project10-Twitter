@@ -13,7 +13,7 @@ const Explore: FunctionComponent = () => {
   const apolloClient = initializeApollo();
   const { type, router } = useTypeRouter();
   const value = type ? type[0] : 'tweets';
-  const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] : '');
+  const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
   const [searchWord, setSearchWord] = useState(textValue);
   const fetchMoreEl = useRef(null);
 
@@ -62,9 +62,9 @@ const Explore: FunctionComponent = () => {
     if (newValue !== value) {
       router.replace('/explore/[[...type]]', `/explore/${newValue}/${textValue}`, {
         shallow: true,
-        setLoadFinished(false);
-        setIntersecting(false);
       });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
 

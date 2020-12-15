@@ -14,7 +14,7 @@ import { ButtonsBox, PinkButton, TweetHeaderContainer, HeaderInfoContainer } fro
 
 interface Props {
   tweet: TweetType;
-  updateQuery: { query: DocumentNode; variables: {} };
+  updateQuery: { query: DocumentNode; variables?: {} };
 }
 
 const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {

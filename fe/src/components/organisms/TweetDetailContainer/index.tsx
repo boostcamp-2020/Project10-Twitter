@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
@@ -14,7 +14,7 @@ import {
   RetweetModal,
   RetweetContainer,
 } from '@organisms';
-import { DELETE_TWEET, GET_TWEET_DETAIL } from '@graphql/tweet';
+import { DELETE_TWEET, GET_CHILD_TWEETLIST, GET_TWEET_DETAIL } from '@graphql/tweet';
 import { QueryVariableType } from '@types';
 import {
   DetailContainer,
@@ -33,6 +33,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ tweetId }) => {
   const router = useRouter();
   const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
+  const updateQuery = { query: GET_CHILD_TWEETLIST, variables: { tweetId } };
   const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweetList, {
     query: GET_TWEET_DETAIL,
     variables: { tweetId },
@@ -122,21 +123,25 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ tweetId }) => {
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}
+        updateQuery={updateQuery.query}
         tweet={tweet}
       />
       <RetweetModal
         displayModal={displayRetweetModal}
         onClickCloseBtn={onClickRetweetBtn}
+        updateQuery={updateQuery.query}
         tweet={tweet}
       />
       <HeartListModal
         displayModal={displayHeartListModal}
         onClickCloseBtn={onCloseHeartList}
+        updateQuery={updateQuery.query}
         tweetId={tweet._id}
       />
       <RetweetListModal
         displayModal={displayRetweetListModal}
         onClickCloseBtn={onCloseRetweetList}
+        updateQuery={updateQuery.query}
         tweetId={tweet._id}
       />
     </>

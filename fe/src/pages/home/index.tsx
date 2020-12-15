@@ -21,7 +21,7 @@ const Home: FunctionComponent = () => {
       <NewTweetContainer onClickQuery={addBasicTweet} />
       <div>
         {data?.tweetList?.map((tweet: TweetType, index: number) => (
-          <TweetContainer key={index} tweet={tweet} updateQuery={GET_TWEETLIST} />
+          <TweetContainer key={index} tweet={tweet} updateQuery={{ query: GET_TWEETLIST }} />
         ))}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
