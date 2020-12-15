@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
-import { TabBar } from '@molecules';
+import { TabBar, LoadingCircle } from '@molecules';
 import { PageLayout, NotificationContainer } from '@organisms';
 import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
@@ -25,7 +25,9 @@ const Notification: FunctionComponent = () => {
     all: ['', '', 'id', 'notifications', GET_NOTIFICATION_LIST, fetchMoreEl],
     mention: ['', '', 'id', 'notifications', GET_MENTION_NOTIFICATION_LIST, fetchMoreEl],
   };
-  const [data] = useDataWithInfiniteScroll(...keyValue[value]);
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    ...keyValue[value],
+  );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -33,6 +35,8 @@ const Notification: FunctionComponent = () => {
     if (newValue !== value) {
       if (newValue === 'all') newValue = '';
       router.replace('/notifications/[[...type]]', `/notifications/${newValue}`, { shallow: true });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
 
@@ -75,7 +79,7 @@ const Notification: FunctionComponent = () => {
           />
         ))}
       </>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useRef } from 'react';
 import { GetServerSideProps } from 'next';
-import { TabBar, TitleSubText, ComponentLoading } from '@molecules';
+import { TabBar, TitleSubText, ComponentLoading, LoadingCircle } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
 import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
 import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
@@ -17,7 +17,9 @@ const Follow: FunctionComponent = () => {
     follower: ['userId', userId, 'oldestUserId', 'list', GET_FOLLOWER_LIST, fetchMoreEl],
     following: ['userId', userId, 'oldestUserId', 'list', GET_FOLLOWING_LIST, fetchMoreEl],
   };
-  const [data] = useDataWithInfiniteScroll(...keyValue[value]);
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    ...keyValue[value],
+  );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -27,6 +29,8 @@ const Follow: FunctionComponent = () => {
       router.replace(`/[userId]/follow/[[...type]]`, `/${userId}/follow/${newValue}`, {
         shallow: true,
       });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
 
@@ -49,7 +53,7 @@ const Follow: FunctionComponent = () => {
           <ComponentLoading />
         )}
       </div>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };

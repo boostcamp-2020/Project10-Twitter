@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
-import { TabBar, ComponentLoading } from '@molecules';
+import { TabBar, ComponentLoading, LoadingCircle } from '@molecules';
 import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
 import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
@@ -26,7 +26,9 @@ const UserDetail: FunctionComponent = () => {
     ],
     likes: ['userId', userId, 'oldestTweetId', 'tweetList', GET_HEART_TWEETLIST, fetchMoreEl],
   };
-  const [data] = useDataWithInfiniteScroll(...keyValue[value]);
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    ...keyValue[value],
+  );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -34,11 +36,11 @@ const UserDetail: FunctionComponent = () => {
     if (newValue !== value) {
       if (newValue === 'tweets') newValue = '';
       router.replace('/[userId]/[type]', `/${userId}/${newValue}`, { shallow: true });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
-
   useEffect(() => {
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'user_tweet_list' });
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'user_all_tweet_list' });
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_tweet_list' });
   }, [userId]);
@@ -60,7 +62,7 @@ const UserDetail: FunctionComponent = () => {
           <ComponentLoading />
         )}
       </div>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };

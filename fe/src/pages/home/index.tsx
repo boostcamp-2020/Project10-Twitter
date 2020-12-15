@@ -6,13 +6,14 @@ import { useHomeTweetListInfiniteScroll } from '@hooks';
 import { GET_TWEETLIST, ADD_BASIC_TWEET } from '@graphql/tweet';
 import { TweetType } from '@types';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
+import { LoadingCircle } from '@molecules';
 import HomeBox from './styled';
 
 const Home: FunctionComponent = () => {
   const [addBasicTweet] = useMutation(ADD_BASIC_TWEET);
   const fetchMoreEl = useRef(null);
 
-  const [data] = useHomeTweetListInfiniteScroll(fetchMoreEl);
+  const [data, , loadFinished] = useHomeTweetListInfiniteScroll(fetchMoreEl);
 
   return (
     <PageLayout>
@@ -23,7 +24,7 @@ const Home: FunctionComponent = () => {
           <TweetContainer key={index} tweet={tweet} updateQuery={GET_TWEETLIST} />
         ))}
       </div>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };
