@@ -3,11 +3,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
 import { useQuery, useMutation } from '@apollo/client';
-import { TitleSubText, IconButton, Loading, UserInfo } from '@molecules';
+import { TitleSubText, IconButton, Loading, UserInfo, UploadImg } from '@molecules';
 import { Text, Heart, Comment, Retweet, X } from '@atoms';
 import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
 import { makeTimeText } from '@libs';
-import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '@organisms';
+import {
+  HeartListModal,
+  RetweetListModal,
+  ReplyModal,
+  RetweetModal,
+  RetweetContainer,
+} from '@organisms';
 import { DELETE_TWEET, GET_TWEET_DETAIL } from '@graphql/tweet';
 import { QueryVariableType } from '@types';
 import {
@@ -23,7 +29,7 @@ interface Props {
   tweetId: string;
 }
 
-const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) => {
+const TweetDetailContainer: FunctionComponent<Props> = ({ children, stweet, tweetId }) => {
   const router = useRouter();
   const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
@@ -69,6 +75,12 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
           {userState === 'me' ? <IconButton icon={X} onClick={onClickDeleteBtn} /> : <></>}
         </TweetHeaderContainer>
         <Markdown allowDangerousHtml>{tweet.content}</Markdown>
+        {tweet.retweet?._id ? <RetweetContainer tweet={tweet.retweet} /> : <></>}
+        {tweet.img_url_list && tweet.img_url_list[0] ? (
+          <UploadImg img={tweet.img_url_list[0]} />
+        ) : (
+          ''
+        )}
         <TimeContainer>
           <Text styled="sub" size="15px" value={makeTimeText(tweet.createAt)} />
         </TimeContainer>

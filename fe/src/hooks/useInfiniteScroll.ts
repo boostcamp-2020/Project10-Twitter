@@ -1,11 +1,10 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 
 const useInfiniteScroll = (
-  targetEl: any,
-  ssr = false,
+  targetEl: React.MutableRefObject<null>,
 ): [boolean, boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const isFirstRender = useRef(!ssr);
+  const isFirstRender = useRef(true);
   const [isIntersecting, setIntersecting] = useState(false);
   const [loadFinished, setLoadFinished] = useState(false);
 
