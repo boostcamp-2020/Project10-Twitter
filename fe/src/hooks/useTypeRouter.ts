@@ -1,8 +1,8 @@
 import { NextRouter, useRouter } from 'next/router';
 
-const useTypeRouter = (): [string | string[] | undefined, NextRouter] => {
+const useTypeRouter = () => {
   const router = useRouter();
-  const { type } = router.query;
-  return [type, router];
+  const { type, userId } = router.query;
+  return { type, userId, router };
 };
 export default useTypeRouter;

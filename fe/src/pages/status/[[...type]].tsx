@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
+import { GetServerSideProps } from 'next';
 import { Loading } from '@molecules';
 import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
@@ -8,7 +9,7 @@ import { GET_CHILD_TWEETLIST, GET_TWEET_DETAIL } from '@graphql/tweet';
 
 const TweetDetail: FunctionComponent = () => {
   const apolloClient = initializeApollo();
-  const [type] = useTypeRouter();
+  const { type } = useTypeRouter();
   const tweetId = type ? type[0] : '';
 
   const fetchMoreEl = useRef(null);
@@ -42,9 +43,13 @@ const TweetDetail: FunctionComponent = () => {
 
 export default TweetDetail;
 
-export async function getServerSideProps({ req, res, query }) {
-  const tweetId = query.type[0];
-  const jwt = getJWTFromBrowser(req, res);
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const apolloClient = initializeApollo();
+  const {
+    type: [tweetId],
+  } = ctx.query;
+  console.log(ctx.params);
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
 
   await apolloClient.query({
     query: GET_TWEET_DETAIL,
@@ -68,4 +73,4 @@ export async function getServerSideProps({ req, res, query }) {
       initialState,
     },
   };
-}
+};

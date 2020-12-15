@@ -10,7 +10,7 @@ interface Props {
   onClickCloseBtn: () => void;
 }
 
-const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
+const SignupModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
   const [createUser] = useMutation(ADD_USER);
   const [userId, setUserId, onUserIdChange] = useOnTextChange('');
   const [name, setName, onNameChange] = useOnTextChange('');

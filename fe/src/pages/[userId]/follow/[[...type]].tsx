@@ -1,16 +1,15 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
 import { TabBar, TitleSubText, ComponentLoading } from '@molecules';
 import { PageLayout, UserCard } from '@organisms';
-import { useInfiniteScroll } from '@hooks';
+import { useInfiniteScroll, useTypeRouter } from '@hooks';
 import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
 import { UserType, QueryVariableType } from '@types';
+import { initializeApollo } from '@libs';
 import UserBox from './styled';
 
 const Follow: FunctionComponent = () => {
-  const router = useRouter();
-  const { userId, type } = router.query;
+  const { type, userId, router } = useTypeRouter();
   const queryArr = { follower: GET_FOLLOWER_LIST, following: GET_FOLLOWING_LIST };
   const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const value = type ? type[0] : 'follower';
