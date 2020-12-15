@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import Cookies from 'cookies';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import { TabBar } from '@molecules';
 import { PageLayout, NotificationContainer } from '@organisms';
-import { useInfiniteScroll } from '@hooks';
-import { initializeApollo } from '@libs';
+import { useInfiniteScroll, useTypeRouter } from '@hooks';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_MYINFO } from '@graphql/user';
 import { NotificationType } from '@types';
 import {
@@ -14,27 +14,15 @@ import {
   CONFIRM_NOTIFICATION,
 } from '@graphql/notification';
 
-const getValue = (type: string | string[] | undefined) => {
-  if (!type) return 'all';
-  return 'mention';
-};
-
-interface Props {
-  ssrNotification: NotificationType[];
-}
-
-const Notification: FunctionComponent<Props> = ({ ssrNotification }) => {
-  const router = useRouter();
+const Notification: FunctionComponent = () => {
   const apolloClient = initializeApollo();
-  const { type } = router.query;
+  const { type, router } = useTypeRouter();
   const queryArr = { all: GET_NOTIFICATION_LIST, mention: GET_MENTION_NOTIFICATION_LIST };
-  const value = getValue(type);
+  const value = type ? type[0] : 'all';
   const { data, fetchMore } = useQuery(queryArr[value]);
   const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
-  const [notificationList, setNotificationList] = useState<NotificationType[]>(
-    ssrNotification || [],
-  );
+  const [notificationList, setNotificationList] = useState<NotificationType[]>([]);
   const { _id: bottomNotificationId } = notificationList[notificationList.length - 1] || {};
   const fetchMoreEl = useRef(null);
   const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
@@ -108,14 +96,13 @@ const Notification: FunctionComponent<Props> = ({ ssrNotification }) => {
 
 export default Notification;
 
-export async function getServerSideProps({ req, res }) {
-  const cookies = new Cookies(req, res);
-  const reqCookie = cookies.get('jwt');
-
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const apolloClient = initializeApollo();
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
   const result = await apolloClient.query({
     query: GET_NOTIFICATION_LIST,
     context: {
-      headers: { cookie: `jwt=${reqCookie}` },
+      headers: { cookie: `jwt=${jwt}` },
     },
   });
   const initialState = apolloClient.cache.extract();
@@ -123,7 +110,6 @@ export async function getServerSideProps({ req, res }) {
   return {
     props: {
       initialState,
-      ssrNotification: result.data?.notifications,
     },
   };
-}
+};

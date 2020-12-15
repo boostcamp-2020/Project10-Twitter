@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import { SearchBar, TabBar, ComponentLoading } from '@molecules';
-import { PageLayout, TweetContainer, UserCard } from '@organ
+import { PageLayout, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
@@ -11,7 +10,7 @@ import { TweetType, UserType } from '@types';
 
 const Explore: FunctionComponent = () => {
   const apolloClient = initializeApollo();
-  const [type, router] = useTypeRouter();
+  const { type, router } = useTypeRouter();
   const value = type ? type[0] : 'tweets';
   const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
   const [searchWord, setSearchWord] = useState(textValue);
@@ -95,9 +94,9 @@ const Explore: FunctionComponent = () => {
 
 export default Explore;
 
-export async function getServerSideProps({ req, res }) {
-  const jwt = getJWTFromBrowser(req, res);
-
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
+  const apolloClient = initializeApollo();
   await apolloClient.query({
     query: GET_SEARCH_TWEETLIST,
     variables: { searchWord: '' },
@@ -112,4 +111,4 @@ export async function getServerSideProps({ req, res }) {
       initialState,
     },
   };
-}
+};
