@@ -48,7 +48,6 @@ export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
   const {
     type: [tweetId],
   } = ctx.query;
-  console.log(ctx.params);
   const jwt = getJWTFromBrowser(ctx.req, ctx.res);
 
   await apolloClient.query({
