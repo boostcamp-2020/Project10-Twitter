@@ -1,6 +1,5 @@
-import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
-import merge from 'deepmerge';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -71,7 +70,7 @@ const initializeApollo = (initialState: NormalizedCacheObject = {}) => {
 
   if (initialState) {
     const existingCache = _apolloClient.extract();
-    const data = merge(initialState, existingCache);
+    const data = Object.assign(existingCache, initialState);
     _apolloClient.cache.restore(data);
   }
   if (typeof window === 'undefined') return _apolloClient;
