@@ -52,15 +52,15 @@ const commonReadCondition = [
       'retweet.img_url_list': 1,
       'retweet.child_user_id_list': 1,
       'retweet.child_tweet_number': {
-        $size: { $ifNull: ['$retweet.child_tweet_number', []] },
+        $size: { $ifNull: ['$retweet.child_user_id_list', []] },
       },
       'retweet.retweet_user_id_list': 1,
       'retweet.retweet_user_number': {
-        $size: { $ifNull: ['$retweet.retweet_user_number', []] },
+        $size: { $ifNull: ['$retweet.retweet_user_id_list', []] },
       },
       'retweet.heart_user_id_list': 1,
       'retweet.heart_user_number': {
-        $size: { $ifNull: ['$retweet.heart_user_number', []] },
+        $size: { $ifNull: ['$retweet.heart_user_id_list', []] },
       },
       'retweet.createAt': 1,
     },
