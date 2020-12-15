@@ -13,6 +13,7 @@ import TweetFooter from './TweetFooter';
 import UploadImg from './UploadImg';
 import UserInfo from './UserInfo';
 import UserPopover from './UserPopover';
+import ComponentLoading from './ComponentLoading';
 
 export {
   Button,
@@ -30,4 +31,5 @@ export {
   UploadImg,
   UserInfo,
   UserPopover,
+  ComponentLoading,
 };

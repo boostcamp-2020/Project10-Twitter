@@ -7,6 +7,7 @@ import { NotificationType } from '@types';
 import HeartContainer from './HeartContainer';
 import { Container, UnderLine } from './styled';
 import FollowContainer from './FollowContainer';
+import RetweetContainer from './RetweetContainer';
 
 interface Props {
   noti: NotificationType;
@@ -48,7 +49,7 @@ const NotificationContainer: FunctionComponent<Props> = ({
       );
     return (
       <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
-        <TweetContainer tweet={tweet} updateQuery={updateQuery} />
+        <RetweetContainer tweet={tweet} user={giver} />
       </Container>
     );
   }

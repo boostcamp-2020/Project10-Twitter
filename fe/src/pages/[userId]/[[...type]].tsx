@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { TabBar, Loading } from '@molecules';
+import { TabBar, ComponentLoading } from '@molecules';
 import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
 import { apolloClient } from '@libs';
@@ -62,7 +62,7 @@ const UserDetail: FunctionComponent = () => {
             <TweetContainer key={index} tweet={tweet} updateQuery={queryArr[value]} />
           ))
         ) : (
-          <Loading message="Loading" />
+          <ComponentLoading />
         )}
       </div>
       <div ref={fetchMoreEl} />
