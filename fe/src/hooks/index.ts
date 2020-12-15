@@ -6,6 +6,7 @@ import useMyInfo from './useMyInfo';
 import useOnTabChange from './useOnTabChange';
 import useOnTextChange from './useOnTextChange';
 import useUserState from './useUserState';
+import useApollo from './useApollo';
 
 export {
   useDisplay,
@@ -16,4 +17,5 @@ export {
   useOnTabChange,
   useOnTextChange,
   useUserState,
+  useApollo,
 };

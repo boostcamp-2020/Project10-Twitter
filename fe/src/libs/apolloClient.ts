@@ -1,5 +1,4 @@
 import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
-import { useMemo } from 'react';
 import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
 
@@ -80,9 +79,4 @@ const initializeApollo = (initialState: NormalizedCacheObject = {}) => {
   return _apolloClient;
 };
 
-const useApollo = (initialState: NormalizedCacheObject) => {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
-  return store;
-};
-
-export { useApollo, initializeApollo };
+export default initializeApollo;
