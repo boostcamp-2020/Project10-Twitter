@@ -1,29 +1,32 @@
-import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
 import { TabBar, ComponentLoading } from '@molecules';
 import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
-import { useDisplay, useInfiniteScroll, useTypeRouter } from '@hooks';
+import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_USER_TWEETLIST, GET_USER_ALL_TWEETLIST, GET_HEART_TWEETLIST } from '@graphql/tweet';
 import DETAIL_PAGE from '@graphql/custom';
-import { TweetType, QueryVariableType } from '@types';
+import { TweetType } from '@types';
 
 const UserDetail: FunctionComponent = () => {
   const apolloClient = initializeApollo();
   const { type, userId, router } = useTypeRouter();
   const value = type ? type[0] : 'tweets';
-  const queryArr = {
-    tweets: GET_USER_TWEETLIST,
-    'tweets & replies': GET_USER_ALL_TWEETLIST,
-    likes: GET_HEART_TWEETLIST,
-  };
 
-  const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
-  const { data, fetchMore } = useQuery(queryArr[value], queryVariable);
-  const { _id: bottomTweetId } = data?.tweetList[data?.tweetList.length - 1] || {};
   const fetchMoreEl = useRef(null);
-  const [intersecting] = useInfiniteScroll(fetchMoreEl);
+  const keyValue = {
+    tweets: ['userId', userId, 'oldestTweetId', 'tweetList', GET_USER_TWEETLIST, fetchMoreEl],
+    'tweets & replies': [
+      'userId',
+      userId,
+      'oldestTweetId',
+      'tweetList',
+      GET_USER_ALL_TWEETLIST,
+      fetchMoreEl,
+    ],
+    likes: ['userId', userId, 'oldestTweetId', 'tweetList', GET_HEART_TWEETLIST, fetchMoreEl],
+  };
+  const [data] = useDataWithInfiniteScroll(...keyValue[value]);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -40,16 +43,6 @@ const UserDetail: FunctionComponent = () => {
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_tweet_list' });
   }, [userId]);
 
-  useEffect(() => {
-    const asyncEffect = async () => {
-      if (!intersecting || !bottomTweetId || !fetchMore) return;
-      const { data: fetchMoreData } = await fetchMore({
-        variables: { ...queryVariable, oldestTweetId: bottomTweetId },
-      });
-    };
-    asyncEffect();
-  }, [intersecting]);
-
   return (
     <PageLayout>
       <UserDetailContainer userId={userId as string} />
@@ -61,7 +54,7 @@ const UserDetail: FunctionComponent = () => {
       <div>
         {data ? (
           data.tweetList?.map((tweet: TweetType, index: number) => (
-            <TweetContainer key={index} tweet={tweet} updateQuery={queryArr[value]} />
+            <TweetContainer key={index} tweet={tweet} updateQuery={keyValue[value][4]} />
           ))
         ) : (
           <ComponentLoading />
