@@ -19,11 +19,13 @@ interface Props {
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   parentId?: string;
   updateQuery?: DocumentNode;
+  onClickCloseBtn?: () => void;
 }
 
 const NewTweetContainer: FunctionComponent<Props> = ({
   tweet,
   onClickQuery,
+  onClickCloseBtn = () => {},
   parentId,
   updateQuery,
 }) => {
@@ -83,6 +85,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
       });
     else await onClickQuery({ variables: { content: value, imgUrlList: [image] } });
     fetchMore({ variables: { latestTweetId: data.tweetList[0]._id } });
+    onClickCloseBtn();
     setValue('');
     imgCloseBtnClick();
   };

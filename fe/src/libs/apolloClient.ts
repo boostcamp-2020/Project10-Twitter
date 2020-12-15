@@ -1,5 +1,8 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
+import merge from 'deepmerge';
+
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = createUploadLink({
   uri: 'http://localhost:3001/graphql',
@@ -39,27 +42,41 @@ const notificationPolicies = {
   },
 };
 
-const apolloClient = new ApolloClient({
-  link: httpLink, // api 서버 url
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          following_tweet_list: tweetPolicies,
-          child_tweet_list: tweetPolicies,
-          heart_tweet_list: tweetPolicies,
-          search_tweet_list: tweetPolicies,
-          user_tweet_list: tweetPolicies,
-          user_all_tweet_list: tweetPolicies,
-          search_user_list: userPolicies,
-          following_list: userPolicies,
-          follower_list: userPolicies,
-          notification_list: notificationPolicies,
-          notification_mention_list: notificationPolicies,
+const createApolloClient = () =>
+  new ApolloClient({
+    link: httpLink, // api 서버 url
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            following_tweet_list: tweetPolicies,
+            child_tweet_list: tweetPolicies,
+            heart_tweet_list: tweetPolicies,
+            search_tweet_list: tweetPolicies,
+            user_tweet_list: tweetPolicies,
+            user_all_tweet_list: tweetPolicies,
+            search_user_list: userPolicies,
+            following_list: userPolicies,
+            follower_list: userPolicies,
+            notification_list: notificationPolicies,
+            notification_mention_list: notificationPolicies,
+          },
         },
       },
-    },
-  }),
-});
+    }),
+  });
 
-export default apolloClient;
+const initializeApollo = (initialState: NormalizedCacheObject = {}) => {
+  const _apolloClient = apolloClient || createApolloClient();
+
+  if (initialState) {
+    const existingCache = _apolloClient.extract();
+    const data = merge(initialState, existingCache);
+    _apolloClient.cache.restore(data);
+  }
+  if (typeof window === 'undefined') return _apolloClient;
+  if (!apolloClient) apolloClient = _apolloClient;
+  return _apolloClient;
+};
+
+export default initializeApollo;

@@ -9,3 +9,9 @@ mutation UNFOLLOW_USER($unfollow_user_id: String!) {
     user_id
   }
 }
+
+mutation UPDATE_USER_INFO($name: String!, $comment: String) {
+  update_user_info(name: $name, comment: $comment) {
+    response
+  }
+}

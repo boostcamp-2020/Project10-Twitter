@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { TabBar } from '@molecules';
 import { PageLayout, NotificationContainer } from '@organisms';
 import { useInfiniteScroll } from '@hooks';
-import { apolloClient } from '@libs';
+import { initializeApollo } from '@libs';
 import { GET_MYINFO } from '@graphql/user';
 import { NotificationType } from '@types';
 import {
@@ -25,6 +25,7 @@ interface Props {
 
 const Notification: FunctionComponent<Props> = ({ ssrNotification }) => {
   const router = useRouter();
+  const apolloClient = initializeApollo();
   const { type } = router.query;
   const queryArr = { all: GET_NOTIFICATION_LIST, mention: GET_MENTION_NOTIFICATION_LIST };
   const value = getValue(type);

@@ -2,17 +2,17 @@ import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { SearchBar, TabBar, ComponentLoading } from '@molecules';
-import { PageLayout, TweetContainer, UserCard } from '@organisms';
+import { PageLayout, TweetContainer, UserCard } from '@organ
 import { useOnTextChange, useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
-import { apolloClient, getJWTFromBrowser } from '@libs';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
 import { GET_SEARCH_USERLIST } from '@graphql/user';
 import { TweetType, UserType } from '@types';
 
 const Explore: FunctionComponent = () => {
+  const apolloClient = initializeApollo();
   const [type, router] = useTypeRouter();
   const value = type ? type[0] : 'tweets';
-
   const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
   const [searchWord, setSearchWord] = useState(textValue);
   const fetchMoreEl = useRef(null);

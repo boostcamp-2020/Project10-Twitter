@@ -1,15 +1,17 @@
 import React, { FunctionComponent, useRef } from 'react';
 import { useMutation } from '@apollo/client';
+ import { GetServerSideProps } from 'next';
 import { PageLayout, TweetContainer, NewTweetContainer } from '@organisms';
 import { useHomeTweetListInfiniteScroll } from '@hooks';
 import { GET_TWEETLIST, ADD_BASIC_TWEET } from '@graphql/tweet';
 import { TweetType } from '@types';
-import { apolloClient, getJWTFromBrowser } from '@libs';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
 import HomeBox from './styled';
 
 const Home: FunctionComponent = () => {
   const [addBasicTweet] = useMutation(ADD_BASIC_TWEET);
   const fetchMoreEl = useRef(null);
+
   const [data] = useHomeTweetListInfiniteScroll(fetchMoreEl);
 
   return (
@@ -28,9 +30,9 @@ const Home: FunctionComponent = () => {
 
 export default Home;
 
-export async function getServerSideProps({ req, res }) {
-  const jwt = getJWTFromBrowser(req, res);
-
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+   const apolloClient = initializeApollo();
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
   await apolloClient.query({
     query: GET_TWEETLIST,
     context: {
@@ -44,4 +46,4 @@ export async function getServerSideProps({ req, res }) {
       initialState,
     },
   };
-}
+};

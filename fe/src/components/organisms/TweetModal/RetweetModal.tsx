@@ -23,7 +23,12 @@ const RetweetModal: FunctionComponent<Props> = ({
 
   return (
     <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
-      <NewTweetContainer tweet={tweet} onClickQuery={addRetweet} updateQuery={updateQuery} />
+      <NewTweetContainer
+        tweet={tweet}
+        onClickQuery={addRetweet}
+        updateQuery={updateQuery}
+        onClickCloseBtn={onClickCloseBtn}
+      />
     </Modal>
   );
 };

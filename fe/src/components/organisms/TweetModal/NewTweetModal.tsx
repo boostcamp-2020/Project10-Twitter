@@ -15,7 +15,7 @@ const NewTweetModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn
   );
   return (
     <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
-      <NewTweetContainer onClickQuery={addBasicTweet} />
+      <NewTweetContainer onClickQuery={addBasicTweet} onClickCloseBtn={onClickCloseBtn} />
     </Modal>
   );
 };

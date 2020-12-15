@@ -28,9 +28,14 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
     setPassword('');
     onClickCloseBtn();
   };
-
+  const onCloseBtnClick = () => {
+    setUserId('');
+    setName('');
+    setPassword('');
+    onClickCloseBtn();
+  };
   return (
-    <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
+    <Modal displayModal={displayModal} onClickCloseBtn={onCloseBtnClick}>
       <StyledInputContainer labelValue="아이디" inputValue={userId} onChange={onUserIdChange} />
       <StyledInputContainer labelValue="이름" inputValue={name} onChange={onNameChange} />
       <StyledInputContainer
@@ -50,4 +55,4 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
   );
 };
 
-export default HeartListModal;
+export default SignupModal;

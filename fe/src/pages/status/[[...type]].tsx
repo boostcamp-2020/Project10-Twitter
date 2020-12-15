@@ -2,11 +2,12 @@ import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { Loading } from '@molecules';
 import { PageLayout, TweetContainer, TweetDetailContainer } from '@organisms';
 import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
-import { apolloClient, getJWTFromBrowser } from '@libs';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { TweetType } from '@types';
 import { GET_CHILD_TWEETLIST, GET_TWEET_DETAIL } from '@graphql/tweet';
 
 const TweetDetail: FunctionComponent = () => {
+  const apolloClient = initializeApollo();
   const [type] = useTypeRouter();
   const tweetId = type ? type[0] : '';
 

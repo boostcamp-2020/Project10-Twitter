@@ -35,6 +35,7 @@ const TweetReplyModal: FunctionComponent<Props> = ({
         onClickQuery={addReplyTweet}
         parentId={tweet._id}
         updateQuery={updateQuery}
+        onClickCloseBtn={onClickCloseBtn}
       />
     </Modal>
   );

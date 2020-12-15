@@ -8,7 +8,7 @@ import {
   GET_HEART_USERLIST,
   GET_RETWEET_USERLIST,
 } from './getUser.gql';
-import { FOLLOW_USER, UNFOLLOW_USER } from './modifyUser.gql';
+import { FOLLOW_USER, UNFOLLOW_USER, UPDATE_USER_INFO } from './modifyUser.gql';
 
 export {
   ADD_USER,
@@ -21,4 +21,5 @@ export {
   GET_RETWEET_USERLIST,
   FOLLOW_USER,
   UNFOLLOW_USER,
+  UPDATE_USER_INFO,
 };

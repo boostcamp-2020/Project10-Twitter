@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { TitleSubText, Button, Loading, ComponentLoading } from '@molecules';
 import { ProfileImg, Text } from '@atoms';
-import { useUserState } from '@hooks';
+import { useDisplay, useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
 import { GET_USER_DETAIL } from '@graphql/user';
 import { QueryVariableType } from '@types';
@@ -17,6 +17,7 @@ import {
   UserImgContainer,
   ImgCircleContainer,
 } from './styled';
+import UserEditModal from '../UserEditModal';
 
 interface Props {
   userId: string;
@@ -24,19 +25,10 @@ interface Props {
 
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
   const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
-  const { loading, error, data } = useQuery(GET_USER_DETAIL, queryVariable);
+  const { data } = useQuery(GET_USER_DETAIL, queryVariable);
   const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
-
-  const onClickEdit = () => {};
-
-  if (loading) return <ComponentLoading />;
-  if (error)
-    return (
-      <div>
-        Error!
-        {error.message}
-      </div>
-    );
+                                                                   
+  const [displayModal, , onClickEditModal] = useDisplay(false);
 
   const PROFILE_IMG_SIZE = 150;
 
@@ -56,7 +48,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           </UserImgContainer>
           {getJSXwithUserState(
             userState,
-            <Button text="edit" variant="outlined" color="primary" onClick={onClickEdit} />,
+            <Button text="edit" variant="outlined" color="primary" onClick={onClickEditModal} />,
             <Button
               text="unfollow"
               color="primary"
@@ -84,6 +76,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
         </BottomContainer>
         {children}
       </UserMainContainer>
+      <UserEditModal displayModal={displayModal} onClickCloseBtn={onClickEditModal} user={user} />
     </DetailContainer>
   );
 };
