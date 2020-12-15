@@ -27,7 +27,7 @@ const useHomeTweetInfiniteScroll = (
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !bottomTweetId || !fetchMore) return;
+      if (!intersecting || loadFinished || !fetchMore) return;
       const { data: fetchMoreData } = await fetchMore({
         variables: { oldestTweetId: bottomTweetId },
       });
