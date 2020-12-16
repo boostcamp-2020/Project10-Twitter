@@ -57,7 +57,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
     let source;
     if (updateQuery.object) {
       source = { ...tweet };
-      const number = source[type] + 1;
+      const number = (source[type] || 0) + 1;
       source = { ...source, [type]: number };
     } else {
       const res = cache.readQuery<{ tweetList: TweetType[] }>(query);
