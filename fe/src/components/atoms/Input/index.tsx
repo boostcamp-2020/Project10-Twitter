@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { InputProps, TextField } from '@material-ui/core';
 
 interface Props {
-  onChange: (e: React.ChangeEvent) => void;
+  onChange: (e: React.SyntheticEvent) => void;
   onKeyDown?: (e: React.SyntheticEvent) => void;
   placeholder?: string;
   type?: string;
