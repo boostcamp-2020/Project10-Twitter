@@ -1,4 +1,5 @@
 const withSourceMaps = require('@zeit/next-source-maps');
+const Dotenv = require('dotenv-webpack');
 
 const nextConfig = withSourceMaps({
   webpack: (config, options) => {
@@ -7,6 +8,8 @@ const nextConfig = withSourceMaps({
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
     });
+    config.plugins.push(new Dotenv({ silent: true }));
+
     return config;
   },
 });
