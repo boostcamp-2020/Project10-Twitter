@@ -67,7 +67,7 @@ const UserDetail: FunctionComponent = () => {
   }, [userId]);
 
   return (
-    <PageLayout>
+    <PageLayout updateQuery={{ query: GET_USER_TWEETLIST, variables: { userId } }}>
       <UserDetailContainer userId={userId as string} />
       <TabBar
         value={value}
@@ -80,7 +80,10 @@ const UserDetail: FunctionComponent = () => {
             <TweetContainer
               key={index}
               tweet={tweet}
-              updateQuery={{ query: keyValue[value].updateQuery }}
+              updateQuery={{
+                query: keyValue[value].updateQuery,
+                variables: { userId: keyValue[value].variableValue },
+              }}
             />
           ))
         ) : (
