@@ -6,7 +6,6 @@ import { useDisplay, useOnTextChange } from '@hooks';
 import { SignupModal } from '@organisms';
 import { LOCAL_LOGIN } from '@graphql/auth';
 import { useRouter } from 'next/router';
-import { GITHUB_LOGIN_URL } from '@config';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';
 
 const LoginRightSection: FunctionComponent = () => {
@@ -30,7 +29,7 @@ const LoginRightSection: FunctionComponent = () => {
   };
 
   const onGithubBtnClick = () => {
-    window.location.href = GITHUB_LOGIN_URL;
+    window.location.href = process.env.GITHUB_LOGIN_URL as string;
   };
   return (
     <>
