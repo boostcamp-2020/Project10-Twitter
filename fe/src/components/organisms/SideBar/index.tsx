@@ -64,7 +64,7 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
     pollInterval: ONE_MINUTE,
   });
 
-  const onKeyDown = (e: any) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       router.push('/explore/[[...type]]', `/explore/tweets/${value}`, { shallow: false });
     }
@@ -108,16 +108,18 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
             )}
           </ListItem>
         ))}
-        <ListItem>
-          <SearchBar
-            placeholder={placeholder}
-            type={type}
-            width="90%"
-            value={value}
-            onChange={onTextChange}
-            onKeyDown={onKeyDown}
-          />
-        </ListItem>
+        {page !== '탐색하기' ? (
+          <ListItem>
+            <SearchBar
+              placeholder={placeholder}
+              type={type}
+              width="90%"
+              value={value}
+              onChange={onTextChange}
+              onKeyDown={onKeyDown}
+            />
+          </ListItem>
+        ) : null}
         {displayPopover ? <UserPopover /> : <></>}
         <ListItem onClick={onClickUserprofile}>
           <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />

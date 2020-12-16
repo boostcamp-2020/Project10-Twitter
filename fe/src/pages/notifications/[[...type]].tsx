@@ -6,7 +6,7 @@ import { PageLayout, NotificationContainer } from '@organisms';
 import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_MYINFO } from '@graphql/user';
-import { NotificationType } from '@types';
+import { NotificationType, UserType } from '@types';
 import {
   GET_NOTIFICATION_LIST,
   GET_MENTION_NOTIFICATION_LIST,
@@ -65,18 +65,23 @@ const Notification: FunctionComponent = () => {
     if (lastestNotification)
       mutate({
         variables: { id: lastestNotification._id },
-        update: (cache: any) => {
-          const updateData = cache.readQuery({ query: GET_MYINFO });
-          if (lastestNotification._id > updateData.myProfile.lastest_notification_id)
-            cache.writeQuery({
-              query: GET_MYINFO,
-              data: {
-                myProfile: {
-                  ...updateData.myProfile,
-                  lastest_notification_id: lastestNotification._id,
+        update: (cache) => {
+          const updateData = cache.readQuery<{ myProfile: UserType }>({ query: GET_MYINFO });
+          if (updateData) {
+            if (
+              updateData.myProfile.lastest_notification_id &&
+              lastestNotification._id > updateData.myProfile.lastest_notification_id
+            )
+              cache.writeQuery({
+                query: GET_MYINFO,
+                data: {
+                  myProfile: {
+                    ...updateData.myProfile,
+                    lastest_notification_id: lastestNotification._id,
+                  },
                 },
-              },
-            });
+              });
+          }
         },
       });
   }, [data?.notifications]);

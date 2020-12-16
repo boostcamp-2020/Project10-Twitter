@@ -46,7 +46,7 @@ const Explore: FunctionComponent = () => {
     keyValue[value],
   );
 
-  const onKeyDown = (e: any) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       router.replace(`/explore/[[...type]]`, `/explore/${value}/${textValue}`, {
         shallow: true,

@@ -6,7 +6,7 @@ import { IconButton, Button, UploadImg } from '@molecules';
 import { useHeartState, useDisplay, useUserState } from '@hooks';
 import { DocumentNode } from 'graphql';
 import { Text, Heart, Comment, Retweet, X, FullHeart } from '@atoms';
-import { makeTimeText } from '@libs';
+import { makeTimeText, binarySearch } from '@libs';
 import { RetweetContainer, ReplyModal, RetweetModal, MainContainer } from '@organisms';
 import { DELETE_TWEET } from '@graphql/tweet';
 import { TweetType } from '@types';
@@ -38,9 +38,13 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
     if (result.response) {
       const tweetCache = cache.readQuery<{ tweetList: TweetType[] }>({ query: updateQuery.query });
       if (tweetCache) {
+        const updateData = [...tweetCache.tweetList];
+        const idx = binarySearch(updateData, tweet._id);
+        if (idx === -1) return;
+        updateData.splice(idx, 1);
         cache.writeQuery({
           query: updateQuery.query,
-          data: { tweetList: tweetCache.tweetList.filter((b) => b._id !== tweet._id) },
+          data: { tweetList: updateData },
         });
       }
     }

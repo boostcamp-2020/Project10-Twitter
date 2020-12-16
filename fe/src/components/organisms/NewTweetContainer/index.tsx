@@ -60,15 +60,17 @@ const NewTweetContainer: FunctionComponent<Props> = ({
       const number = source[type] || 0 + 1;
       source = { ...source, [type]: number };
     } else {
-      const res: any = cache.readQuery(query);
-      source = [...res.tweetList];
-      const idx = binarySearch(source, targetId);
-      if (idx === -1) return;
-      const number: number = source[idx][type] + 1;
-      source[idx] = {
-        ...source[idx],
-        [type]: number,
-      };
+      const res = cache.readQuery<{ tweetList: TweetType[] }>(query);
+      if (res) {
+        source = [...res.tweetList];
+        const idx = binarySearch(source, targetId);
+        if (idx === -1) return;
+        const number: number = source[idx][type] + 1;
+        source[idx] = {
+          ...source[idx],
+          [type]: number,
+        };
+      }
     }
     cache.writeQuery({
       query: updateQuery.query,

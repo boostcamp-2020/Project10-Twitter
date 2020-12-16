@@ -9,7 +9,7 @@ interface Props {
   type: string;
   width?: string;
   onChange?: (e: React.SyntheticEvent) => void;
-  onKeyDown?: (e: React.SyntheticEvent) => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
 const SearchBar: FunctionComponent<Props> = ({

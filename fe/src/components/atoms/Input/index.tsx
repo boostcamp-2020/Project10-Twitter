@@ -3,7 +3,7 @@ import { InputProps, TextField } from '@material-ui/core';
 
 interface Props {
   onChange: (e: React.SyntheticEvent) => void;
-  onKeyDown?: (e: React.SyntheticEvent) => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
   placeholder?: string;
   type?: string;
   value: string;
