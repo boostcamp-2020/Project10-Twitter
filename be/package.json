@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register src/app.ts",
     "prod": "cross-env NODE_ENV=production nodemon --exec ts-node -r tsconfig-paths/register src/app.ts",
-    "start-dist": "pm2 start npm --name 'api-dist' -- run prod"
+    "prod-dist": "pm2 start npm --name 'bwitter-api-dist' -- run prod"
   },
   "author": "",
   "license": "ISC",
