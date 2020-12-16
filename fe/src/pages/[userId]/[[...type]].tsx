@@ -86,6 +86,7 @@ const UserDetail: FunctionComponent = () => {
         ) : (
           <ComponentLoading />
         )}
+        {data?.tweetList?.length === 0 ? <div>팔로우 x </div> : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

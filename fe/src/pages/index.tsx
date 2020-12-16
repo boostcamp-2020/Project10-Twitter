@@ -22,6 +22,7 @@ const Home: FunctionComponent = () => {
         {data?.tweetList?.map((tweet: TweetType, index: number) => (
           <TweetContainer key={index} tweet={tweet} updateQuery={{ query: GET_TWEETLIST }} />
         ))}
+        {data?.tweetList?.length === 0 ? <div>데이터 x</div> : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

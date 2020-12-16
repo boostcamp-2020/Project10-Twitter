@@ -98,6 +98,7 @@ const Notification: FunctionComponent = () => {
             updateQuery={{ query: keyValue[value].updateQuery }}
           />
         ))}
+        {data?.notifications?.length === 0 ? <div>데이터 x</div> : null}
       </>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

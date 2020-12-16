@@ -103,6 +103,8 @@ const Explore: FunctionComponent = () => {
         ) : (
           <ComponentLoading />
         )}
+        {data?.tweetList?.length === 0 ? <div>데이터 X</div> : null}
+        {data?.searchList?.length === 0 ? <div>데이터 X</div> : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
