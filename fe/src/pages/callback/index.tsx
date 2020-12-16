@@ -4,6 +4,7 @@ import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Loading } from '@molecules';
 import { GITHUB_LOGIN } from '@graphql/auth';
+import { recreateApollo } from '@libs';
 
 interface Props {
   code: string | string[] | undefined;
@@ -18,6 +19,7 @@ const Callback: NextPage<Props> = ({ code }) => {
 
   if (error) router.push('/login');
   if (data) {
+    recreateApollo();
     router.push('/home');
   }
   return <Loading message="loading" />;
