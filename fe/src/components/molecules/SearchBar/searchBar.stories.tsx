@@ -9,6 +9,5 @@ export default {
 export const Default = () => {
   const placeholder = 'Search Twitter';
   const type = 'text';
-  const variant = 'standard';
-  return <SearchBar placeholder={placeholder} type={type} variant={variant} />;
+  return <SearchBar placeholder={placeholder} type={type} />;
 };

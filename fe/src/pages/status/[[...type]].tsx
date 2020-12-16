@@ -11,15 +11,16 @@ const TweetDetail: FunctionComponent = () => {
   const { type } = useTypeRouter();
   const tweetId = type ? type[0] : '';
 
-  const fetchMoreEl = useRef(null);
-  const [data, , loadFinished] = useDataWithInfiniteScroll(
-    'tweetId',
-    tweetId,
-    'oldestTweetId',
-    'tweetList',
-    GET_CHILD_TWEETLIST,
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
+
+  const [data, , loadFinished] = useDataWithInfiniteScroll({
+    variableTarget: 'tweetId',
+    variableValue: tweetId,
+    moreVariableTarget: 'oldestTweetId',
+    dataTarget: 'tweetList',
+    updateQuery: GET_CHILD_TWEETLIST,
     fetchMoreEl,
-  );
+  });
 
   return (
     <PageLayout>

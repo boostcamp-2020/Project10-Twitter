@@ -41,7 +41,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
   const [ImageMutation] = useMutation(UPLOAD_IMAGE);
   const [image, setImage] = useState(undefined);
 
-  const fileUpload = useRef(null);
+  const fileUpload = useRef<HTMLInputElement>(null);
   const { data, fetchMore } = useQuery(updateQuery.query, { variables: updateQuery.variables });
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
     let source;
     if (updateQuery.object) {
       source = { ...tweet };
-      const number = source[type] + 1;
+      const number = source[type] || 0 + 1;
       source = { ...source, [type]: number };
     } else {
       const res: any = cache.readQuery(query);
@@ -103,11 +103,11 @@ const NewTweetContainer: FunctionComponent<Props> = ({
   };
 
   const onClick = () => {
-    if (fileUpload) fileUpload.current.click();
+    if (fileUpload.current) fileUpload.current.click();
   };
 
   const imgCloseBtnClick = () => {
-    if (fileUpload) {
+    if (fileUpload.current) {
       fileUpload.current.value = '';
     }
     setImage(undefined);

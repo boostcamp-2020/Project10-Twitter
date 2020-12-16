@@ -2,20 +2,22 @@ import React, { useEffect, useRef } from 'react';
 import { StyledDiv, LoadingCanvas, Bird } from './styled';
 
 const ComponentLoading: React.FC = () => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    if (canvasRef.current) {
+      const canvas: HTMLCanvasElement = canvasRef.current;
+      const ctx: CanvasRenderingContext2D = canvas.getContext('2d') as CanvasRenderingContext2D;
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      requestAnimationFrame(animate);
-    };
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        requestAnimationFrame(animate);
+      };
 
-    animate();
+      animate();
+    }
   }, []);
 
   return (

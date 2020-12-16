@@ -8,17 +8,37 @@ import { UserType } from '@types';
 import { getJWTFromBrowser, initializeApollo } from '@libs';
 import UserBox from './styled';
 
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'follower';
+  if (type[0] === 'following') return 'following';
+  return 'follower';
+};
+
 const Follow: FunctionComponent = () => {
   const { type, userId, router } = useTypeRouter();
-  const value = type ? type[0] : 'follower';
-  const fetchMoreEl = useRef(null);
+  const value = getValue(type);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
 
   const keyValue = {
-    follower: ['userId', userId, 'oldestUserId', 'list', GET_FOLLOWER_LIST, fetchMoreEl],
-    following: ['userId', userId, 'oldestUserId', 'list', GET_FOLLOWING_LIST, fetchMoreEl],
+    follower: {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestUserId',
+      dataTarget: 'list',
+      updateQuery: GET_FOLLOWER_LIST,
+      fetchMoreEl,
+    },
+    following: {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestUserId',
+      dataTarget: 'list',
+      updateQuery: GET_FOLLOWING_LIST,
+      fetchMoreEl,
+    },
   };
   const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
-    ...keyValue[value],
+    keyValue[value],
   );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
