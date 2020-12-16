@@ -43,7 +43,7 @@ const commonNotificationCondition = [
       'tweet.img_url_list': 1,
       'tweet.child_tweet_id_list': 1,
       'tweet.child_tweet_number': {
-        $size: { $ifNull: ['$tweet.child_tweet_number', []] },
+        $size: { $ifNull: ['$tweet.child_tweet_id_list', []] },
       },
       'tweet.retweet_user_id_list': 1,
       'tweet.retweet_user_number': {
