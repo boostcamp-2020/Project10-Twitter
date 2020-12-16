@@ -9,24 +9,22 @@ import { useRouter } from 'next/router';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';
 
 const LoginRightSection: FunctionComponent = () => {
-  const [localLogin, { error, data }] = useMutation(LOCAL_LOGIN);
+  const [localLogin] = useMutation(LOCAL_LOGIN);
   const [displaySignupModal, , onClickSignupBtn] = useDisplay(false);
   const [userId, setUserId, onUserIdChange] = useOnTextChange('');
   const [password, setPassword, onPasswordChange] = useOnTextChange('');
   const router = useRouter();
 
-  const onLoginBtnClick = () => {
-    localLogin({ variables: { userId, password } });
+  const onLoginBtnClick = async () => {
+    try {
+      await localLogin({ variables: { userId, password } });
+      setUserId('');
+      setPassword('');
 
-    setUserId('');
-    setPassword('');
-
-    if (error) {
-      alert(error.message);
-      router.push('/login');
-    }
-    if (data) {
       router.push('/home');
+    } catch (err) {
+      alert(err);
+      router.push('/login');
     }
   };
 
