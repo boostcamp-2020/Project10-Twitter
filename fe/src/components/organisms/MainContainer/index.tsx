@@ -1,19 +1,13 @@
-import React, { FunctionComponent, ReactElement } from 'react';
-import { Box } from '@material-ui/core';
-import styled from 'styled-components';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { ProfileImg } from '@atoms';
-import { BodyContainer, MainBox } from './styled';
+import { BodyContainer, Profile, MainBox } from './styled';
 
 interface Props {
   userId?: string;
   ProfileImgUrl?: string;
   children: React.ReactChild[];
 }
-
-const Profile = styled(Box)`
-  margin: 0 auto;
-`;
 
 const MainContaier: FunctionComponent<Props> = ({ userId = '', ProfileImgUrl = '', children }) => {
   return (

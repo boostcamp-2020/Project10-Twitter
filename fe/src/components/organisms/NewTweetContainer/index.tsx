@@ -1,5 +1,11 @@
 import React, { FunctionComponent, useState, useEffect, ReactChild, useRef } from 'react';
-import { useMutation, MutationFunctionOptions, FetchResult, useQuery } from '@apollo/client';
+import {
+  useMutation,
+  MutationFunctionOptions,
+  FetchResult,
+  useQuery,
+  ApolloCache,
+} from '@apollo/client';
 import { DocumentNode } from 'graphql';
 import { TweetFooter, UploadImg } from '@molecules';
 import { TextArea, Picture } from '@atoms';
@@ -18,7 +24,7 @@ interface Props {
     options?: MutationFunctionOptions<any, Record<string, any>> | undefined,
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   parentId?: string;
-  updateQuery?: DocumentNode;
+  updateQuery?: { query: DocumentNode; variables?: {}; object?: boolean };
   onClickCloseBtn?: () => void;
 }
 
@@ -27,7 +33,7 @@ const NewTweetContainer: FunctionComponent<Props> = ({
   onClickQuery,
   onClickCloseBtn = () => {},
   parentId,
-  updateQuery,
+  updateQuery = { query: GET_TWEETLIST, variables: {} },
 }) => {
   const { myProfile } = useMyInfo();
   const [value, setValue, onTextChange] = useOnTextChange('');
@@ -36,53 +42,61 @@ const NewTweetContainer: FunctionComponent<Props> = ({
   const [image, setImage] = useState(undefined);
 
   const fileUpload = useRef(null);
-  const { data, fetchMore } = useQuery(GET_TWEETLIST);
+  const { data, fetchMore } = useQuery(updateQuery.query, { variables: updateQuery.variables });
 
   useEffect(() => {
     setBtnDisabled(!value && !image);
   }, [value, image]);
+
+  const updateCache = (
+    cache: ApolloCache<any>,
+    targetId: string,
+    query: { query: DocumentNode; variables?: {} },
+    type: 'child_tweet_number' | 'retweet_user_number',
+  ) => {
+    let source;
+    if (updateQuery.object) {
+      source = { ...tweet };
+      const number = source[type] + 1;
+      source = { ...source, [type]: number };
+    } else {
+      const res: any = cache.readQuery(query);
+      source = [...res.tweetList];
+      const idx = binarySearch(source, targetId);
+      if (idx === -1) return;
+      const number: number = source[idx][type] + 1;
+      source[idx] = {
+        ...source[idx],
+        [type]: number,
+      };
+    }
+    cache.writeQuery({
+      query: updateQuery.query,
+      variables: updateQuery.variables,
+      data: { tweetList: source },
+    });
+  };
 
   const onTweetBtnClick = async () => {
     if (parentId && updateQuery)
       await onClickQuery({
         variables: { content: value, parentId, imgUrlList: [image] },
         update: (cache) => {
-          const res = cache.readQuery({ query: updateQuery });
-          const source = [...res.tweetList];
-          const idx = binarySearch(source, parentId);
-          if (idx === -1) return;
-          const number: number = source[idx].child_tweet_number + 1;
-          source[idx] = {
-            ...source[idx],
-            child_tweet_number: number,
-          };
-          cache.writeQuery({
-            query: updateQuery,
-            data: { tweetList: source },
-          });
+          updateCache(cache, parentId, updateQuery, 'child_tweet_number');
         },
       });
     else if (tweet && updateQuery)
       await onClickQuery({
         variables: { content: value, retweetId: tweet._id },
         update: (cache) => {
-          const res = cache.readQuery({ query: updateQuery });
-          const source = [...res.tweetList];
-          const idx = binarySearch(source, tweet._id);
-          if (idx === -1) return;
-          const number: number = source[idx].retweet_user_number + 1;
-          source[idx] = {
-            ...source[idx],
-            retweet_user_number: number,
-          };
-          cache.writeQuery({
-            query: updateQuery,
-            data: { tweetList: source },
-          });
+          updateCache(cache, tweet._id, updateQuery, 'retweet_user_number');
+          cache.evict({ id: 'ROOT_QUERY', fieldName: 'retweet_user_list' });
         },
       });
     else await onClickQuery({ variables: { content: value, imgUrlList: [image] } });
-    fetchMore({ variables: { latestTweetId: data?.tweetList[0]._id } });
+    let variables = {};
+    if (data?.tweetList[0]) variables = { latestTweetId: data?.tweetList[0]._id };
+    fetchMore({ variables: { ...variables, ...updateQuery.variables } });
     onClickCloseBtn();
     setValue('');
     imgCloseBtnClick();

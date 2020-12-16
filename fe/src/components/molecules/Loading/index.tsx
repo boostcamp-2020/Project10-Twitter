@@ -10,8 +10,8 @@ const Loading: React.FC<Props> = ({ message }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const ctx: CanvasRenderingContext2D = canvasRef.current.getContext('2d');
     const canvas: HTMLCanvasElement = canvasRef.current;
+    const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 

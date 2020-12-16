@@ -3,6 +3,8 @@ import { useQuery } from '@apollo/client';
 import { useInfiniteScroll } from '@hooks';
 import { GET_TWEETLIST } from '@graphql/tweet';
 
+const ONE_MINUTE = 60 * 1000;
+
 const useHomeTweetInfiniteScroll = (
   fetchMoreEl: React.MutableRefObject<null>,
 ): [
@@ -16,7 +18,7 @@ const useHomeTweetInfiniteScroll = (
   const { _id: bottomTweetId } = data?.tweetList[data?.tweetList.length - 1] || {};
   useQuery(GET_TWEETLIST, {
     variables: { latestTweetId: topTweetId },
-    pollInterval: 60 * 1000,
+    pollInterval: ONE_MINUTE,
   });
 
   const [intersecting, setIntersecting, loadFinished, setLoadFinished] = useInfiniteScroll(
@@ -25,7 +27,7 @@ const useHomeTweetInfiniteScroll = (
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !bottomTweetId || !fetchMore) return;
+      if (!intersecting || loadFinished || !fetchMore) return;
       const { data: fetchMoreData } = await fetchMore({
         variables: { oldestTweetId: bottomTweetId },
       });

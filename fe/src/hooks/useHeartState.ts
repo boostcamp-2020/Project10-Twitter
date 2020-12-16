@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { DocumentNode } from 'graphql';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, ApolloCache } from '@apollo/client';
 import { GET_MYINFO } from '@graphql/user';
 import { HEART_TWEET, UNHEART_TWEET, GET_TWEETLIST } from '@graphql/tweet';
 import { TweetType, UserType } from '@types';
@@ -29,6 +29,41 @@ const useHeartState = (
     setIsHeart(false);
   };
 
+  const updateCache = (cache: ApolloCache<any>, type: string) => {
+    let source;
+    if (updateQuery.object) {
+      source = { ...tweet };
+      if (type === 'heart') {
+        const number = source.heart_user_number + 1;
+        source = { ...source, heart_user_number: number };
+      } else {
+        const number = source.heart_user_number - 1;
+        source = { ...source, heart_user_number: number };
+      }
+    } else {
+      const res: any = cache.readQuery({
+        query: updateQuery.query,
+        variables: updateQuery.variables || {},
+      });
+      source = [...res.tweetList];
+      const idx = binarySearch(source, tweet._id);
+      if (idx === -1) return;
+      let number;
+      if (type === 'heart') number = source[idx].heart_user_number + 1;
+      else number = source[idx].heart_user_number - 1;
+      source[idx] = {
+        ...source[idx],
+        heart_user_number: number,
+      };
+    }
+    cache.writeQuery({
+      query: updateQuery.query,
+      variables: updateQuery.variables || {},
+      data: { tweetList: source },
+    });
+    cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_user_list' });
+  };
+
   const onClickHeart = async () => {
     if (!state) {
       setState(true);
@@ -45,32 +80,7 @@ const useHeartState = (
               },
             },
           });
-
-          let source;
-          if (updateQuery.object) {
-            source = { ...tweet };
-            const number = source.heart_user_number + 1;
-            source = { ...source, heart_user_number: number };
-          } else {
-            const res: any = cache.readQuery({
-              query: updateQuery.query,
-              variables: updateQuery.variables || {},
-            });
-            source = [...res.tweetList];
-            const idx = binarySearch(source, tweet._id);
-            if (idx === -1) return;
-            const number: number = source[idx].heart_user_number + 1;
-            source[idx] = {
-              ...source[idx],
-              heart_user_number: number,
-            };
-          }
-          cache.writeQuery({
-            query: updateQuery.query,
-            variables: updateQuery.variables || {},
-            data: { tweetList: source },
-          });
-          cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_user_list' });
+          updateCache(cache, 'heart');
         },
       });
       setHeartTweet();
@@ -99,30 +109,7 @@ const useHeartState = (
               },
             },
           });
-          let source;
-          if (updateQuery.object) {
-            source = { ...tweet };
-            source.heart_user_number -= 1;
-          } else {
-            const res: any = cache.readQuery({
-              query: updateQuery.query,
-              variables: updateQuery.variables || {},
-            });
-            source = [...res.tweetList];
-            const idx = binarySearch(source, tweet._id);
-            if (idx === -1) return;
-            const number: number = source[idx].heart_user_number - 1;
-            source[idx] = {
-              ...source[idx],
-              heart_user_number: number,
-            };
-          }
-          cache.writeQuery({
-            query: updateQuery.query,
-            variables: updateQuery.variables || {},
-            data: { tweetList: source },
-          });
-          cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_user_list' });
+          updateCache(cache, 'unheart');
         },
       });
       setUnheartTweet();

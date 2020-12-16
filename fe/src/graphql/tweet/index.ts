@@ -1,4 +1,4 @@
-import { ADD_BASIC_TWEET, ADD_REPLY_TWEET, ADD_RETWEET } from './addTweet.gql';
+import { ADD_BASIC_TWEET, ADD_REPLY_TWEET, ADD_RETWEET } from './addTweet';
 import {
   GET_TWEETLIST,
   GET_USER_TWEETLIST,
@@ -7,9 +7,9 @@ import {
   GET_CHILD_TWEETLIST,
   GET_SEARCH_TWEETLIST,
   GET_HEART_TWEETLIST,
-} from './getTweet.gql';
-import { DELETE_TWEET } from './deleteTweet.gql';
-import { HEART_TWEET, UNHEART_TWEET } from './modifyTweet.gql';
+} from './getTweet';
+import DELETE_TWEET from './deleteTweet';
+import { HEART_TWEET, UNHEART_TWEET } from './modifyTweet';
 
 export {
   ADD_BASIC_TWEET,

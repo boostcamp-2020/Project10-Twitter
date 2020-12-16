@@ -5,7 +5,7 @@ import { ApolloCache, useMutation } from '@apollo/client';
 import { IconButton, Button, UploadImg } from '@molecules';
 import { useHeartState, useDisplay, useUserState } from '@hooks';
 import { DocumentNode } from 'graphql';
-import { Text, Heart, Comment, Retweet, X } from '@atoms';
+import { Text, Heart, Comment, Retweet, X, FullHeart } from '@atoms';
 import { makeTimeText } from '@libs';
 import { RetweetContainer, ReplyModal, RetweetModal, MainContainer } from '@organisms';
 import { DELETE_TWEET } from '@graphql/tweet';
@@ -76,7 +76,7 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
           <Button icon={Comment({})} text={tweet.child_tweet_number} onClick={onClickReplyBtn} />
           <Button icon={Retweet({})} text={tweet.retweet_user_number} onClick={onClickRetweetBtn} />
           {isHeart ? (
-            <PinkButton icon={Heart({})} text={tweet.heart_user_number} onClick={onClickUnheart} />
+            <Button icon={FullHeart({})} text={tweet.heart_user_number} onClick={onClickUnheart} />
           ) : (
             <Button icon={Heart({})} text={tweet.heart_user_number} onClick={onClickHeart} />
           )}
@@ -85,13 +85,13 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}
-        updateQuery={updateQuery.query}
+        updateQuery={updateQuery}
         tweet={tweet}
       />
       <RetweetModal
         displayModal={displayRetweetModal}
         onClickCloseBtn={onClickRetweetBtn}
-        updateQuery={updateQuery.query}
+        updateQuery={updateQuery}
         tweet={tweet}
       />
     </>

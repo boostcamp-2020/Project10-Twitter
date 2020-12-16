@@ -14,20 +14,22 @@ const useDataWithInfiniteScroll = (
   React.Dispatch<React.SetStateAction<boolean>>,
   boolean,
   React.Dispatch<React.SetStateAction<boolean>>,
-]  => {
+] => {
   const queryVariable = { variables: { [variableTarget]: variableValue } };
   const { data, fetchMore } = useQuery(updateQuery, queryVariable);
   const { _id: bottomId } = data?.[dataTarget][data?.[dataTarget].length - 1] || {};
-  const [intersecting, setIntersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
+  const [intersecting, setIntersecting, loadFinished, setLoadFinished] = useInfiniteScroll(
+    fetchMoreEl,
+  );
 
   useEffect(() => {
     const asyncEffect = async () => {
-      if (!intersecting || !bottomId || !fetchMore) return;
-      const { data: fetchMoreData } = await fetchMore({
+      if (!intersecting || !fetchMore) return;
+      const { data: fetchMoreData }: any = await fetchMore({
         variables: { [moreVariableTarget]: bottomId },
       });
       if (!fetchMoreData) setIntersecting(false);
-      if (fetchMoreData.[dataTarget].length < 20) setLoadFinished(true);
+      if (fetchMoreData[dataTarget].length < 20) setLoadFinished(true);
     };
     asyncEffect();
   }, [intersecting]);

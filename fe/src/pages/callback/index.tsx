@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { NextPageContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { ComponentLoading } from '@molecules';
+import { Loading } from '@molecules';
 import { GITHUB_LOGIN } from '@graphql/auth';
 
 interface Props {
@@ -20,7 +20,7 @@ const Callback: NextPage<Props> = ({ code }) => {
   if (data) {
     router.push('/home');
   }
-  return <ComponentLoading />;
+  return <Loading message="loading" />;
 };
 
 Callback.getInitialProps = ({ query: { code } }: NextPageContext) => {

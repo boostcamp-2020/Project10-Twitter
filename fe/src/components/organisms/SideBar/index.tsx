@@ -10,6 +10,8 @@ import { NewTweetModal } from '@organisms';
 import { GET_NOTIFICATION_COUNT } from '@graphql/notification';
 import Container from './styled';
 
+const ONE_MINUTE = 60 * 1000;
+
 interface ButtonProps {
   id: number;
   text: string;
@@ -46,7 +48,11 @@ const TITLE: Array<ButtonProps> = [
   },
 ];
 
-const SideBar: FunctionComponent = () => {
+interface Props {
+  page?: string;
+}
+
+const SideBar: FunctionComponent<Props> = ({ page }) => {
   const router = useRouter();
   const { myProfile } = useMyInfo();
   const [value, , onTextChange] = useOnTextChange('');
@@ -55,7 +61,7 @@ const SideBar: FunctionComponent = () => {
   const variables = { id: myProfile ? myProfile.lastest_notification_id : undefined };
   const { data } = useQuery(GET_NOTIFICATION_COUNT, {
     variables,
-    pollInterval: 60 * 1000,
+    pollInterval: ONE_MINUTE,
   });
 
   const onKeyDown = (e: any) => {
@@ -85,7 +91,7 @@ const SideBar: FunctionComponent = () => {
                 <Button
                   text={v.text}
                   icon={v.icon}
-                  color={v.color}
+                  color={page && v.text.startsWith(page) ? 'primary' : v.color}
                   variant={v.variant}
                   width={v.width}
                 />

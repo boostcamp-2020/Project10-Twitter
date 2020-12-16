@@ -6,13 +6,12 @@ import { Modal, TitleSubText } from '@molecules';
 import { NewTweetContainer, MainContainer } from '@organisms';
 import { ADD_REPLY_TWEET } from '@graphql/tweet';
 import { TweetType } from '@types';
-import { binarySearch } from '@libs';
 
 interface Props {
   displayModal: boolean;
   onClickCloseBtn: () => void;
   tweet: TweetType;
-  updateQuery?: DocumentNode;
+  updateQuery?: { query: DocumentNode; variables?: {} };
 }
 
 const TweetReplyModal: FunctionComponent<Props> = ({
