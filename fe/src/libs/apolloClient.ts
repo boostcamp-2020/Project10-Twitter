@@ -3,8 +3,13 @@ import { createUploadLink } from 'apollo-upload-client';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
+const API_SERVER_URL =
+  process.env.NODE_ENV === 'development'
+    ? process.env.DEV_API_SERVER_URL
+    : process.env.PRO_API_SERVER_URL;
+
 const httpLink = createUploadLink({
-  uri: process.env.API_SERVER_URL as string,
+  uri: API_SERVER_URL,
   credentials: 'include',
 });
 
