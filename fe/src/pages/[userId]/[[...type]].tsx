@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
-import { TabBar, ComponentLoading, LoadingCircle } from '@molecules';
+import { TabBar, LoadingCircle } from '@molecules';
 import { PageLayout, TweetContainer, UserDetailContainer } from '@organisms';
 import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
@@ -84,7 +84,7 @@ const UserDetail: FunctionComponent = () => {
             />
           ))
         ) : (
-          <ComponentLoading />
+          <></>
         )}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />

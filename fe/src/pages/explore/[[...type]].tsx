@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { GetServerSideProps } from 'next';
-import { SearchBar, TabBar, ComponentLoading, LoadingCircle } from '@molecules';
+import { SearchBar, TabBar, LoadingCircle } from '@molecules';
 import { PageLayout, TweetContainer, UserCard } from '@organisms';
 import { useOnTextChange, useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
@@ -101,7 +101,7 @@ const Explore: FunctionComponent = () => {
             ))
           )
         ) : (
-          <ComponentLoading />
+          <></>
         )}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
