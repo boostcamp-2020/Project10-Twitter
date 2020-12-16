@@ -24,8 +24,8 @@ interface ButtonProps {
 }
 
 const TITLE: Array<ButtonProps> = [
-  { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px' }), link: '/home' },
-  { id: 1, text: '홈', icon: Home({ width: '30px', height: '30px' }), link: '/home' },
+  { id: 0, text: '', icon: Twitter({ width: '40px', height: '40px' }), link: '/' },
+  { id: 1, text: '홈', icon: Home({ width: '30px', height: '30px' }), link: '/' },
   {
     id: 2,
     text: '탐색하기',
@@ -64,7 +64,7 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
     pollInterval: ONE_MINUTE,
   });
 
-  const onKeyDown = (e: any) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       router.push('/explore/[[...type]]', `/explore/tweets/${value}`, { shallow: false });
     }
@@ -108,16 +108,18 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
             )}
           </ListItem>
         ))}
-        <ListItem>
-          <SearchBar
-            placeholder={placeholder}
-            type={type}
-            width="90%"
-            value={value}
-            onChange={onTextChange}
-            onKeyDown={onKeyDown}
-          />
-        </ListItem>
+        {page !== '탐색하기' ? (
+          <ListItem>
+            <SearchBar
+              placeholder={placeholder}
+              type={type}
+              width="90%"
+              value={value}
+              onChange={onTextChange}
+              onKeyDown={onKeyDown}
+            />
+          </ListItem>
+        ) : null}
         {displayPopover ? <UserPopover /> : <></>}
         <ListItem onClick={onClickUserprofile}>
           <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />

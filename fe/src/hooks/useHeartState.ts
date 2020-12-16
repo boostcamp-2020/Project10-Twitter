@@ -70,16 +70,18 @@ const useHeartState = (
       await heartTweet({
         variables: { tweet_id: tweet._id },
         update: (cache) => {
-          const userInfo: any = cache.readQuery({ query: GET_MYINFO });
-          cache.writeQuery({
-            query: GET_MYINFO,
-            data: {
-              myProfile: {
-                ...userInfo.myProfile,
-                heart_tweet_id_list: [...userInfo.myProfile.heart_tweet_id_list, tweet._id],
+          const userInfo = cache.readQuery<{ myProfile: UserType }>({ query: GET_MYINFO });
+          if (userInfo) {
+            cache.writeQuery({
+              query: GET_MYINFO,
+              data: {
+                myProfile: {
+                  ...userInfo.myProfile,
+                  heart_tweet_id_list: [...userInfo.myProfile.heart_tweet_id_list, tweet._id],
+                },
               },
-            },
-          });
+            });
+          }
           updateCache(cache, 'heart');
         },
       });
@@ -94,21 +96,23 @@ const useHeartState = (
       await unheartTweet({
         variables: { tweet_id: tweet._id },
         update: (cache) => {
-          const userInfo: any = cache.readQuery({
+          const userInfo = cache.readQuery<{ myProfile: UserType }>({
             query: GET_MYINFO,
           });
-          const arr = [...userInfo.myProfile.heart_tweet_id_list];
-          const index = arr.indexOf(tweet._id);
-          arr.splice(index, 1);
-          cache.writeQuery({
-            query: GET_MYINFO,
-            data: {
-              myProfile: {
-                ...userInfo.myProfile,
-                heart_tweet_id_list: arr,
+          if (userInfo) {
+            const arr = [...userInfo.myProfile.heart_tweet_id_list];
+            const index = arr.indexOf(tweet._id);
+            arr.splice(index, 1);
+            cache.writeQuery({
+              query: GET_MYINFO,
+              data: {
+                myProfile: {
+                  ...userInfo.myProfile,
+                  heart_tweet_id_list: arr,
+                },
               },
-            },
-          });
+            });
+          }
           updateCache(cache, 'unheart');
         },
       });

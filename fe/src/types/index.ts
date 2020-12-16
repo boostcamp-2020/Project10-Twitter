@@ -17,6 +17,7 @@ interface UserType {
   heart_tweet_id_list: [string];
   following_id_list: [string];
   following_user?: UserType;
+  lastest_notification_id?: string;
 }
 
 interface TweetType {

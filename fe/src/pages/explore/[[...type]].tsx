@@ -46,7 +46,7 @@ const Explore: FunctionComponent = () => {
     keyValue[value],
   );
 
-  const onKeyDown = (e: any) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       router.replace(`/explore/[[...type]]`, `/explore/${value}/${textValue}`, {
         shallow: true,
@@ -103,6 +103,8 @@ const Explore: FunctionComponent = () => {
         ) : (
           <></>
         )}
+        {data?.tweetList?.length === 0 ? <div>데이터 X</div> : null}
+        {data?.searchList?.length === 0 ? <div>데이터 X</div> : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

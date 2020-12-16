@@ -51,7 +51,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ tweetId }) => {
     await deleteTweet({
       variables: { tweetId: tweet._id },
     });
-    router.push('/home');
+    router.push('/');
   };
 
   if (loading) return <ComponentLoading />;

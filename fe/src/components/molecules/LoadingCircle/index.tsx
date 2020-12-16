@@ -4,7 +4,7 @@ import Contaniner from './styled';
 
 interface Props {
   loadFinished: boolean;
-  fetchMoreEl: any;
+  fetchMoreEl: React.RefObject<HTMLDivElement>;
 }
 
 const LoadingCircle: FunctionComponent<Props> = ({ loadFinished, fetchMoreEl }) => {

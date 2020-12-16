@@ -49,6 +49,8 @@ const Follow: FunctionComponent = () => {
       router.replace(`/[userId]/follow/[[...type]]`, `/${userId}/follow/${newValue}`, {
         shallow: true,
       });
+      initializeApollo().cache.evict({ id: 'ROOT_QUERY', fieldName: 'following_list' });
+      initializeApollo().cache.evict({ id: 'ROOT_QUERY', fieldName: 'follower_list' });
       setLoadFinished(false);
       setIntersecting(false);
     }
@@ -72,6 +74,7 @@ const Follow: FunctionComponent = () => {
         ) : (
           <ComponentLoading />
         )}
+        {data?.list?.length === 0 ? <div>팔로우 x </div> : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
