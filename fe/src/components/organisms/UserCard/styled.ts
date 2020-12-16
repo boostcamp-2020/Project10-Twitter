@@ -10,4 +10,8 @@ const Container = styled(Box)`
   border-bottom: 1px solid rgb(235, 238, 240);
 `;
 
-export default Container;
+const EmptyDiv = styled.div`
+  width: 120px;
+`;
+
+export { EmptyDiv, Container };
