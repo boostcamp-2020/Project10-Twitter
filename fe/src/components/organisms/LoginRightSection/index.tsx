@@ -6,6 +6,7 @@ import { useDisplay, useOnTextChange } from '@hooks';
 import { SignupModal } from '@organisms';
 import { LOCAL_LOGIN } from '@graphql/auth';
 import { useRouter } from 'next/router';
+import { GITHUB_LOGIN_URL } from '@config';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';
 
 const LoginRightSection: FunctionComponent = () => {
@@ -29,8 +30,7 @@ const LoginRightSection: FunctionComponent = () => {
   };
 
   const onGithubBtnClick = () => {
-    window.location.href =
-      'https://github.com/login/oauth/authorize?client_id=5ca42b21f33b23cc53e8&redirect_uri=http://localhost:3000/callback';
+    window.location.href = GITHUB_LOGIN_URL;
   };
   return (
     <>

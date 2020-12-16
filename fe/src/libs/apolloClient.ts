@@ -1,10 +1,11 @@
 import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
+import { API_SERVER_URL } from '@config';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = createUploadLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: API_SERVER_URL,
   credentials: 'include',
 });
 
