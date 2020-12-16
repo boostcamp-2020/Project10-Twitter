@@ -29,7 +29,11 @@ const LoginRightSection: FunctionComponent = () => {
   };
 
   const onGithubBtnClick = () => {
-    window.location.href = process.env.GITHUB_LOGIN_URL as string;
+    const GITHUB_LOGIN_URL =
+      process.env.NODE_ENV === 'development'
+        ? process.env.DEV_GITHUB_LOGIN_URL
+        : process.env.PRO_GITHUB_LOGIN_URL;
+    window.location.href = GITHUB_LOGIN_URL as string;
   };
   return (
     <>
