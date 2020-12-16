@@ -1,3 +1,3 @@
-import { DETAIL_PAGE } from './customQuery.gql';
+import DETAIL_PAGE from './customQuery';
 
 export default DETAIL_PAGE;

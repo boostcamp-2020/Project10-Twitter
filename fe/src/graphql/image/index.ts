@@ -1,3 +1,3 @@
-import { UPLOAD_IMAGE } from './addImage.gql';
+import UPLOAD_IMAGE from './addImage';
 
 export default UPLOAD_IMAGE;

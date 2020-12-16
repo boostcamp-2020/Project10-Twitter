@@ -1,4 +1,4 @@
-import { ADD_USER } from './addUser.gql';
+import ADD_USER from './addUser';
 import {
   GET_MYINFO,
   GET_USER_DETAIL,
@@ -7,8 +7,8 @@ import {
   GET_SEARCH_USERLIST,
   GET_HEART_USERLIST,
   GET_RETWEET_USERLIST,
-} from './getUser.gql';
-import { FOLLOW_USER, UNFOLLOW_USER, UPDATE_USER_INFO } from './modifyUser.gql';
+} from './getUser';
+import { FOLLOW_USER, UNFOLLOW_USER, UPDATE_USER_INFO } from './modifyUser';
 
 export {
   ADD_USER,
