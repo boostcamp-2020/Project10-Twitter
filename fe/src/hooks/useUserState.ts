@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, ApolloCache } from '@apollo/client';
 import { GET_MYINFO, FOLLOW_USER, UNFOLLOW_USER, GET_USER_DETAIL } from '@graphql/user';
 import { UserType, QueryVariableType } from '@types';
 
@@ -9,7 +9,7 @@ const getUserType = (user: UserType, myProfile: UserType) => {
   return 'unfollowUser';
 };
 
-const useUserState = (user: UserType): [string, () => Promise<void>, () => Promise<void>] => {
+const useUserState = (user: UserType): [string, () => void, () => void] => {
   const { data } = useQuery(GET_MYINFO);
   const [userState, setUserState] = useState(getUserType(user, data?.myProfile));
 
@@ -23,25 +23,32 @@ const useUserState = (user: UserType): [string, () => Promise<void>, () => Promi
     setUserState('unfollowUser');
   };
 
+  const updateCache = (cache: ApolloCache<any>, type: string) => {
+    const userInfo = cache.readQuery({
+      query: GET_USER_DETAIL,
+      variables: { userId: user.user_id },
+    });
+    let number;
+    if (type === 'follow') number = userInfo.followerCount.count + 1;
+    else number = userInfo.followerCount.count - 1;
+    cache.writeQuery({
+      query: GET_USER_DETAIL,
+      variables: { userId: user.user_id },
+      data: {
+        followerCount: {
+          count: number,
+        },
+      },
+    });
+  };
+
   const onClickFollow = () => {
     setFollowUser();
-    const handler = setTimeout(() => {
+    setTimeout(() => {
       followUser({
         variables: { follow_user_id: user.user_id },
         update: (cache) => {
-          const userInfo = cache.readQuery({
-            query: GET_USER_DETAIL,
-            variables: { userId: user.user_id },
-          });
-          cache.writeQuery({
-            query: GET_USER_DETAIL,
-            variables: { userId: user.user_id },
-            data: {
-              followerCount: {
-                count: userInfo.followerCount.count + 1,
-              },
-            },
-          });
+          updateCache(cache, 'follow');
         },
       });
     });
@@ -53,19 +60,7 @@ const useUserState = (user: UserType): [string, () => Promise<void>, () => Promi
       unfollowUser({
         variables: { unfollow_user_id: user.user_id },
         update: (cache) => {
-          const userInfo = cache.readQuery({
-            query: GET_USER_DETAIL,
-            variables: { userId: user.user_id },
-          });
-          cache.writeQuery({
-            query: GET_USER_DETAIL,
-            variables: { userId: user.user_id },
-            data: {
-              followerCount: {
-                count: userInfo.followerCount.count - 1,
-              },
-            },
-          });
+          updateCache(cache, 'unfollow');
         },
       });
     });

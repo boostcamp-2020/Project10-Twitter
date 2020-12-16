@@ -48,7 +48,11 @@ const TITLE: Array<ButtonProps> = [
   },
 ];
 
-const SideBar: FunctionComponent = () => {
+interface Props {
+  page?: string;
+}
+
+const SideBar: FunctionComponent<Props> = ({ page }) => {
   const router = useRouter();
   const { myProfile } = useMyInfo();
   const [value, , onTextChange] = useOnTextChange('');
@@ -87,7 +91,7 @@ const SideBar: FunctionComponent = () => {
                 <Button
                   text={v.text}
                   icon={v.icon}
-                  color={v.color}
+                  color={page && v.text.startsWith(page) ? 'primary' : v.color}
                   variant={v.variant}
                   width={v.width}
                 />

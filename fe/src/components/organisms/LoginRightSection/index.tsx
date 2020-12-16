@@ -41,7 +41,6 @@ const LoginRightSection: FunctionComponent = () => {
               labelValue="아이디"
               placeholder="입력!"
               type="text"
-              variant="standard"
               inputValue={userId}
               onChange={onUserIdChange}
             />
@@ -49,7 +48,6 @@ const LoginRightSection: FunctionComponent = () => {
               labelValue="비밀번호"
               placeholder="입력!"
               type="password"
-              variant="standard"
               inputValue={password}
               onChange={onPasswordChange}
             />

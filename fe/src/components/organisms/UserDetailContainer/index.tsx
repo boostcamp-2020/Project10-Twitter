@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import { TitleSubText, Button, Loading, ComponentLoading } from '@molecules';
+import { TitleSubText, Button } from '@molecules';
 import { ProfileImg, Text } from '@atoms';
 import { useDisplay, useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
@@ -27,7 +27,6 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
   const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const { data } = useQuery(GET_USER_DETAIL, queryVariable);
   const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
-                                                                   
   const [displayModal, , onClickEditModal] = useDisplay(false);
 
   const PROFILE_IMG_SIZE = 150;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { StyledIconLabel } from './styled';
+import StyledIconLabel from './styled';
 
 interface Props {
   children: React.ReactChild[];

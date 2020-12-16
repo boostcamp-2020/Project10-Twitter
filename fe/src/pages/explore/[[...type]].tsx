@@ -69,7 +69,7 @@ const Explore: FunctionComponent = () => {
   };
 
   return (
-    <PageLayout>
+    <PageLayout page="탐색하기">
       <SearchBar
         placeholder="Search Twitter"
         type="text"

@@ -26,6 +26,10 @@ export default class Wave {
     this.width = width;
     this.height = height;
 
+    this.centerX = 0;
+    this.centerY = 0;
+    this.pointGap = 0;
+
     this.init();
   }
 

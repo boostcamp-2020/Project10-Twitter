@@ -62,7 +62,7 @@ const Notification: FunctionComponent = () => {
   }, [data?.notifications]);
 
   return (
-    <PageLayout>
+    <PageLayout page="알림">
       <TabBar value={value} handleChange={onClick} labels={['all', 'mention']} />
       <>
         {data?.notifications.map((noti: NotificationType, index: number) => (
