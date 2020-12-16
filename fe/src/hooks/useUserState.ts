@@ -28,10 +28,10 @@ const useUserState = (
 
   const updateCache = (cache: ApolloCache<any>, type: string) => {
     if (updateQuery) {
-      const userInfo = cache.readQuery({
+      const userInfo: { followerCount: { count: number } } = cache.readQuery({
         query: updateQuery.query,
         variables: updateQuery.variables,
-      });
+      }) || { followerCount: { count: 0 } };
 
       let number;
       if (type === 'follow') number = userInfo.followerCount.count + 1;

@@ -7,23 +7,25 @@ interface Props {
 }
 
 const Loading: React.FC<Props> = ({ message }) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    if (canvasRef.current) {
+      const canvas: HTMLCanvasElement = canvasRef.current;
+      const ctx: CanvasRenderingContext2D = canvas.getContext('2d') as CanvasRenderingContext2D;
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
 
-    const waveGroup = new WaveGroup(canvas.width, canvas.height);
+      const waveGroup = new WaveGroup(canvas.width, canvas.height);
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      waveGroup.draw(ctx);
-      requestAnimationFrame(animate);
-    };
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        waveGroup.draw(ctx);
+        requestAnimationFrame(animate);
+      };
 
-    animate();
+      animate();
+    }
   }, [message]);
 
   return (

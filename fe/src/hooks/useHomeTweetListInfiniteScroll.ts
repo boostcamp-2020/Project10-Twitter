@@ -6,7 +6,7 @@ import { GET_TWEETLIST } from '@graphql/tweet';
 const ONE_MINUTE = 60 * 1000;
 
 const useHomeTweetInfiniteScroll = (
-  fetchMoreEl: React.MutableRefObject<null>,
+  fetchMoreEl: React.RefObject<HTMLDivElement>,
 ): [
   any,
   React.Dispatch<React.SetStateAction<boolean>>,

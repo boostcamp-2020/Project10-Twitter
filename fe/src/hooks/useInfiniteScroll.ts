@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 
 const useInfiniteScroll = (
-  targetEl: React.MutableRefObject<null>,
+  targetEl: React.RefObject<HTMLDivElement>,
 ): [
   boolean,
   React.Dispatch<React.SetStateAction<boolean>>,

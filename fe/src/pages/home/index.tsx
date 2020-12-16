@@ -11,8 +11,7 @@ import HomeBox from './styled';
 
 const Home: FunctionComponent = () => {
   const [addBasicTweet] = useMutation(ADD_BASIC_TWEET);
-  const fetchMoreEl = useRef(null);
-
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
   const [data, , loadFinished] = useHomeTweetListInfiniteScroll(fetchMoreEl);
 
   return (

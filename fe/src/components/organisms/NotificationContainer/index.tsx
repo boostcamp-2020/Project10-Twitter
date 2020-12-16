@@ -50,6 +50,7 @@ const NotificationContainer: FunctionComponent<Props> = ({
     return (
       <Container color={isRead ? 'rgba(29,161,242,0.1)' : undefined}>
         <RetweetContainer tweet={tweet} user={giver} />
+        <UnderLine />
       </Container>
     );
   }

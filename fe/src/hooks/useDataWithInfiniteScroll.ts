@@ -1,15 +1,25 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
+import { DocumentNode } from 'graphql';
 import { useInfiniteScroll } from '@hooks';
 
-const useDataWithInfiniteScroll = (
-  variableTarget: string,
-  variableValue: string,
-  moreVariableTarget: string,
-  dataTarget: string,
-  updateQuery: any,
-  fetchMoreEl: React.MutableRefObject<null>,
-): [
+interface Props {
+  variableTarget: string;
+  variableValue?: string | string[];
+  moreVariableTarget: string;
+  dataTarget: string;
+  updateQuery: DocumentNode;
+  fetchMoreEl: React.RefObject<HTMLDivElement>;
+}
+
+const useDataWithInfiniteScroll = ({
+  variableTarget,
+  variableValue,
+  moreVariableTarget,
+  dataTarget,
+  updateQuery,
+  fetchMoreEl,
+}: Props): [
   any,
   React.Dispatch<React.SetStateAction<boolean>>,
   boolean,

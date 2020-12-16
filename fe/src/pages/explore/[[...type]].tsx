@@ -9,35 +9,41 @@ import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
 import { GET_SEARCH_USERLIST } from '@graphql/user';
 import { TweetType, UserType } from '@types';
 
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'tweets';
+  if (type[0] === 'people') return 'people';
+  return 'tweets';
+};
+
 const Explore: FunctionComponent = () => {
   const apolloClient = initializeApollo();
   const { type, router } = useTypeRouter();
-  const value = type ? type[0] : 'tweets';
+  const value = getValue(type);
   const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
   const [searchWord, setSearchWord] = useState(textValue);
-  const fetchMoreEl = useRef(null);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
 
   const keyValue = {
-    tweets: [
-      'searchWord',
-      searchWord,
-      'oldestTweetId',
-      'tweetList',
-      GET_SEARCH_TWEETLIST,
+    tweets: {
+      variableTarget: 'searchWord',
+      variableValue: searchWord,
+      moreVariableTarget: 'oldestTweetId',
+      dataTarget: 'tweetList',
+      updateQuery: GET_SEARCH_TWEETLIST,
       fetchMoreEl,
-    ],
-    people: [
-      'searchWord',
-      searchWord,
-      'oldestUserId',
-      'searchList',
-      GET_SEARCH_USERLIST,
+    },
+    people: {
+      variableTarget: 'searchWord',
+      variableValue: searchWord,
+      moreVariableTarget: 'oldestUserId',
+      dataTarget: 'tweetList',
+      updateQuery: GET_SEARCH_USERLIST,
       fetchMoreEl,
-    ],
+    },
   };
 
   const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
-    ...keyValue[value],
+    keyValue[value],
   );
 
   const onKeyDown = (e: any) => {
@@ -73,7 +79,6 @@ const Explore: FunctionComponent = () => {
       <SearchBar
         placeholder="Search Twitter"
         type="text"
-        variant="standard"
         width="90%"
         value={textValue}
         onChange={onTextChange}

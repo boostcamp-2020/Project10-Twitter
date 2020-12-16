@@ -7,7 +7,6 @@ interface Props {
   placeholder?: string;
   value?: string;
   type: string;
-  variant?: 'filled' | 'outlined' | 'standard' | undefined;
   width?: string;
   onChange?: (e: React.SyntheticEvent) => void;
   onKeyDown?: (e: React.SyntheticEvent) => void;
@@ -17,7 +16,6 @@ const SearchBar: FunctionComponent<Props> = ({
   placeholder = '',
   value = '',
   type,
-  variant = undefined,
   width = '',
   onChange = (e) => {},
   onKeyDown = (e) => {},
@@ -30,7 +28,6 @@ const SearchBar: FunctionComponent<Props> = ({
       <Input
         placeholder={placeholder}
         type={type}
-        variant={variant}
         value={value}
         onChange={onChange}
         onKeyDown={onKeyDown}

@@ -13,20 +13,40 @@ import {
   CONFIRM_NOTIFICATION,
 } from '@graphql/notification';
 
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'all';
+  if (type[0] === 'mention') return 'mention';
+  return 'all';
+};
+
 const Notification: FunctionComponent = () => {
   const apolloClient = initializeApollo();
   const { type, router } = useTypeRouter();
-  const value = type ? type[0] : 'all';
+  const value = getValue(type);
   const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
-  const fetchMoreEl = useRef(null);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
 
   const keyValue = {
-    all: ['', '', 'id', 'notifications', GET_NOTIFICATION_LIST, fetchMoreEl],
-    mention: ['', '', 'id', 'notifications', GET_MENTION_NOTIFICATION_LIST, fetchMoreEl],
+    all: {
+      variableTarget: '',
+      variableValue: '',
+      moreVariableTarget: 'id',
+      dataTarget: 'notifications',
+      updateQuery: GET_NOTIFICATION_LIST,
+      fetchMoreEl,
+    },
+    mention: {
+      variableTarget: '',
+      variableValue: '',
+      moreVariableTarget: 'id',
+      dataTarget: 'notifications',
+      updateQuery: GET_MENTION_NOTIFICATION_LIST,
+      fetchMoreEl,
+    },
   };
   const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
-    ...keyValue[value],
+    keyValue[value],
   );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
@@ -70,7 +90,7 @@ const Notification: FunctionComponent = () => {
             key={index}
             noti={noti}
             curTabValue={value}
-            updateQuery={{ query: keyValue[value][4] }}
+            updateQuery={{ query: keyValue[value].updateQuery }}
           />
         ))}
       </>

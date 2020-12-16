@@ -112,7 +112,6 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
           <SearchBar
             placeholder={placeholder}
             type={type}
-            variant={variant}
             width="90%"
             value={value}
             onChange={onTextChange}

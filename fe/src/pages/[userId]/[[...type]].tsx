@@ -8,26 +8,47 @@ import { GET_USER_TWEETLIST, GET_USER_ALL_TWEETLIST, GET_HEART_TWEETLIST } from 
 import DETAIL_PAGE from '@graphql/custom';
 import { TweetType } from '@types';
 
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'tweets';
+  if (type[0] === 'tweets & replies') return 'tweets & replies';
+  if (type[0] === 'likes') return 'likes';
+  return 'tweets';
+};
+
 const UserDetail: FunctionComponent = () => {
   const apolloClient = initializeApollo();
   const { type, userId, router } = useTypeRouter();
-  const value = type ? type[0] : 'tweets';
+  const value = getValue(type);
 
-  const fetchMoreEl = useRef(null);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
   const keyValue = {
-    tweets: ['userId', userId, 'oldestTweetId', 'tweetList', GET_USER_TWEETLIST, fetchMoreEl],
-    'tweets & replies': [
-      'userId',
-      userId,
-      'oldestTweetId',
-      'tweetList',
-      GET_USER_ALL_TWEETLIST,
+    tweets: {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestTweetId',
+      dataTarget: 'tweetList',
+      updateQuery: GET_USER_TWEETLIST,
       fetchMoreEl,
-    ],
-    likes: ['userId', userId, 'oldestTweetId', 'tweetList', GET_HEART_TWEETLIST, fetchMoreEl],
+    },
+    'tweets & replies': {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestTweetId',
+      dataTarget: 'tweetList',
+      updateQuery: GET_USER_ALL_TWEETLIST,
+      fetchMoreEl,
+    },
+    likes: {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestTweetId',
+      dataTarget: 'tweetList',
+      updateQuery: GET_HEART_TWEETLIST,
+      fetchMoreEl,
+    },
   };
   const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
-    ...keyValue[value],
+    keyValue[value],
   );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
@@ -56,7 +77,11 @@ const UserDetail: FunctionComponent = () => {
       <div>
         {data ? (
           data.tweetList?.map((tweet: TweetType, index: number) => (
-            <TweetContainer key={index} tweet={tweet} updateQuery={{ query: keyValue[value][4] }} />
+            <TweetContainer
+              key={index}
+              tweet={tweet}
+              updateQuery={{ query: keyValue[value].updateQuery }}
+            />
           ))
         ) : (
           <ComponentLoading />
