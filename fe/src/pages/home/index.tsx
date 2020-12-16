@@ -16,7 +16,7 @@ const Home: FunctionComponent = () => {
   const [data, , loadFinished] = useHomeTweetListInfiniteScroll(fetchMoreEl);
 
   return (
-    <PageLayout>
+    <PageLayout page="홈">
       <HomeBox>Home</HomeBox>
       <NewTweetContainer onClickQuery={addBasicTweet} />
       <div>
