@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useOnTextChange } from '@hooks';
 import Inputcontainer from './index';
 
 export default {
@@ -10,14 +11,15 @@ export const Default = () => {
   const labelValue = '이메일';
   const placeholder = '입력!';
   const type = 'email';
-  const variant = 'standard';
+  const [value, , onChange] = useOnTextChange('');
 
   return (
     <Inputcontainer
       labelValue={labelValue}
       placeholder={placeholder}
       type={type}
-      variant={variant}
+      inputValue={value}
+      onChange={onChange}
     />
   );
 };

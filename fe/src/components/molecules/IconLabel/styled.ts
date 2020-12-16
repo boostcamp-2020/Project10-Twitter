@@ -5,4 +5,4 @@ const StyledIconLabel = styled.div`
   align-items: center;
 `;
 
-export { StyledIconLabel };
+export default StyledIconLabel;

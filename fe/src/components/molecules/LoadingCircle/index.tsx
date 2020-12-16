@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { CircularProgress } from '@material-ui/core';
+import Contaniner from './styled';
 
 interface Props {
   loadFinished: boolean;
@@ -10,9 +11,9 @@ const LoadingCircle: FunctionComponent<Props> = ({ loadFinished, fetchMoreEl }) 
   if (loadFinished) return <div />;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', height: '50px' }} ref={fetchMoreEl}>
+    <Contaniner ref={fetchMoreEl}>
       <CircularProgress />
-    </div>
+    </Contaniner>
   );
 };
 
