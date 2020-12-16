@@ -1,7 +1,7 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { useQuery, useMutation, ApolloCache } from '@apollo/client';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation, ApolloCache, DocumentNode } from '@apollo/client';
 import { GET_MYINFO, FOLLOW_USER, UNFOLLOW_USER, GET_USER_DETAIL } from '@graphql/user';
-import { UserType, QueryVariableType } from '@types';
+import { UserType } from '@types';
 
 const getUserType = (user: UserType, myProfile: UserType) => {
   if (myProfile?.user_id === user?.user_id) return 'me';
@@ -9,7 +9,10 @@ const getUserType = (user: UserType, myProfile: UserType) => {
   return 'unfollowUser';
 };
 
-const useUserState = (user: UserType): [string, () => void, () => void] => {
+const useUserState = (
+  user: UserType,
+  updateQuery?: { query: DocumentNode; variables?: {} },
+): [string, () => void, () => void] => {
   const { data } = useQuery(GET_MYINFO);
   const [userState, setUserState] = useState(getUserType(user, data?.myProfile));
 
@@ -24,22 +27,25 @@ const useUserState = (user: UserType): [string, () => void, () => void] => {
   };
 
   const updateCache = (cache: ApolloCache<any>, type: string) => {
-    const userInfo = cache.readQuery({
-      query: GET_USER_DETAIL,
-      variables: { userId: user.user_id },
-    });
-    let number;
-    if (type === 'follow') number = userInfo.followerCount.count + 1;
-    else number = userInfo.followerCount.count - 1;
-    cache.writeQuery({
-      query: GET_USER_DETAIL,
-      variables: { userId: user.user_id },
-      data: {
-        followerCount: {
-          count: number,
+    if (updateQuery) {
+      const userInfo = cache.readQuery({
+        query: updateQuery.query,
+        variables: updateQuery.variables,
+      });
+
+      let number;
+      if (type === 'follow') number = userInfo.followerCount.count + 1;
+      else number = userInfo.followerCount.count - 1;
+      cache.writeQuery({
+        query: updateQuery.query,
+        variables: updateQuery.variables,
+        data: {
+          followerCount: {
+            count: number,
+          },
         },
-      },
-    });
+      });
+    }
   };
 
   const onClickFollow = () => {
@@ -56,7 +62,7 @@ const useUserState = (user: UserType): [string, () => void, () => void] => {
 
   const onClickUnfollow = () => {
     setUnfollowUser();
-    const handler = setTimeout(() => {
+    setTimeout(() => {
       unfollowUser({
         variables: { unfollow_user_id: user.user_id },
         update: (cache) => {

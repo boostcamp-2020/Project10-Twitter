@@ -26,7 +26,10 @@ interface Props {
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
   const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
   const { data } = useQuery(GET_USER_DETAIL, queryVariable);
-  const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
+  const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user, {
+    query: GET_USER_DETAIL,
+    variables: { userId: data.user.user_id },
+  });
   const [displayModal, , onClickEditModal] = useDisplay(false);
 
   const PROFILE_IMG_SIZE = 150;
