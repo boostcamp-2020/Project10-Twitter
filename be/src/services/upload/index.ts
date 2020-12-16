@@ -24,7 +24,10 @@ const imgUpload = async (_: any, { file }: File) => {
       .on('finish', resolve);
   });
 
-  return { img_url: process.env.DEV_IMG_URL + newFilename };
+  const IMG_URL =
+    process.env.NODE_ENV === 'development' ? process.env.DEV_IMG_URL : process.env.PRO_IMG_URL;
+
+  return { img_url: IMG_URL + newFilename };
 };
 
 export { imgUpload };

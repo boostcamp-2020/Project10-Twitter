@@ -16,7 +16,10 @@ dotenv.config();
 
 const app = express();
 
-const corsOptions = { origin: 'http://localhost:3000', credentials: true };
+const ORIGIN =
+  process.env.NODE_ENV === 'development' ? process.env.DEV_ORIGIN : process.env.PRO_ORIGIN;
+
+const corsOptions = { origin: ORIGIN, credentials: true };
 
 app.use(cookieParser());
 app.use(logger('dev'));

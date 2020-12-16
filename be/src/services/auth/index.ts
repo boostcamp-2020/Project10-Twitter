@@ -29,7 +29,7 @@ const getGithubToken = async (code: string) => {
       : process.env.PRO_GITHUB_CLIENT_SECRET;
 
   const { data } = await axios.post(
-    'https://github.com/login/oauth/access_token',
+    process.env.GITHUB_GET_TOKEN_URL as string,
     {
       code,
       client_id: githubClientId,
@@ -45,11 +45,14 @@ const getGithubToken = async (code: string) => {
 };
 
 const getGithubUserInfo = async (githubToken: string) => {
-  const { data }: { data: GithubUserInfo } = await axios.get('https://api.github.com/user', {
-    headers: {
-      Authorization: `token ${githubToken}`,
+  const { data }: { data: GithubUserInfo } = await axios.get(
+    process.env.GITHUB_GET_USER_URL as string,
+    {
+      headers: {
+        Authorization: `token ${githubToken}`,
+      },
     },
-  });
+  );
   return data;
 };
 
