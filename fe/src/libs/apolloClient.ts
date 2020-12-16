@@ -79,4 +79,8 @@ const initializeApollo = (initialState: NormalizedCacheObject = {}) => {
   return _apolloClient;
 };
 
-export default initializeApollo;
+const recreateApollo = () => {
+  apolloClient = createApolloClient();
+};
+
+export { initializeApollo, recreateApollo };
