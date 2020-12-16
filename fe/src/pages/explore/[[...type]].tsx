@@ -36,7 +36,7 @@ const Explore: FunctionComponent = () => {
       variableTarget: 'searchWord',
       variableValue: searchWord,
       moreVariableTarget: 'oldestUserId',
-      dataTarget: 'tweetList',
+      dataTarget: 'searchList',
       updateQuery: GET_SEARCH_USERLIST,
       fetchMoreEl,
     },
