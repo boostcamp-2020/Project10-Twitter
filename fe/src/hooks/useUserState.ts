@@ -45,7 +45,7 @@ const useUserState = (
           },
         },
       });
-    }
+    } else cache.evict({ id: 'ROOT_QUERY', fieldName: 'my_info' });
   };
 
   const onClickFollow = () => {
