@@ -40,11 +40,10 @@ const commonNotificationCondition = [
       'tweet.content': 1,
       'tweet.parent_id': 1,
       'tweet.retweet_id': 1,
-      'tweet.child_tweet_id_list': 1,
       'tweet.img_url_list': 1,
-      'tweet.child_user_id_list': 1,
+      'tweet.child_tweet_id_list': 1,
       'tweet.child_tweet_number': {
-        $size: { $ifNull: ['$tweet.child_user_id_list', []] },
+        $size: { $ifNull: ['$tweet.child_tweet_id_list', []] },
       },
       'tweet.retweet_user_id_list': 1,
       'tweet.retweet_user_number': {

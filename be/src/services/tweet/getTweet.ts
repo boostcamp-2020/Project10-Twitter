@@ -122,7 +122,7 @@ const getChildTweetList = async (
     {
       $match: { $and: [{ parent_id: stringToObjectId(tweet_id) }, nextTweetsCondition] },
     },
-    { $sort: { createAt: -1 } },
+    { $sort: { createAt: 1 } },
     { $limit: 20 },
     ...commonReadCondition,
   ]);

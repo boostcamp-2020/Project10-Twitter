@@ -48,11 +48,10 @@ const commonReadCondition = [
       'retweet.content': 1,
       'retweet.parent_id': 1,
       'retweet.retweet_id': 1,
-      'retweet.child_tweet_id_list': 1,
       'retweet.img_url_list': 1,
-      'retweet.child_user_id_list': 1,
+      'retweet.child_tweet_id_list': 1,
       'retweet.child_tweet_number': {
-        $size: { $ifNull: ['$retweet.child_user_id_list', []] },
+        $size: { $ifNull: ['$retweet.child_tweet_id_list', []] },
       },
       'retweet.retweet_user_id_list': 1,
       'retweet.retweet_user_number': {
