@@ -21,7 +21,7 @@ const LoginRightSection: FunctionComponent = () => {
       setUserId('');
       setPassword('');
 
-      router.push('/home');
+      router.push('/');
     } catch (err) {
       alert(err);
       router.push('/login');

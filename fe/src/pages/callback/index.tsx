@@ -20,7 +20,7 @@ const Callback: NextPage<Props> = ({ code }) => {
   if (error) router.push('/login');
   if (data) {
     recreateApollo();
-    router.push('/home');
+    router.push('/');
   }
   return <Loading message="loading" />;
 };
