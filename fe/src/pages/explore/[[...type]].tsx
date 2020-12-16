@@ -75,7 +75,10 @@ const Explore: FunctionComponent = () => {
   };
 
   return (
-    <PageLayout page="탐색하기">
+    <PageLayout
+      page="탐색하기"
+      updateQuery={{ query: GET_SEARCH_TWEETLIST, variables: { searchWord } }}
+    >
       <SearchBar
         placeholder="Search Twitter"
         type="text"
