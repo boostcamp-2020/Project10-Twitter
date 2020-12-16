@@ -5,7 +5,7 @@ import { Text } from '@atoms';
 import { useUserState } from '@hooks';
 import { getJSXwithUserState } from '@libs';
 import { UserType } from '@types';
-import Container from './styled';
+import { Container, EmptyDiv } from './styled';
 
 interface Props {
   user: UserType;
@@ -24,7 +24,7 @@ const UserCard: FunctionComponent<Props> = ({ user }) => {
       </Link>
       {getJSXwithUserState(
         userState,
-        <></>,
+        <EmptyDiv />,
         <Button text="unfollow" color="primary" variant="contained" onClick={onClickUnfollow} />,
         <Button text="follow" color="primary" variant="outlined" onClick={onClickFollow} />,
       )}
