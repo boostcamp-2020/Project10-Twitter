@@ -6,6 +6,7 @@ import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_USER_TWEETLIST, GET_USER_ALL_TWEETLIST, GET_HEART_TWEETLIST } from '@graphql/tweet';
 import DETAIL_PAGE from '@graphql/custom';
+import { NoResult } from '@atoms';
 import { TweetType } from '@types';
 
 const getValue = (type?: string[] | string) => {
@@ -57,17 +58,16 @@ const UserDetail: FunctionComponent = () => {
     if (newValue !== value) {
       if (newValue === 'tweets') newValue = '';
       router.replace('/[userId]/[type]', `/${userId}/${newValue}`, { shallow: true });
+      apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'user_all_tweet_list' });
+      apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_tweet_list' });
+      apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'user_tweet_list' });
       setLoadFinished(false);
       setIntersecting(false);
     }
   };
-  useEffect(() => {
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'user_all_tweet_list' });
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'heart_tweet_list' });
-  }, [userId]);
 
   return (
-    <PageLayout updateQuery={{ query: GET_USER_TWEETLIST, variables: { userId } }}>
+    <PageLayout updateQuery={{ query: keyValue[value].updateQuery, variables: { userId } }}>
       <UserDetailContainer userId={userId as string} />
       <TabBar
         value={value}
@@ -89,7 +89,9 @@ const UserDetail: FunctionComponent = () => {
         ) : (
           <></>
         )}
-        {data?.tweetList?.length === 0 ? <div>팔로우 x </div> : null}
+        {data?.tweetList?.length === 0 ? (
+          <NoResult start="You don’t have any" value={value} end="yet" />
+        ) : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

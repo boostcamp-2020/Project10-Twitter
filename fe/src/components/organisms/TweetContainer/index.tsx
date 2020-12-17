@@ -40,6 +40,20 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
       if (tweetCache) {
         const updateData = [...tweetCache.tweetList];
         const idx = binarySearch(updateData, tweet._id);
+        if (updateData[idx].parent_id) {
+          const retweetIdx = binarySearch(updateData, updateData[idx].parent_id);
+          if (retweetIdx !== -1) {
+            const number = updateData[retweetIdx].child_tweet_number - 1;
+            updateData[retweetIdx] = { ...updateData[retweetIdx], child_tweet_number: number };
+          }
+        }
+        if (updateData[idx].retweet_id) {
+          const retweetIdx = binarySearch(updateData, updateData[idx].retweet_id);
+          if (retweetIdx !== -1) {
+            const number = updateData[retweetIdx].retweet_user_number - 1;
+            updateData[retweetIdx] = { ...updateData[retweetIdx], retweet_user_number: number };
+          }
+        }
         if (idx === -1) return;
         updateData.splice(idx, 1);
         cache.writeQuery({
@@ -101,4 +115,5 @@ const TweetContainer: FunctionComponent<Props> = ({ tweet, updateQuery }) => {
     </>
   );
 };
+
 export default TweetContainer;

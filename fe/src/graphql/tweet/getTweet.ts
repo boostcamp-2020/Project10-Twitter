@@ -13,6 +13,7 @@ export const GET_TWEETLIST = gql`
       retweet_user_number
       heart_user_number
       retweet_id
+      parent_id
       img_url_list
       retweet {
         _id
@@ -47,6 +48,7 @@ export const GET_USER_TWEETLIST = gql`
       retweet_user_number
       heart_user_number
       retweet_id
+      parent_id
       img_url_list
       retweet {
         _id
@@ -81,6 +83,7 @@ export const GET_USER_ALL_TWEETLIST = gql`
       retweet_user_number
       heart_user_number
       retweet_id
+      parent_id
       img_url_list
       retweet {
         _id
@@ -116,6 +119,7 @@ export const GET_TWEET_DETAIL = gql`
       retweet_user_number
       heart_user_number
       retweet_id
+      parent_id
       img_url_list
       retweet {
         _id
@@ -150,6 +154,7 @@ export const GET_CHILD_TWEETLIST = gql`
       retweet_user_number
       heart_user_number
       retweet_id
+      parent_id
       img_url_list
       retweet {
         _id
@@ -186,6 +191,7 @@ export const GET_SEARCH_TWEETLIST = gql`
       img_url_list
       heart_user_number
       retweet_id
+      parent_id
       retweet {
         _id
         content
@@ -220,6 +226,7 @@ export const GET_HEART_TWEETLIST = gql`
       heart_user_number
       img_url_list
       retweet_id
+      parent_id
       retweet {
         _id
         content

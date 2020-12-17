@@ -6,6 +6,7 @@ import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
 import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
 import { UserType } from '@types';
 import { getJWTFromBrowser, initializeApollo } from '@libs';
+import { NoResult } from '@atoms';
 import UserBox from './styled';
 
 const getValue = (type?: string[] | string) => {
@@ -72,9 +73,11 @@ const Follow: FunctionComponent = () => {
             ),
           )
         ) : (
-          <ComponentLoading />
+          <></>
         )}
-        {data?.list?.length === 0 ? <div>팔로우 x </div> : null}
+        {data?.list?.length === 0 ? (
+          <NoResult start="You aren’t" value={value} end="anyone yet" />
+        ) : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
