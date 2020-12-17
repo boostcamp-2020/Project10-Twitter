@@ -83,7 +83,7 @@ const getNotificationCount = async (
       $count: 'count',
     },
   ]);
-  return count;
+  return count || { count: 0 };
 };
 
 export { getNotificationCount, getNotification, getNotificationWithMention };

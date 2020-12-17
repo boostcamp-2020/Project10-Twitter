@@ -71,7 +71,7 @@ const getFollowerCount = async (_: any, { user_id }: Args, { authUser }: Auth) =
     },
     { $count: 'count' },
   ]);
-  return followerCount;
+  return followerCount || { count: 0 };
 };
 
 const getHeartUserList = async (_: any, { tweet_id, oldest_user_id }: Args, { authUser }: Auth) => {
