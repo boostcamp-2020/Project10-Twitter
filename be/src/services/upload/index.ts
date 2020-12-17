@@ -9,8 +9,8 @@ interface File {
   };
 }
 
-const imgUpload = async (_: any, { file }: File) => {
-  const { createReadStream, filename } = await file;
+const imgUpload = async (_: any, { file: { file: imgFile } }: any) => {
+  const { createReadStream, filename } = await imgFile;
 
   !fs.existsSync('uploads') && fs.mkdirSync('uploads');
 
