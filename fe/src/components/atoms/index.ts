@@ -18,6 +18,7 @@ import Label from './Label';
 import ProfileImg from './ProfileImg';
 import Text from './Text';
 import TextArea from './TextArea';
+import NoResult from './NoResult';
 
 export {
   Form,
@@ -38,4 +39,5 @@ export {
   ProfileImg,
   Text,
   TextArea,
+  NoResult,
 };
