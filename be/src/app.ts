@@ -1,5 +1,6 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 import logger from 'morgan';
 import path from 'path';
@@ -25,11 +26,13 @@ app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, '../uploads')));
 app.use(cors(corsOptions));
+app.use(graphqlUploadExpress());
 const port: number = Number(process.env.PORT) || 3000;
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  uploads: false, // Here!
   context: ({ req, res }) => {
     if (!req.cookies.jwt) return { authUser: undefined, res };
 
