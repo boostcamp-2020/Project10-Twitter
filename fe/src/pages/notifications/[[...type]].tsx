@@ -7,6 +7,7 @@ import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_MYINFO } from '@graphql/user';
 import { NotificationType, UserType } from '@types';
+import { NoResult } from '@atoms';
 import {
   GET_NOTIFICATION_LIST,
   GET_MENTION_NOTIFICATION_LIST,
@@ -98,7 +99,9 @@ const Notification: FunctionComponent = () => {
             updateQuery={{ query: keyValue[value].updateQuery }}
           />
         ))}
-        {data?.notifications?.length === 0 ? <div>데이터 x</div> : null}
+        {data?.notifications?.length === 0 ? (
+          <NoResult start="You don’t have any" value="notification" end="yet" />
+        ) : null}
       </>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

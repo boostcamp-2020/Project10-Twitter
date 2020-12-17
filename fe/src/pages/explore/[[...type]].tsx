@@ -7,6 +7,7 @@ import { useOnTextChange, useTypeRouter, useDataWithInfiniteScroll } from '@hook
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
 import { GET_SEARCH_USERLIST } from '@graphql/user';
+import { NoResult } from '@atoms';
 import { TweetType, UserType } from '@types';
 
 const getValue = (type?: string[] | string) => {
@@ -79,14 +80,16 @@ const Explore: FunctionComponent = () => {
       page="탐색하기"
       updateQuery={{ query: GET_SEARCH_TWEETLIST, variables: { searchWord } }}
     >
-      <SearchBar
-        placeholder="Search Twitter"
-        type="text"
-        width="90%"
-        value={textValue}
-        onChange={onTextChange}
-        onKeyDown={onKeyDown}
-      />
+      <div style={{ margin: '10px' }}>
+        <SearchBar
+          placeholder="Search Twitter"
+          type="text"
+          width="100%"
+          value={textValue}
+          onChange={onTextChange}
+          onKeyDown={onKeyDown}
+        />
+      </div>
       <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
       <div>
         {data ? (
@@ -106,8 +109,9 @@ const Explore: FunctionComponent = () => {
         ) : (
           <></>
         )}
-        {data?.tweetList?.length === 0 ? <div>데이터 X</div> : null}
-        {data?.searchList?.length === 0 ? <div>데이터 X</div> : null}
+        {data?.tweetList?.length === 0 || data?.searchList?.length === 0 ? (
+          <NoResult start="No results for" value={value} end="" />
+        ) : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
