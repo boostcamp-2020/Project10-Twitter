@@ -66,7 +66,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           <UserFollowContainer>
             <Link href={`/${user.user_id}/follow/`}>
               <a>
-                <TitleSubText title="팔로워 수" sub={followerCount ? followerCount.count : 0} />
+                <TitleSubText title="팔로워 수" sub={followerCount?.count} />
               </a>
             </Link>
             <Link href={`/${user.user_id}/follow/following`}>

@@ -2,6 +2,7 @@ import React, { ReactElement, FunctionComponent, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { ListItem } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import { DocumentNode } from 'graphql';
 import Link from 'next/link';
 import { Button, UserPopover, UserInfo, SearchBar } from '@molecules';
 import { Home, Explore, Twitter, Notifications, Profiles } from '@atoms';
@@ -10,7 +11,7 @@ import { NewTweetModal } from '@organisms';
 import { GET_NOTIFICATION_COUNT } from '@graphql/notification';
 import Container from './styled';
 
-const ONE_MINUTE = 60 * 1000;
+const TEN_SECONDS = 10 * 1000;
 
 interface ButtonProps {
   id: number;
@@ -50,9 +51,10 @@ const TITLE: Array<ButtonProps> = [
 
 interface Props {
   page?: string;
+  updateQuery?: { query: DocumentNode; variables?: {} };
 }
 
-const SideBar: FunctionComponent<Props> = ({ page }) => {
+const SideBar: FunctionComponent<Props> = ({ page, updateQuery }) => {
   const router = useRouter();
   const { myProfile } = useMyInfo();
   const [value, , onTextChange] = useOnTextChange('');
@@ -61,7 +63,7 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
   const variables = { id: myProfile ? myProfile.lastest_notification_id : undefined };
   const { data } = useQuery(GET_NOTIFICATION_COUNT, {
     variables,
-    pollInterval: ONE_MINUTE,
+    pollInterval: TEN_SECONDS,
   });
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -73,13 +75,12 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
   const userId: string = myProfile.user_id;
   const userName: string = myProfile.name;
   const userProfileImg: string = myProfile.profile_img_url;
-  if (data) TITLE[3].text = `알림 ${data.count ? data.count.count : ''}`;
+  if (data) TITLE[3].text = `알림 ${data.count.count !== 0 ? data.count.count : ''}`;
   TITLE[4].link = `/${userId}`;
   TITLE[5].onClick = onClickTweetBtn;
 
   const placeholder = 'Search Twitter';
   const type = 'text';
-  const variant = 'standard';
 
   return (
     <>
@@ -125,7 +126,11 @@ const SideBar: FunctionComponent<Props> = ({ page }) => {
           <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />
         </ListItem>
       </Container>
-      <NewTweetModal displayModal={displayModal} onClickCloseBtn={onClickTweetBtn} />
+      <NewTweetModal
+        displayModal={displayModal}
+        onClickCloseBtn={onClickTweetBtn}
+        updateQuery={updateQuery}
+      />
     </>
   );
 };
