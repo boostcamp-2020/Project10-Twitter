@@ -7,6 +7,7 @@ import { GET_TWEETLIST, ADD_BASIC_TWEET } from '@graphql/tweet';
 import { TweetType } from '@types';
 import { initializeApollo, getJWTFromBrowser } from '@libs';
 import { LoadingCircle } from '@molecules';
+import { NoResult } from '@atoms';
 import HomeBox from './styled';
 
 const Home: FunctionComponent = () => {
@@ -22,7 +23,9 @@ const Home: FunctionComponent = () => {
         {data?.tweetList?.map((tweet: TweetType, index: number) => (
           <TweetContainer key={index} tweet={tweet} updateQuery={{ query: GET_TWEETLIST }} />
         ))}
-        {data?.tweetList?.length === 0 ? <div>데이터 x</div> : null}
+        {data?.tweetList?.length === 0 ? (
+          <NoResult start="Welcome to Twitter!" value="" end="" />
+        ) : null}
       </div>
       <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>

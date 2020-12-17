@@ -31,6 +31,7 @@ interface TweetType {
   author: UserType;
   retweet_id: string;
   retweet: TweetType;
+  parent_id: string;
 }
 
 interface NotificationType {

@@ -5,6 +5,7 @@ const BodyContainer = styled.div`
 `;
 const Container = styled.div`
   display: flex;
+  margin: 10px;
 `;
 
 export { BodyContainer, Container };
