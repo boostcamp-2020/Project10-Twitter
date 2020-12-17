@@ -6,6 +6,7 @@ import { useDisplay, useOnTextChange } from '@hooks';
 import { SignupModal } from '@organisms';
 import { LOCAL_LOGIN } from '@graphql/auth';
 import { useRouter } from 'next/router';
+import { recreateApollo } from '@libs';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';
 
 const LoginRightSection: FunctionComponent = () => {
@@ -20,7 +21,7 @@ const LoginRightSection: FunctionComponent = () => {
       await localLogin({ variables: { userId, password } });
       setUserId('');
       setPassword('');
-
+      recreateApollo();
       router.push('/');
     } catch (err) {
       alert(err);
