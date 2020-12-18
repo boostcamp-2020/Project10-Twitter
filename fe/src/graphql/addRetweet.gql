@@ -1,6 +1,0 @@
-mutation($content: String, $retweetId: String!) {
-  tweet: add_retweet(content: $content, retweet_id: $retweetId) {
-    content
-    author_id
-  }
-}

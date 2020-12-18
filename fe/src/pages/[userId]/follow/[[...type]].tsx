@@ -1,59 +1,46 @@
-import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
-import TabBar from '../../../components/molecules/TabBar';
-import PageLayout from '../../../components/organisms/PageLayout';
-import UserCard from '../../../components/organisms/UserCard';
-import GET_FOLLOWINGLIST from '../../../graphql/getFollowingList.gql';
-import GET_FOLLOWERLIST from '../../../graphql/getFollowerList.gql';
-import { UserBox } from '../styled';
-import TitleSubText from '../../../components/molecules/TitleSubText';
-import useInfiniteScroll from '../../../hooks/useInfiniteScroll';
-import Loading from '../../molecules/Loading';
+import React, { FunctionComponent, useRef } from 'react';
+import { GetServerSideProps } from 'next';
+import { TabBar, TitleSubText, ComponentLoading, LoadingCircle } from '@molecules';
+import { PageLayout, UserCard } from '@organisms';
+import { useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
+import { GET_FOLLOWING_LIST, GET_FOLLOWER_LIST } from '@graphql/user';
+import { UserType } from '@types';
+import { getJWTFromBrowser, initializeApollo } from '@libs';
+import { NoResult } from '@atoms';
+import UserBox from './styled';
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
-interface User {
-  _id: string;
-  user_id: string;
-  following_id_list: string[];
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'follower';
+  if (type[0] === 'following') return 'following';
+  return 'follower';
+};
 
 const Follow: FunctionComponent = () => {
-  const router = useRouter();
-  const { userId, type } = router.query;
-  const queryArr = { follower: GET_FOLLOWERLIST, following: GET_FOLLOWINGLIST };
-  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const value = type ? type[0] : 'follower';
-  const [userList, setUserList] = useState<User[]>([]);
-  const { loading, error, data, fetchMore } = useQuery(queryArr[value], queryVariable);
-  const fetchMoreEl = useRef(null);
-  const [intersecting] = useInfiniteScroll(fetchMoreEl);
-  const { _id: bottomUserId } = userList[userList.length - 1] || {};
+  const { type, userId, router } = useTypeRouter();
+  const value = getValue(type);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (data?.list) setUserList(data?.list);
-  }, [data?.list]);
-
-  useEffect(() => {
-    const asyncEffect = async () => {
-      if (intersecting || !bottomUserId || !fetchMore) return;
-      const { data: fetchMoreData } = await fetchMore({
-        variables: { userId: userId as string, oldestUserId: bottomUserId },
-      });
-    };
-    asyncEffect();
-  }, [intersecting]);
+  const keyValue = {
+    follower: {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestUserId',
+      dataTarget: 'list',
+      updateQuery: GET_FOLLOWER_LIST,
+      fetchMoreEl,
+    },
+    following: {
+      variableTarget: 'userId',
+      variableValue: userId,
+      moreVariableTarget: 'oldestUserId',
+      dataTarget: 'list',
+      updateQuery: GET_FOLLOWING_LIST,
+      fetchMoreEl,
+    },
+  };
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    keyValue[value],
+  );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -63,6 +50,10 @@ const Follow: FunctionComponent = () => {
       router.replace(`/[userId]/follow/[[...type]]`, `/${userId}/follow/${newValue}`, {
         shallow: true,
       });
+      initializeApollo().cache.evict({ id: 'ROOT_QUERY', fieldName: 'following_list' });
+      initializeApollo().cache.evict({ id: 'ROOT_QUERY', fieldName: 'follower_list' });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
 
@@ -74,7 +65,7 @@ const Follow: FunctionComponent = () => {
       <TabBar value={value} handleChange={onClick} labels={['follower', 'following']} />
       <div>
         {data ? (
-          data.list?.map((user: User, index: number) =>
+          data.list?.map((user: UserType, index: number) =>
             user.following_user ? (
               <UserCard key={index} user={user.following_user} />
             ) : (
@@ -82,12 +73,41 @@ const Follow: FunctionComponent = () => {
             ),
           )
         ) : (
-          <Loading message="Loading" />
+          <></>
         )}
+        {data?.list?.length === 0 ? (
+          <NoResult start="You aren’t" value={value} end="anyone yet" />
+        ) : null}
       </div>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };
 
 export default Follow;
+
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
+  const { userId } = ctx.query || {};
+
+  const apolloClient = initializeApollo();
+  const result = await apolloClient.query({
+    query: GET_FOLLOWER_LIST,
+    variables: { userId },
+    context: {
+      headers: { cookie: `jwt=${jwt}` },
+    },
+  });
+  if (!result) {
+    return {
+      notFound: true,
+    };
+  }
+  const initialState = apolloClient.cache.extract();
+
+  return {
+    props: {
+      initialState,
+    },
+  };
+};

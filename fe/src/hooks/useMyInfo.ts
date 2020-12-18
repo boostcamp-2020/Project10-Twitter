@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import GET_MYINFO from '../graphql/getMyInfo.gql';
+import { GET_MYINFO } from '@graphql/user';
 
 const useMyInfo = () => {
   const { loading, error, data } = useQuery(GET_MYINFO);

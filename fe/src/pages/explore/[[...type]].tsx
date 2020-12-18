@@ -1,68 +1,53 @@
 /* eslint-disable no-nested-ternary */
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
-import SearchBar from '../../components/molecules/SearchBar';
-import SideBar from '../../components/organisms/SideBar';
-import TabBar from '../../components/molecules/TabBar';
-import { Container, MainContainer } from './styled';
-import TweetContainer from '../../components/organisms/TweetContainer';
-import UserCard from '../../components/organisms/UserCard';
-import GET_SEARCH_TWEETLIST from '../../graphql/getSearchedTweetList.gql';
-import GET_SEARCH_USERLIST from '../../graphql/getSearchedUserList.gql';
-import useOnTextChange from '../../hooks/useOnTextChange';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import apolloClient from '../../libs/apolloClient';
-import Loading from '../../components/molecules/Loading';
+import { GetServerSideProps } from 'next';
+import { SearchBar, TabBar, LoadingCircle } from '@molecules';
+import { PageLayout, TweetContainer, UserCard } from '@organisms';
+import { useOnTextChange, useTypeRouter, useDataWithInfiniteScroll } from '@hooks';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
+import { GET_SEARCH_TWEETLIST } from '@graphql/tweet';
+import { GET_SEARCH_USERLIST } from '@graphql/user';
+import { NoResult } from '@atoms';
+import { TweetType, UserType } from '@types';
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  searchWord: string;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  img_url_list: [string];
-  author: Author;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  retweet: Tweet;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  following_id_list: string[];
-  comment?: string;
-}
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'tweets';
+  if (type[0] === 'people') return 'people';
+  return 'tweets';
+};
 
 const Explore: FunctionComponent = () => {
-  const router = useRouter();
-  const { type } = router.query;
+  const apolloClient = initializeApollo();
+  const { type, router } = useTypeRouter();
+  const value = getValue(type);
   const [textValue, setTextValue, onTextChange] = useOnTextChange(type ? type[1] || '' : '');
   const [searchWord, setSearchWord] = useState(textValue);
-  const value = type ? type[0] : 'tweets';
-  const queryArr = { tweets: GET_SEARCH_TWEETLIST, people: GET_SEARCH_USERLIST };
-  const queryVariable: Variable = { searchWord };
-  const { loading, error, data, fetchMore } = useQuery(queryArr[value], {
-    variables: queryVariable,
-  });
-  const { _id: bottomId } = data?.searchList?.[data?.searchList?.length - 1] || {};
-  const fetchMoreEl = useRef(null);
-  const [intersecting] = useInfiniteScroll(fetchMoreEl);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
 
-  const onKeyDown = (e: any) => {
+  const keyValue = {
+    tweets: {
+      variableTarget: 'searchWord',
+      variableValue: searchWord,
+      moreVariableTarget: 'oldestTweetId',
+      dataTarget: 'tweetList',
+      updateQuery: GET_SEARCH_TWEETLIST,
+      fetchMoreEl,
+    },
+    people: {
+      variableTarget: 'searchWord',
+      variableValue: searchWord,
+      moreVariableTarget: 'oldestUserId',
+      dataTarget: 'searchList',
+      updateQuery: GET_SEARCH_USERLIST,
+      fetchMoreEl,
+    },
+  };
+
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    keyValue[value],
+  );
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       router.replace(`/explore/[[...type]]`, `/explore/${value}/${textValue}`, {
         shallow: true,
@@ -74,61 +59,82 @@ const Explore: FunctionComponent = () => {
   useEffect(() => {
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'search_tweet_list' });
     apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'search_user_list' });
+    setLoadFinished(false);
+    setIntersecting(false);
   }, [searchWord]);
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
-    let newValue = target.textContent;
+    const newValue = target.textContent;
     if (newValue !== value) {
-      if (newValue === 'tweets') newValue = '';
-      router.replace('/explore/[[...type]]', `/explore/${newValue}`, { shallow: true });
+      router.replace('/explore/[[...type]]', `/explore/${newValue}/${textValue}`, {
+        shallow: true,
+      });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
 
-  useEffect(() => {
-    const asyncEffect = async () => {
-      if (!intersecting || !bottomId || !fetchMore) return;
-      const newQueryVariable =
-        value === 'tweets' ? { oldestTweetId: bottomId } : { oldestUserId: bottomId };
-      const mergeQueryVariable = { ...queryVariable, ...newQueryVariable };
-      const { data: fetchMoreData } = await fetchMore({ variables: mergeQueryVariable });
-    };
-    asyncEffect();
-  }, [intersecting]);
-
   return (
-    <Container>
-      <SideBar />
-      <MainContainer>
+    <PageLayout
+      page="탐색하기"
+      updateQuery={{ query: GET_SEARCH_TWEETLIST, variables: { searchWord } }}
+    >
+      <div style={{ margin: '10px' }}>
         <SearchBar
           placeholder="Search Twitter"
           type="text"
-          variant="standard"
-          width="90%"
+          width="100%"
           value={textValue}
           onChange={onTextChange}
           onKeyDown={onKeyDown}
         />
-        <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
-        <div>
-          {data ? (
-            value === 'tweets' ? (
-              data.searchList?.map((tweet: Tweet, index: number) => (
-                <TweetContainer key={index} tweet={tweet} updateQuery={GET_SEARCH_TWEETLIST} />
-              ))
-            ) : (
-              data.searchList?.map((user: User, index: number) => (
-                <UserCard key={index} user={user} />
-              ))
-            )
+      </div>
+      <TabBar value={value} handleChange={onClick} labels={['tweets', 'people']} />
+      <div>
+        {data ? (
+          value === 'tweets' ? (
+            data.tweetList?.map((tweet: TweetType, index: number) => (
+              <TweetContainer
+                key={index}
+                tweet={tweet}
+                updateQuery={{ query: GET_SEARCH_TWEETLIST, variables: { searchWord } }}
+              />
+            ))
           ) : (
-            <Loading message="Loading" />
-          )}
-        </div>
-        <div ref={fetchMoreEl} />
-      </MainContainer>
-    </Container>
+            data.searchList?.map((user: UserType, index: number) => (
+              <UserCard key={index} user={user} />
+            ))
+          )
+        ) : (
+          <></>
+        )}
+        {data?.tweetList?.length === 0 || data?.searchList?.length === 0 ? (
+          <NoResult start="No results for" value={value} end="" />
+        ) : null}
+      </div>
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
+    </PageLayout>
   );
 };
 
 export default Explore;
+
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
+  const apolloClient = initializeApollo();
+  await apolloClient.query({
+    query: GET_SEARCH_TWEETLIST,
+    variables: { searchWord: '' },
+    context: {
+      headers: { cookie: `jwt=${jwt}` },
+    },
+  });
+  const initialState = apolloClient.cache.extract();
+
+  return {
+    props: {
+      initialState,
+    },
+  };
+};

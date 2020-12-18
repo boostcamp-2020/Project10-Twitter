@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Box, SvgIcon } from '@material-ui/core';
-import IconLabel from '../../molecules/IconLabel';
+import { IconLabel } from '@molecules';
 
 const Container = styled(Box)`
   display: flex;
@@ -12,12 +12,10 @@ const Container = styled(Box)`
   background-color: rgb(122, 204, 254);
 `;
 
-const SvgContainer = styled(SvgIcon)`
+const LogoContainer = styled.div`
   position: fixed;
   overflow: hidden;
   color: rgb(29, 161, 242);
-  width: 100% !important;
-  height: 100% !important;
 `;
 
 const StyledIconLabel = styled(IconLabel)`
@@ -33,4 +31,4 @@ const StyledIconLabel = styled(IconLabel)`
 const IconLabelContainer = styled(Box)`
   z-index: 1;
 `;
-export { StyledIconLabel, IconLabelContainer, Container, SvgContainer };
+export { StyledIconLabel, IconLabelContainer, Container, LogoContainer };

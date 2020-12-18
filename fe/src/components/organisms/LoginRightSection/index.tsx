@@ -1,33 +1,40 @@
 import React, { FunctionComponent } from 'react';
-import { Twitter } from '../../atoms/Icons';
-import LoginForm from '../../molecules/LoginForm';
-import InputContainer from '../../molecules/InputContainer';
-import Button from '../../molecules/Button';
-import SignupModal from '../SignupModal';
-import useDisplay from '../../../hooks/useDisplay';
+import { useMutation } from '@apollo/client';
+import { LoginForm, InputContainer, Button } from '@molecules';
+import { Twitter } from '@atoms';
+import { useDisplay, useOnTextChange } from '@hooks';
+import { SignupModal } from '@organisms';
+import { LOCAL_LOGIN } from '@graphql/auth';
+import { useRouter } from 'next/router';
+import { recreateApollo } from '@libs';
 import { Container, JoinBox, LoginFormContainer, StyledButton, StyledText } from './styled';
 
 const LoginRightSection: FunctionComponent = () => {
-  const emailLabelValue = '이메일';
-  const emailPlaceholder = '입력!';
-  const emailType = 'email';
-  const emailVariant = 'standard';
-
-  const passwordLabelValue = '비밀번호';
-  const passwordPlaceholder = '입력!';
-  const passwordType = 'password';
-  const passwordVariant = 'standard';
-
-  const content = '로그인';
-  const color = 'primary';
-  const variant = 'contained';
-  const borderRadius = 50;
-
+  const [localLogin] = useMutation(LOCAL_LOGIN);
   const [displaySignupModal, , onClickSignupBtn] = useDisplay(false);
+  const [userId, setUserId, onUserIdChange] = useOnTextChange('');
+  const [password, setPassword, onPasswordChange] = useOnTextChange('');
+  const router = useRouter();
 
-  const onClick = () => {
-    window.location.href =
-      'https://github.com/login/oauth/authorize?client_id=5ca42b21f33b23cc53e8&redirect_uri=http://localhost:3000/callback';
+  const onLoginBtnClick = async () => {
+    try {
+      await localLogin({ variables: { userId, password } });
+      setUserId('');
+      setPassword('');
+      recreateApollo();
+      router.push('/');
+    } catch (err) {
+      alert(err);
+      router.push('/login');
+    }
+  };
+
+  const onGithubBtnClick = () => {
+    const GITHUB_LOGIN_URL =
+      process.env.NODE_ENV === 'development'
+        ? process.env.DEV_GITHUB_LOGIN_URL
+        : process.env.PRO_GITHUB_LOGIN_URL;
+    window.location.href = GITHUB_LOGIN_URL as string;
   };
   return (
     <>
@@ -35,18 +42,26 @@ const LoginRightSection: FunctionComponent = () => {
         <LoginFormContainer component="div">
           <LoginForm>
             <InputContainer
-              labelValue={emailLabelValue}
-              placeholder={emailPlaceholder}
-              type={emailType}
-              variant={emailVariant}
+              labelValue="아이디"
+              placeholder="입력!"
+              type="text"
+              inputValue={userId}
+              onChange={onUserIdChange}
             />
             <InputContainer
-              labelValue={passwordLabelValue}
-              placeholder={passwordPlaceholder}
-              type={passwordType}
-              variant={passwordVariant}
+              labelValue="비밀번호"
+              placeholder="입력!"
+              type="password"
+              inputValue={password}
+              onChange={onPasswordChange}
             />
-            <Button borderRadius={borderRadius} text={content} color={color} variant={variant} />
+            <Button
+              borderRadius={50}
+              text="로그인"
+              color="primary"
+              variant="contained"
+              onClick={onLoginBtnClick}
+            />
           </LoginForm>
         </LoginFormContainer>
         <JoinBox component="div">
@@ -69,7 +84,7 @@ const LoginRightSection: FunctionComponent = () => {
             variant="outlined"
             borderRadius={3}
             icon={Twitter({})}
-            onClick={onClick}
+            onClick={onGithubBtnClick}
           />
         </JoinBox>
       </Container>

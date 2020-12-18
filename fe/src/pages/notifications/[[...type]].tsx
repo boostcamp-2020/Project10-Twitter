@@ -1,75 +1,54 @@
-import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
-import TabBar from '../../components/molecules/TabBar';
-import NotificationContainer from '../../components/organisms/NotificationContainer';
-import PageLayout from '../../components/organisms/PageLayout';
-import GET_MYINFO from '../../graphql/getMyInfo.gql';
-import GET_NOTIFICATION from '../../graphql/getNotification.gql';
-import GET_MENTION_NOTIFICATION from '../../graphql/getMentionNotification.gql';
-import UPDATE_NOTIFICATION from '../../graphql/updateNotification.gql';
-import useInfiniteScroll from '../../hooks/useInfiniteScroll';
-import apolloClient from '../../libs/apolloClient';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
+import { useMutation } from '@apollo/client';
+import { GetServerSideProps } from 'next';
+import { TabBar, LoadingCircle } from '@molecules';
+import { PageLayout, NotificationContainer } from '@organisms';
+import { useDataWithInfiniteScroll, useTypeRouter } from '@hooks';
+import { initializeApollo, getJWTFromBrowser } from '@libs';
+import { GET_MYINFO } from '@graphql/user';
+import { NotificationType, UserType } from '@types';
+import { NoResult } from '@atoms';
+import {
+  GET_NOTIFICATION_LIST,
+  GET_MENTION_NOTIFICATION_LIST,
+  CONFIRM_NOTIFICATION,
+} from '@graphql/notification';
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
-interface Noti {
-  _id: string;
-  giver: User;
-  tweet: Tweet;
-  type: string;
-}
-
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
-
-interface Tweet {
-  _id: string;
-  content: string;
-  child_tweet_number: number;
-  retweet_user_number: number;
-  heart_user_number: number;
-  img_url_list: [string];
-  author: Author;
-  retweet_id: string;
-  retweet: Tweet;
-}
-
-interface Author {
-  user_id: string;
-  name: string;
-  profile_img_url: string;
-}
-
-const getValue = (type: string | string[] | undefined) => {
-  if (!type) return 'all';
-  return 'mention';
+const getValue = (type?: string[] | string) => {
+  if (!type || !type.length) return 'all';
+  if (type[0] === 'mention') return 'mention';
+  return 'all';
 };
 
 const Notification: FunctionComponent = () => {
-  const router = useRouter();
-  const { type } = router.query;
-  const queryArr = { all: GET_NOTIFICATION, mention: GET_MENTION_NOTIFICATION };
+  const apolloClient = initializeApollo();
+  const { type, router } = useTypeRouter();
   const value = getValue(type);
-  // type ? type[0] : 'all';
-  const { data, fetchMore } = useQuery(queryArr[value]);
-  const [mutate] = useMutation(UPDATE_NOTIFICATION);
+  const [mutate] = useMutation(CONFIRM_NOTIFICATION);
 
-  const [notificationList, setNotificationList] = useState<Noti[]>([]);
-  const { _id: bottomNotificationId } = notificationList[notificationList.length - 1] || {};
-  const fetchMoreEl = useRef(null);
-  const [intersecting, loadFinished, setLoadFinished] = useInfiniteScroll(fetchMoreEl);
+  const fetchMoreEl = useRef<HTMLDivElement>(null);
+
+  const keyValue = {
+    all: {
+      variableTarget: '',
+      variableValue: '',
+      moreVariableTarget: 'id',
+      dataTarget: 'notifications',
+      updateQuery: GET_NOTIFICATION_LIST,
+      fetchMoreEl,
+    },
+    mention: {
+      variableTarget: '',
+      variableValue: '',
+      moreVariableTarget: 'id',
+      dataTarget: 'notifications',
+      updateQuery: GET_MENTION_NOTIFICATION_LIST,
+      fetchMoreEl,
+    },
+  };
+  const [data, setIntersecting, loadFinished, setLoadFinished] = useDataWithInfiniteScroll(
+    keyValue[value],
+  );
 
   const onClick = (e: React.SyntheticEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
@@ -77,60 +56,74 @@ const Notification: FunctionComponent = () => {
     if (newValue !== value) {
       if (newValue === 'all') newValue = '';
       router.replace('/notifications/[[...type]]', `/notifications/${newValue}`, { shallow: true });
+      setLoadFinished(false);
+      setIntersecting(false);
     }
   };
 
   useEffect(() => {
-    const asyncEffect = async () => {
-      if (!intersecting || loadFinished || !bottomNotificationId || !fetchMore) return;
-      const { data: newData } = await fetchMore({
-        variables: { id: bottomNotificationId },
-      });
-      if (newData.notifications.length < 20) setLoadFinished(true);
-    };
-    asyncEffect();
-  }, [intersecting]);
-
-  useEffect(() => {
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'notification_list' });
-    apolloClient.cache.evict({ id: 'ROOT_QUERY', fieldName: 'notification_mention_list' });
-  }, []);
-
-  useEffect(() => {
-    if (data?.notifications) {
-      setNotificationList(data?.notifications);
-    }
     const lastestNotification = data?.notifications[0];
     if (lastestNotification)
       mutate({
         variables: { id: lastestNotification._id },
-        update: (cache: any) => {
-          const updateData = cache.readQuery({ query: GET_MYINFO });
-          if (lastestNotification._id > updateData.myProfile.lastest_notification_id)
-            cache.writeQuery({
-              query: GET_MYINFO,
-              data: {
-                myProfile: {
-                  ...updateData.myProfile,
-                  lastest_notification_id: lastestNotification._id,
+        update: (cache) => {
+          const updateData = cache.readQuery<{ myProfile: UserType }>({ query: GET_MYINFO });
+          if (updateData) {
+            if (
+              updateData.myProfile.lastest_notification_id &&
+              lastestNotification._id > updateData.myProfile.lastest_notification_id
+            )
+              cache.writeQuery({
+                query: GET_MYINFO,
+                data: {
+                  myProfile: {
+                    ...updateData.myProfile,
+                    lastest_notification_id: lastestNotification._id,
+                  },
                 },
-              },
-            });
+              });
+          }
         },
       });
   }, [data?.notifications]);
 
   return (
-    <PageLayout>
+    <PageLayout page="알림">
       <TabBar value={value} handleChange={onClick} labels={['all', 'mention']} />
       <>
-        {notificationList?.map((noti: Noti, index: number) => (
-          <NotificationContainer key={index} noti={{ ...noti, curTabValue: value }} />
+        {data?.notifications.map((noti: NotificationType, index: number) => (
+          <NotificationContainer
+            key={index}
+            noti={noti}
+            curTabValue={value}
+            updateQuery={{ query: keyValue[value].updateQuery }}
+          />
         ))}
+        {data?.notifications?.length === 0 ? (
+          <NoResult start="You don’t have any" value="notification" end="yet" />
+        ) : null}
       </>
-      <div ref={fetchMoreEl} />
+      <LoadingCircle loadFinished={loadFinished} fetchMoreEl={fetchMoreEl} />
     </PageLayout>
   );
 };
 
 export default Notification;
+
+export const getServerSideProps: GetServerSideProps<{}, {}> = async (ctx) => {
+  const apolloClient = initializeApollo();
+  const jwt = getJWTFromBrowser(ctx.req, ctx.res);
+  const result = await apolloClient.query({
+    query: GET_NOTIFICATION_LIST,
+    context: {
+      headers: { cookie: `jwt=${jwt}` },
+    },
+  });
+  const initialState = apolloClient.cache.extract();
+
+  return {
+    props: {
+      initialState,
+    },
+  };
+};

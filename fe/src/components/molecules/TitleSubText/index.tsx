@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Box } from '@material-ui/core';
-import Text from '../../atoms/Text';
+import { Text } from '@atoms';
 
 interface Props {
   title: string;

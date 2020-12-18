@@ -1,11 +1,12 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import useUserState from '../../../hooks/useUserState';
-import TitleSubText from '../../molecules/TitleSubText';
-import ProfileImg from '../../atoms/ProfileImg';
-import Button from '../../molecules/Button';
-
+import { TitleSubText, Button } from '@molecules';
+import { ProfileImg, Text } from '@atoms';
+import { useDisplay, useUserState } from '@hooks';
+import { getJSXwithUserState } from '@libs';
+import { GET_USER_DETAIL } from '@graphql/user';
+import { QueryVariableType } from '@types';
 import {
   DetailContainer,
   UserBackgroundContainer,
@@ -16,38 +17,20 @@ import {
   UserImgContainer,
   ImgCircleContainer,
 } from './styled';
-import Text from '../../atoms/Text';
-import { getJSXwithUserState } from '../../../libs';
-import GET_USERDETAIL from '../../../graphql/getUserDetail.gql';
-import Loading from '../../molecules/Loading';
+import UserEditModal from '../UserEditModal';
 
 interface Props {
   userId: string;
 }
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  userId: string;
-}
-
 const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => {
-  const queryVariable: QueryVariable = { variables: { userId: userId as string } };
-  const { loading, error, data } = useQuery(GET_USERDETAIL, queryVariable);
-  const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user);
-
-  const onClickEdit = () => {};
-
-  if (loading) return <Loading message="Loading" />;
-  if (error)
-    return (
-      <div>
-        Error!
-        {error.message}
-      </div>
-    );
+  const queryVariable: QueryVariableType = { variables: { userId: userId as string } };
+  const { data } = useQuery(GET_USER_DETAIL, queryVariable);
+  const [userState, onClickFollow, onClickUnfollow] = useUserState(data?.user, {
+    query: GET_USER_DETAIL,
+    variables: { userId: data.user.user_id },
+  });
+  const [displayModal, , onClickEditModal] = useDisplay(false);
 
   const PROFILE_IMG_SIZE = 150;
 
@@ -67,7 +50,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           </UserImgContainer>
           {getJSXwithUserState(
             userState,
-            <Button text="edit" variant="outlined" color="primary" onClick={onClickEdit} />,
+            <Button text="edit" variant="outlined" color="primary" onClick={onClickEditModal} />,
             <Button
               text="unfollow"
               color="primary"
@@ -83,7 +66,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
           <UserFollowContainer>
             <Link href={`/${user.user_id}/follow/`}>
               <a>
-                <TitleSubText title="팔로워 수" sub={followerCount.count || 0} />
+                <TitleSubText title="팔로워 수" sub={followerCount?.count} />
               </a>
             </Link>
             <Link href={`/${user.user_id}/follow/following`}>
@@ -95,6 +78,7 @@ const UserDetailContainer: FunctionComponent<Props> = ({ children, userId }) => 
         </BottomContainer>
         {children}
       </UserMainContainer>
+      <UserEditModal displayModal={displayModal} onClickCloseBtn={onClickEditModal} user={user} />
     </DetailContainer>
   );
 };

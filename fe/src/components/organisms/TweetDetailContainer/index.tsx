@@ -1,11 +1,21 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Markdown from 'react-markdown/with-html';
 import { useQuery, useMutation } from '@apollo/client';
-import useHeartState from '../../../hooks/useHeartState';
-import TitleSubText from '../../molecules/TitleSubText';
-import IconButton from '../../molecules/IconButton';
+import { TitleSubText, IconButton, ComponentLoading, UserInfo, UploadImg } from '@molecules';
+import { Text, Heart, Comment, Retweet, X, FullHeart } from '@atoms';
+import { useHeartState, useDisplay, useDisplayWithShallow, useUserState } from '@hooks';
+import { makeTimeText } from '@libs';
+import {
+  HeartListModal,
+  RetweetListModal,
+  ReplyModal,
+  RetweetModal,
+  RetweetContainer,
+} from '@organisms';
+import { DELETE_TWEET, GET_CHILD_TWEETLIST, GET_TWEET_DETAIL } from '@graphql/tweet';
+import { QueryVariableType } from '@types';
 import {
   DetailContainer,
   TweetHeaderContainer,
@@ -14,36 +24,21 @@ import {
   ButtonsContainer,
   PinkIconButton,
 } from './styled';
-import { Heart, Comment, Retweet, X } from '../../atoms/Icons';
-import Loading from '../../molecules/Loading';
-import GET_TWEET_DETAIL from '../../../graphql/getTweetDetail.gql';
-import UserInfo from '../../molecules/UserInfo';
-import useDisplay from '../../../hooks/useDisplay';
-import useDisplayWithShallow from '../../../hooks/useDisplayWithShallow';
-import { HeartListModal, RetweetListModal, ReplyModal, RetweetModal } from '../TweetModal';
-import useUserState from '../../../hooks/useUserState';
-import Text from '../../atoms/Text';
-import DELETE_TWEET from '../../../graphql/deleteTweet.gql';
-import { makeTimeText } from '../../../libs/utility';
 
 interface Props {
   tweetId: string;
 }
 
-interface QueryVariable {
-  variables: Variable;
-}
-
-interface Variable {
-  tweetId: string;
-}
-
-const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) => {
+const TweetDetailContainer: FunctionComponent<Props> = ({ tweetId }) => {
   const router = useRouter();
-  const queryVariable: QueryVariable = { variables: { tweetId: tweetId as string } };
+  const queryVariable: QueryVariableType = { variables: { tweetId: tweetId as string } };
   const { loading, error, data } = useQuery(GET_TWEET_DETAIL, queryVariable);
-  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweet);
-  const [userState] = useUserState(data?.tweet.author);
+  const replyQuery = { query: GET_CHILD_TWEETLIST, variables: { tweetId }, object: true };
+  const retweetQuery = { query: GET_TWEET_DETAIL, variables: { tweetId }, object: true };
+  const [isHeart, onClickHeart, onClickUnheart] = useHeartState(data?.tweetList, {
+    ...retweetQuery,
+  });
+  const [userState] = useUserState(data?.tweetList.author);
   const [displayReplyModal, , onClickReplyBtn] = useDisplay(false);
   const [displayRetweetModal, , onClickRetweetBtn] = useDisplay(false);
   const [displayHeartListModal, onOpenHeartList, onCloseHeartList] = useDisplayWithShallow('likes');
@@ -56,10 +51,10 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
     await deleteTweet({
       variables: { tweetId: tweet._id },
     });
-    router.push('/home');
+    router.push('/');
   };
 
-  if (loading) return <Loading message="Loading" />;
+  if (loading) return <ComponentLoading />;
   if (error)
     return (
       <div>
@@ -68,7 +63,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
       </div>
     );
 
-  const { tweet } = data;
+  const { tweetList: tweet } = data;
 
   return (
     <>
@@ -84,6 +79,12 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
           {userState === 'me' ? <IconButton icon={X} onClick={onClickDeleteBtn} /> : <></>}
         </TweetHeaderContainer>
         <Markdown allowDangerousHtml>{tweet.content}</Markdown>
+        {tweet.retweet?._id ? <RetweetContainer tweet={tweet.retweet} /> : <></>}
+        {tweet.img_url_list && tweet.img_url_list[0] ? (
+          <UploadImg img={tweet.img_url_list[0]} />
+        ) : (
+          ''
+        )}
         <TimeContainer>
           <Text styled="sub" size="15px" value={makeTimeText(tweet.createAt)} />
         </TimeContainer>
@@ -112,7 +113,7 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
           <IconButton icon={Comment} onClick={onClickReplyBtn} />
           <IconButton icon={Retweet} onClick={onClickRetweetBtn} />
           {isHeart ? (
-            <PinkIconButton icon={Heart} onClick={onClickUnheart} />
+            <IconButton icon={FullHeart} onClick={onClickUnheart} />
           ) : (
             <IconButton icon={Heart} onClick={onClickHeart} />
           )}
@@ -121,11 +122,13 @@ const TweetDetailContainer: FunctionComponent<Props> = ({ children, tweetId }) =
       <ReplyModal
         displayModal={displayReplyModal}
         onClickCloseBtn={onClickReplyBtn}
+        updateQuery={replyQuery}
         tweet={tweet}
       />
       <RetweetModal
         displayModal={displayRetweetModal}
         onClickCloseBtn={onClickRetweetBtn}
+        updateQuery={retweetQuery}
         tweet={tweet}
       />
       <HeartListModal

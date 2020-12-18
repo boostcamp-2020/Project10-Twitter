@@ -1,38 +1,41 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
-import Modal from '../../molecules/Modal';
+import { Modal } from '@molecules';
+import { useOnTextChange } from '@hooks';
+import { ADD_USER } from '@graphql/user';
 import { StyledInputContainer, StyledButton } from './styled';
-import ADD_USER from '../../../graphql/addUser.gql';
-import useOnTextChange from '../../../hooks/useOnTextChange';
 
 interface Props {
   displayModal: boolean;
   onClickCloseBtn: () => void;
 }
 
-interface User {
-  user_id: string;
-  name: string;
-  profile_img_url?: string;
-  comment?: string;
-  following_user?: User;
-}
-
-const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
-  const [createUser, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_USER);
+const SignupModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBtn }) => {
+  const [createUser] = useMutation(ADD_USER);
   const [userId, setUserId, onUserIdChange] = useOnTextChange('');
   const [name, setName, onNameChange] = useOnTextChange('');
   const [password, setPassword, onPasswordChange] = useOnTextChange('');
+  const [btnDisabled, setBtnDisabled] = useState(true);
+
+  useEffect(() => {
+    setBtnDisabled(!userId || !name || !password);
+  }, [userId, name, password]);
 
   const onSignupBtnClick = () => {
     createUser({ variables: { userId, name, password } });
     setUserId('');
     setName('');
     setPassword('');
+    onClickCloseBtn();
   };
-
+  const onCloseBtnClick = () => {
+    setUserId('');
+    setName('');
+    setPassword('');
+    onClickCloseBtn();
+  };
   return (
-    <Modal displayModal={displayModal} onClickCloseBtn={onClickCloseBtn}>
+    <Modal displayModal={displayModal} onClickCloseBtn={onCloseBtnClick}>
       <StyledInputContainer labelValue="아이디" inputValue={userId} onChange={onUserIdChange} />
       <StyledInputContainer labelValue="이름" inputValue={name} onChange={onNameChange} />
       <StyledInputContainer
@@ -41,9 +44,15 @@ const HeartListModal: FunctionComponent<Props> = ({ displayModal, onClickCloseBt
         inputValue={password}
         onChange={onPasswordChange}
       />
-      <StyledButton text="가입" color="primary" variant="contained" onClick={onSignupBtnClick} />
+      <StyledButton
+        text="가입"
+        color="primary"
+        variant="contained"
+        onClick={onSignupBtnClick}
+        disabled={btnDisabled}
+      />
     </Modal>
   );
 };
 
-export default HeartListModal;
+export default SignupModal;

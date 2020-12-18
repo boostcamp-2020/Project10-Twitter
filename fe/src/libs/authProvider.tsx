@@ -1,8 +1,8 @@
 import React, { FunctionComponent, ReactChild } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import GET_MYINFO from '../graphql/getMyInfo.gql';
-import Loading from '../components/molecules/Loading';
+import { Loading } from '@molecules';
+import { GET_MYINFO } from '@graphql/user';
 
 interface Props {
   children: ReactChild;
@@ -10,10 +10,11 @@ interface Props {
 
 const AuthProvider: FunctionComponent<Props> = ({ children }) => {
   const router = useRouter();
+  const { data, error } = useQuery(GET_MYINFO);
+
   if (router.pathname.includes('login') || router.pathname.includes('callback'))
     return <>{children}</>;
 
-  const { data, error } = useQuery(GET_MYINFO);
   if (data) return <>{children}</>;
   if (error) router.push('/login');
   return <Loading message="Loading" />;

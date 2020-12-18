@@ -1,20 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
-import Text from '../../atoms/Text';
-
-const Container = styled.div`
-  z-index: 1;
-  margin: 0 auto;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  & span {
-    zindex: 1;
-    margin: 0 5px;
-    padding-right: 10px;
-  }
-`;
+import { Text } from '@atoms';
+import Container from './styled';
 
 const Footer: FunctionComponent = () => {
   return (

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/core/styles';
 import { ServerStyleSheet } from 'styled-components';
 
@@ -12,6 +12,11 @@ export default class MyDocument extends Document {
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          <title>Bwitter</title>
+          <link
+            rel="shortcut icon"
+            href="https://user-images.githubusercontent.com/37282087/102025958-9a8e8e80-3dde-11eb-937e-ae05015d5b71.png"
           />
         </Head>
         <body>
@@ -26,7 +31,7 @@ export default class MyDocument extends Document {
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with server-side generation (SSG).
-MyDocument.getInitialProps = async (ctx) => {
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   // Resolution order
   //
   // On the server:

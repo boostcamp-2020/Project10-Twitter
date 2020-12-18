@@ -49,6 +49,7 @@ const StyledP = styled.p`
   animation: ${grow} 4s infinite linear;
   width: 30rem;
   text-align: center;
+  z-index: 100;
 `;
 
 const fly = keyframes`

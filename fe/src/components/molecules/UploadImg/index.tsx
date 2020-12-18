@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import IconButton from '../IconButton';
-import { X } from '../../atoms/Icons';
+import { X } from '@atoms';
+import { IconButton } from '@molecules';
 
 interface Props {
   onClick?: () => void;

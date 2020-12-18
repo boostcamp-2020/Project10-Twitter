@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
 import TimeAgo from 'javascript-time-ago';
+import Cookies from 'cookies';
 
 // English.
 import en from 'javascript-time-ago/locale/en';
@@ -21,4 +21,21 @@ const makeTimeText = (pastTime: string) => {
   return timeString;
 };
 
-export { getJSXwithUserState, makeTimeText };
+const binarySearch = (arr: any, id: string) => {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid]._id < id) right = mid - 1;
+    else if (arr[mid]._id > id) left = mid + 1;
+    else return mid;
+  }
+  return -1;
+};
+
+const getJWTFromBrowser = (req: any, res: any) => {
+  const cookies = new Cookies(req, res);
+  return cookies.get('jwt');
+};
+
+export { getJSXwithUserState, makeTimeText, binarySearch, getJWTFromBrowser };

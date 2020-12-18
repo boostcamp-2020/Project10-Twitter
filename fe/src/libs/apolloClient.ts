@@ -1,19 +1,16 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
-import { setContext } from '@apollo/client/link/context';
 
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('jwt_token');
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
+let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+const API_SERVER_URL =
+  process.env.NODE_ENV === 'development'
+    ? process.env.DEV_API_SERVER_URL
+    : process.env.PRO_API_SERVER_URL;
 
 const httpLink = createUploadLink({
-  uri: 'http://127.0.0.1:3001/graphql',
+  uri: API_SERVER_URL,
+  credentials: 'include',
 });
 
 const mergeItems = (a = [], b = []) => {
@@ -24,9 +21,10 @@ const tweetPolicies = {
   read(existing: any) {
     return existing;
   },
-  merge(existing = [], incoming = [], { args: { oldest_tweet_id } }: any) {
-    if (!oldest_tweet_id) return mergeItems(incoming, existing);
-    return mergeItems(existing, incoming);
+  merge(existing = [], incoming = [], { args: { oldest_tweet_id, latest_tweet_id } }: any) {
+    if (oldest_tweet_id) return mergeItems(existing, incoming);
+    if (latest_tweet_id) return mergeItems(incoming, existing);
+    return incoming;
   },
 };
 
@@ -49,27 +47,45 @@ const notificationPolicies = {
   },
 };
 
-const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink), // api 서버 url
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          following_tweet_list: tweetPolicies,
-          child_tweet_list: tweetPolicies,
-          heart_tweet_list: tweetPolicies,
-          search_tweet_list: tweetPolicies,
-          user_tweet_list: tweetPolicies,
-          user_all_tweet_list: tweetPolicies,
-          search_user_list: userPolicies,
-          following_list: userPolicies,
-          follower_list: userPolicies,
-          notification_list: notificationPolicies,
-          notification_mention_list: notificationPolicies,
+const createApolloClient = () =>
+  new ApolloClient({
+    link: httpLink, // api 서버 url
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            following_tweet_list: tweetPolicies,
+            child_tweet_list: tweetPolicies,
+            heart_tweet_list: tweetPolicies,
+            search_tweet_list: tweetPolicies,
+            user_tweet_list: tweetPolicies,
+            user_all_tweet_list: tweetPolicies,
+            search_user_list: userPolicies,
+            following_list: userPolicies,
+            follower_list: userPolicies,
+            notification_list: notificationPolicies,
+            notification_mention_list: notificationPolicies,
+          },
         },
       },
-    },
-  }),
-});
+    }),
+  });
 
-export default apolloClient;
+const initializeApollo = (initialState: NormalizedCacheObject = {}) => {
+  const _apolloClient = apolloClient || createApolloClient();
+
+  if (initialState) {
+    const existingCache = _apolloClient.extract();
+    const data = Object.assign(existingCache, initialState);
+    _apolloClient.cache.restore(data);
+  }
+  if (typeof window === 'undefined') return _apolloClient;
+  if (!apolloClient) apolloClient = _apolloClient;
+  return _apolloClient;
+};
+
+const recreateApollo = () => {
+  apolloClient = createApolloClient();
+};
+
+export { initializeApollo, recreateApollo };

@@ -3,8 +3,9 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { AuthProvider, apolloClient } from '../libs';
-import '../styles/global.css';
+import { AuthProvider } from '@libs';
+import { useApollo } from '@hooks';
+import '@styles/global.css';
 
 const theme = createMuiTheme({
   palette: {
@@ -16,6 +17,8 @@ const theme = createMuiTheme({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
+  const apolloClient = useApollo(pageProps.initialState);
+
   return (
     <ApolloProvider client={apolloClient}>
       <MuiThemeProvider theme={theme}>

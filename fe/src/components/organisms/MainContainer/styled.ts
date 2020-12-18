@@ -12,4 +12,8 @@ const BodyContainer = styled(Box)`
   width: 85%;
 `;
 
-export { MainBox, BodyContainer };
+const Profile = styled(Box)`
+  margin: 0 auto;
+`;
+
+export { MainBox, Profile, BodyContainer };
