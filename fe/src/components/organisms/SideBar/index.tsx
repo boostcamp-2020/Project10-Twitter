@@ -121,7 +121,7 @@ const SideBar: FunctionComponent<Props> = ({ page, updateQuery }) => {
             />
           </ListItem>
         ) : null}
-        {displayPopover ? <UserPopover /> : <></>}
+        {displayPopover ? <UserPopover closeEvent={onClickUserprofile} /> : <></>}
         <ListItem onClick={onClickUserprofile}>
           <UserInfo title={userName} sub={userId} img={userProfileImg} width="90%" />
         </ListItem>
