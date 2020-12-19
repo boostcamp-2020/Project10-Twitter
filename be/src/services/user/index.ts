@@ -1,6 +1,8 @@
 import {
   getFollowerList,
   getFollowingList,
+  getHeartUserList,
+  getRetweetUserList,
   getSearchedUserList,
   getUserInfo,
   getMyUserInfo,
@@ -9,7 +11,7 @@ import {
 import {
   followUser,
   unfollowUser,
-  updateUserName,
+  updateUserInfo,
   updateUserComment,
   updateUserProfileImg,
   updateUserBackgroundImg,
@@ -19,6 +21,8 @@ import { createUser } from './addUser';
 export {
   getFollowerList,
   getFollowingList,
+  getHeartUserList,
+  getRetweetUserList,
   getSearchedUserList,
   getMyUserInfo,
   getUserInfo,
@@ -26,7 +30,7 @@ export {
   followUser,
   unfollowUser,
   createUser,
-  updateUserName,
+  updateUserInfo,
   updateUserComment,
   updateUserProfileImg,
   updateUserBackgroundImg,

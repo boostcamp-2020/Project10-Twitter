@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { userModel } from '../../models';
-import { createNotification } from '../notification';
+import { userModel } from '@models';
+import { createNotification } from '@services/notification';
 
 interface Auth {
   authUser: { id: string };
@@ -47,11 +47,15 @@ const unfollowUser = async (
   return user;
 };
 
-const updateUserName = async (_: any, { name }: { name: string }, { authUser }: Auth) => {
+const updateUserInfo = async (
+  _: any,
+  { name, comment }: { name: string; comment: string },
+  { authUser }: Auth,
+) => {
   if (!authUser) throw new AuthenticationError('not authenticated');
 
   const userId = authUser.id;
-  await userModel.update({ user_id: userId }, { $set: { name } });
+  await userModel.update({ user_id: userId }, { $set: { name, comment } });
   return { response: true };
 };
 
@@ -90,7 +94,7 @@ const updateUserBackgroundImg = async (
 export {
   followUser,
   unfollowUser,
-  updateUserName,
+  updateUserInfo,
   updateUserComment,
   updateUserProfileImg,
   updateUserBackgroundImg,

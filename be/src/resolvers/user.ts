@@ -3,28 +3,32 @@ import {
   getFollowingList,
   getFollowerList,
   getSearchedUserList,
+  getHeartUserList,
+  getRetweetUserList,
   getUserInfo,
   getMyUserInfo,
   followUser,
   unfollowUser,
   createUser,
-  updateUserName,
+  updateUserInfo,
   getFollowerCount,
-} from '../services/user';
+} from '@services/user';
 
-import { githubLogin, localLogin } from '../services/auth';
+import { githubLogin, localLogin } from '@services/auth';
 
 const userResolvers: IResolvers = {
   Query: {
     following_list: getFollowingList,
     follower_list: getFollowerList,
+    heart_user_list: getHeartUserList,
+    retweet_user_list: getRetweetUserList,
     search_user_list: getSearchedUserList,
     my_info: getMyUserInfo,
     user_info: getUserInfo,
     follower_count: getFollowerCount,
   },
   Mutation: {
-    update_user_name: updateUserName,
+    update_user_info: updateUserInfo,
     create_user: createUser,
     github_login: githubLogin,
     local_login: localLogin,

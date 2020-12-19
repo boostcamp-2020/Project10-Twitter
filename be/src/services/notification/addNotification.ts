@@ -1,4 +1,4 @@
-import { notificationModel } from '../../models';
+import { notificationModel } from '@models';
 
 interface Args {
   userId: string;

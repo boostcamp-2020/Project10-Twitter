@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import axios from 'axios';
-import { signToken } from '../../lib/jwt-token';
-import { userModel } from '../../models';
-import { registerUser } from '../../services/user/addUser';
+import { signToken } from '@libs/jwt-token';
+import { userModel } from '@models';
+import { registerUser } from '@services/user/addUser';
 
 interface UserInfo {
   user_id: string;
@@ -29,7 +29,7 @@ const getGithubToken = async (code: string) => {
       : process.env.PRO_GITHUB_CLIENT_SECRET;
 
   const { data } = await axios.post(
-    'https://github.com/login/oauth/access_token',
+    process.env.GITHUB_GET_TOKEN_URL as string,
     {
       code,
       client_id: githubClientId,
@@ -45,11 +45,14 @@ const getGithubToken = async (code: string) => {
 };
 
 const getGithubUserInfo = async (githubToken: string) => {
-  const { data }: { data: GithubUserInfo } = await axios.get('https://api.github.com/user', {
-    headers: {
-      Authorization: `token ${githubToken}`,
+  const { data }: { data: GithubUserInfo } = await axios.get(
+    process.env.GITHUB_GET_USER_URL as string,
+    {
+      headers: {
+        Authorization: `token ${githubToken}`,
+      },
     },
-  });
+  );
   return data;
 };
 
@@ -61,7 +64,7 @@ const getOurUser = async (userInfo: UserInfo) => {
   return user;
 };
 
-const githubLogin = async (_: any, { code }: { code: string }) => {
+const githubLogin = async (_: any, { code }: { code: string }, { res }: any) => {
   const githubToken = await getGithubToken(code);
   const githubUserInfo = await getGithubUserInfo(githubToken);
   const user = await getOurUser({
@@ -71,10 +74,15 @@ const githubLogin = async (_: any, { code }: { code: string }) => {
     profile_img_url: githubUserInfo.avatar_url,
   });
   const signedToken = signToken({ id: user.get('user_id') });
+  res.cookie('jwt', signedToken);
   return { token: signedToken };
 };
 
-const localLogin = async (_: any, { user_id, password }: { user_id: string; password: string }) => {
+const localLogin = async (
+  _: any,
+  { user_id, password }: { user_id: string; password: string },
+  { res }: any,
+) => {
   const userInfo = await userModel.findOne({ user_id });
 
   if (!userInfo) throw new Error('Not Found User');
@@ -85,6 +93,7 @@ const localLogin = async (_: any, { user_id, password }: { user_id: string; pass
   if (!isLogined) throw new Error('Wrong Password');
 
   const signedToken = signToken({ id: userInfo?.get('user_id') });
+  res.cookie('jwt', signedToken);
   return { token: signedToken };
 };
 

@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { userModel } from '../../models';
+import { userModel } from '@models';
 
 interface Auth {
   authUser: { id: string };

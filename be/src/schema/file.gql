@@ -11,6 +11,8 @@ type Query {
   upload_images: [File]
 }
 
+scalar Upload
+
 type Mutation {
   single_upload(file: Upload!): Image
 }
